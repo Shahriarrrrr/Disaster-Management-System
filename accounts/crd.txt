@@ -1,0 +1,10 @@
+Admin->
+admin@gmail.com
+admin
+admin
+
+Regular ->
+user1@gmail.com
+user1
+user
+
