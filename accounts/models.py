@@ -72,6 +72,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f"{self.email} ({self.user_type})"
+    def get_full_name(self):
+        return self.user_name
 
 #Needs to be used when foreign key is passed    
 #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
