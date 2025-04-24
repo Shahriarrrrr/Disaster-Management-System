@@ -18,7 +18,8 @@ class CustomUserAdmin(UserAdmin):
         ('Personal Info', {
             'fields': (
                 'user_name', 'user_gender', 'user_age', 'user_phone',
-                'user_state', 'user_address', 'user_type','user_profile_image','user_nid'
+                'user_state', 'user_address', 'user_type','user_profile_image','user_nid',
+                'user_awards','user_total_donate','user_last_donated_at'
             )
         }),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
@@ -30,8 +31,18 @@ class CustomUserAdmin(UserAdmin):
             'classes': ('wide',),
             'fields': (
                 'email', 'password1', 'password2',
-                'user_name', 'user_gender', 'user_age', 'user_phone',
-                'user_state', 'user_address', 'user_type','user_profile_image','user_nid',
+                'user_name', 
+                'user_gender', 
+                'user_age', 
+                'user_phone',
+                'user_state', 
+                'user_address', 
+                'user_type',
+                'user_profile_image',
+                'user_nid',
+                'user_awards',
+                'user_total_donate',
+                'user_last_donated_at',
                 'is_active', 'is_staff'
             ),
         }),

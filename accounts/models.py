@@ -39,6 +39,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         ('O', 'Other'),
     ]
 
+    TIER_CHOICES = [
+        ('SUPPORTER', 'Supporter'),
+        ('ROOKIE', 'Rookie'),
+        ('CHAMPION', 'Champion'),
+        ('VISIONARY', 'Visionary'),
+        ('LEGEND', 'Legend'),
+    ]
+
     user_type = models.CharField(max_length=10, choices=[('regular', 'Regular'), ('volunteer', 'Volunteer')], default='regular')
     user_name = models.CharField(max_length=100)
     user_gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
@@ -48,6 +56,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     user_address = models.TextField()
     user_profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
     user_nid = models.ImageField(upload_to='nid/', null=True, blank=True)
+    user_awards = models.CharField(max_length=10, choices=TIER_CHOICES, default='SUPPORTER')
+    user_total_donate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    user_last_donated_at = models.DateTimeField(null=True, blank=True)
 
     # Authentication fields
     USERNAME_FIELD = 'email'

@@ -4,7 +4,7 @@ admin
 admin
 
 Regular ->
-user1@gmail.com
-user1
-user
+test1@gmail.com
+test1
+1234
 

@@ -1,0 +1,28 @@
+CAMPAIGN ->
+Method | Endpoint | Description | Permissions
+GET | /campaigns/ | List all campaigns | Anyone
+POST | /campaigns/ | Create a new campaign | Admin only
+GET | /campaigns/{campaign_id}/ | Retrieve a specific campaign | Anyone
+PUT | /campaigns/{campaign_id}/ | Update entire campaign | Admin only
+PATCH | /campaigns/{campaign_id}/ | Partially update a campaign | Admin only
+DELETE | /campaigns/{campaign_id}/ | Delete a campaign | Admin only
+
+
+CAMPAIGN UPDATE ->
+Method | Endpoint | Description | Permissions
+GET | /campaigns/{campaign_id}/updates/ | List updates for a campaign | Anyone
+POST | /campaigns/{campaign_id}/updates/ | Create update for a campaign | Admin only
+GET | /campaigns/{campaign_id}/updates/{update_id}/ | Get a specific update | Anyone
+PUT | /campaigns/{campaign_id}/updates/{update_id}/ | Fully update update | Admin only
+PATCH | /campaigns/{campaign_id}/updates/{update_id}/ | Partial update | Admin only
+DELETE | /campaigns/{campaign_id}/updates/{update_id}/ | Delete update | Admin only
+
+
+CAMPAIGN COMMENT ->
+Method | Endpoint | Description | Permissions
+GET | /campaigns/{campaign_id}/comments/ | List all comments on campaign | Anyone
+POST | /campaigns/{campaign_id}/comments/ | Add a comment | Authenticated users
+GET | /campaigns/{campaign_id}/comments/{comment_id}/ | Retrieve a specific comment | Anyone
+PUT | /campaigns/{campaign_id}/comments/{comment_id}/ | Update comment | Comment owner only
+PATCH | /campaigns/{campaign_id}/comments/{comment_id}/ | Partially update comment | Comment owner only
+DELETE | /campaigns/{campaign_id}/comments/{comment_id}/ | Delete comment | Comment owner only
