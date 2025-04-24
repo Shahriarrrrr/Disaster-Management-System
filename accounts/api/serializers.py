@@ -7,7 +7,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model  = CustomUser
-        fields = ['user_name','password']
+        fields = ['user_name','password','user_address']
 
     def create(self, validated_data):
         password = validated_data.pop('password')  # Extract password
