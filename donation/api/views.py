@@ -1,10 +1,12 @@
 import requests
 import logging
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
 from donation.models import Donation
+from accounts.models import CustomUser
 from .serializers import DonationSerializer
 import uuid
 from django.http import HttpResponse
@@ -15,6 +17,9 @@ from django.shortcuts import get_object_or_404
 class DonationListView(generics.ListAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
+
+
+
 logger = logging.getLogger(__name__)
 class InitiateDonation(APIView):
     def post(self, request):
@@ -48,8 +53,8 @@ class InitiateDonation(APIView):
             # Extract donor information
             donor = donation.donor
             donor_name = donor.get_full_name() if donor else donation.donor_name or "Anonymous"
-            print(f"This is donor_name{donor_name}")
-            print(f"This is donor.user_name{donor.user_name}")
+            # print(f"This is donor_name{donor_name}")
+            # print(f"This is donor.user_name{donor.user_name}")
             
             # Payment data for SSLCommerz
             payment_data = {
@@ -113,6 +118,12 @@ def payment_success(request):
     donation = get_object_or_404(Donation, transaction_id=tran_id)
     donation.status = "Success"
     donation.save()
+    user = donation.donor
+    
+    if user:
+        user.user_total_donate += donation.donation_amount
+        user.user_last_donated_at = timezone.now()
+        user.save()
     
     return HttpResponse(f"Payment Success! Transaction ID: {tran_id}")
 @csrf_exempt
