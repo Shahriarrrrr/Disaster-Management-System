@@ -32,3 +32,22 @@ class Donation(models.Model):
 
     def __str__(self):
         return f"{self.display_donor_name()} - {self.donation_amount}"
+
+
+class Funds(models.Model):
+    total_amount = models.DecimalField(max_digits=30, decimal_places=2, default=0.00)
+    last_updated = models.DateTimeField(auto_now = True)
+
+
+class FundTransaction(models.Model):
+    TRANSACTION_TYPES = (
+        ('donation', 'Donation'),
+        ('expense', 'Expense'),
+    )
+    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    #related_donation = models.ForeignKey(Donation, on_delete=models.SET_NULL, null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+    date = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.transaction_type.capitalize()} - {self.amount} on {self.date.strftime('%Y-%m-%d')}"

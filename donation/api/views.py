@@ -14,6 +14,12 @@ from rest_framework import generics
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
+class Fund(generics.ListAPIView):
+    pass
+
+
+
+
 class DonationListView(generics.ListAPIView):
     queryset = Donation.objects.all()
     serializer_class = DonationSerializer
