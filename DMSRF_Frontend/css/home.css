@@ -28,7 +28,7 @@ body {
 /* Hero */
 
   .hero {
-    background-image: url('/DMSRF_Frontend/assets/img/heroHome.jpg');
+    background-image: url("/DMSRF/DMSRF_Frontend/assets/img/heroHome.jpg");
     background-size: cover;
     background-position: center;
     height: 90vh;
