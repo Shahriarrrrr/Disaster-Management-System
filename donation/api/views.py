@@ -20,9 +20,14 @@ class FundsView(generics.ListAPIView):
     serializer_class = FundsSerializer
 
 class FundTransactionView(generics.ListAPIView):
-    queryset = FundTransaction.objects.all()
     serializer_class = FundTransactionSerializer
 
+    def get_queryset(self):
+        fund_id = self.request.query_params.get('fund_id')
+        queryset = FundTransaction.objects.all()
+        if fund_id:
+            queryset = queryset.filter(fund__id=fund_id)
+        return queryset
 
 
 class DonationListView(generics.ListAPIView):
