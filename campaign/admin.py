@@ -23,3 +23,4 @@ class CampaignCommentAdmin(admin.ModelAdmin):
     list_display = ['campaign', 'user', 'content', 'posted_at']
     search_fields = ['campaign__title', 'user__username', 'content']
     list_filter = ['posted_at']
+

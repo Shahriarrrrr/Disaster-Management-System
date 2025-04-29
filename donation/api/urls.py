@@ -1,31 +1,17 @@
-# from django.urls import path,include
-# from rest_framework.routers import DefaultRouter
-# from .views import InitiateDonation, payment_success, payment_fail, payment_cancel
-
-# # Create a router and register the views
-# router = DefaultRouter()
-# router.register(r'donate/initiate', InitiateDonation, basename='donate-initiate')
-
-# urlpatterns = [
-#     # Include the router-generated paths
-#     path('', include(router.urls)),  # Include router-generated paths
-
-#     path('success/', payment_success, name='donate-success'),
-#     path('fail/', payment_fail, name='donate-fail'),
-#     path('cancel/', payment_cancel, name='donate-cancel'),
-# ]
-
 from django.urls import path
-from .views import DonationListView, InitiateDonation, payment_success, payment_fail, payment_cancel
+from . import views
 
 urlpatterns = [
-    # View all donations (GET request)
-    path('donations/', DonationListView.as_view(), name='donation-list'),
+    # URLs for donations
+    path('donation/', views.DonationListView.as_view(), name='donation-list'),
+    path('donation/initiate/', views.InitiateDonation.as_view(), name='initiate-donation'),
     
-    # Make a donation (POST request)
-    path('donate/initiate/', InitiateDonation.as_view(), name='donate-initiate'),
-    # Payment callback URLs
-    path('success/', payment_success, name='donate-success'),
-    path('fail/', payment_fail, name='donate-fail'),
-    path('cancel/', payment_cancel, name='donate-cancel'),
+    # URLs for funds and transactions
+    path('funds/', views.FundsView.as_view(), name='funds-list'),
+    path('fund-transactions/', views.FundTransactionView.as_view(), name='fund-transaction-list'),
+    
+    # SSLCommerz payment response URLs
+    path('payment/success/', views.payment_success, name='payment-success'),
+    path('payment/fail/', views.payment_fail, name='payment-fail'),
+    path('payment/cancel/', views.payment_cancel, name='payment-cancel'),
 ]

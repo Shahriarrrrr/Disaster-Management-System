@@ -35,8 +35,11 @@ class Donation(models.Model):
 
 
 class Funds(models.Model):
+    fund_cause = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='funds',null=True, blank=True)
     total_amount = models.DecimalField(max_digits=30, decimal_places=2, default=0.00)
     last_updated = models.DateTimeField(auto_now = True)
+    def __str__(self):
+        return f"Fund for {self.fund_cause.title} - Total Amount: {self.total_amount}"
 
 
 class FundTransaction(models.Model):
@@ -46,8 +49,19 @@ class FundTransaction(models.Model):
     )
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    #related_donation = models.ForeignKey(Donation, on_delete=models.SET_NULL, null=True, blank=True)
+    fund = models.ForeignKey(Funds, on_delete=models.CASCADE, related_name='transactions' ,null=True, blank=True)
     description = models.TextField(blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        # Update the total_amount when a new transaction is saved
+        if self.transaction_type == 'donation':
+            self.fund.total_amount += self.amount
+        elif self.transaction_type == 'expense':
+            self.fund.total_amount -= self.amount
+        self.fund.save()
+        
+        super(FundTransaction, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.transaction_type.capitalize()} - {self.amount} on {self.date.strftime('%Y-%m-%d')}"

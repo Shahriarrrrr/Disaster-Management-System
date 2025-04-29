@@ -1,0 +1,60 @@
+1. Donation Endpoints (from donation.api.urls):
+GET /donation/api/donation/: Get the list of all donations (DonationListView)
+
+POST /donation/api/donation/initiate/: Initiate a new donation (InitiateDonation)
+
+GET /donation/api/payment/success/: Payment success callback (payment_success)
+
+GET /donation/api/payment/fail/: Payment failure callback (payment_fail)
+
+GET /donation/api/payment/cancel/: Payment cancellation callback (payment_cancel)
+
+2. Fund Endpoints (from campaign.api.urls):
+GET /api/funds/: Get the list of all funds (FundsView)
+
+GET /api/fund-transactions/: Get the list of all fund transactions (FundTransactionView)
+
+3. Authentication Endpoints (from rest_framework_simplejwt):
+POST /api/token/: Obtain JWT tokens (access & refresh) (TokenObtainPairView)
+
+POST /api/token/refresh/: Refresh the JWT token (TokenRefreshView)
+
+4. Account Endpoints (from accounts.api.urls):
+This will depend on how your accounts API is set up, but typically you may have:
+
+POST /account/api/register/: Register a new user (if you have a registration view).
+
+POST /account/api/login/: User login (though this may be handled by the JWT tokens).
+
+GET /account/api/profile/: Get user profile details (if implemented).
+
+PUT /account/api/profile/: Update user profile (if implemented).
+
+Summarized Endpoints:
+Donation Endpoints:
+
+GET /donation/api/donation/
+
+POST /donation/api/donation/initiate/
+
+GET /donation/api/payment/success/
+
+GET /donation/api/payment/fail/
+
+GET /donation/api/payment/cancel/
+
+Fund Endpoints:
+
+GET /api/funds/
+
+GET /api/fund-transactions/
+
+Authentication Endpoints:
+
+POST /api/token/
+
+POST /api/token/refresh/
+
+Account Endpoints:
+
+These will be defined in your accounts app.
