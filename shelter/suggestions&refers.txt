@@ -1,0 +1,17 @@
+Load Leaflet in your base template
+<!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script> -->
+
+<!-- Show map in your shelter detail page -->
+<!-- <div id="map" style="height: 400px;"></div> -->
+
+<!-- <script>
+  var map = L.map('map').setView([{{ shelter.latitude }}, {{ shelter.longitude }}], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors'
+  }).addTo(map);
+  L.marker([{{ shelter.latitude }}, {{ shelter.longitude }}])
+    .addTo(map)
+    .bindPopup('{{ shelter.name }}')
+    .openPopup();
+</script> -->

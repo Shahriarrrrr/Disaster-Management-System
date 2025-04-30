@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'donation',
     'volunteer',
     'program',
+    'shelter',
 ]
 
 MIDDLEWARE = [

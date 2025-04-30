@@ -1,0 +1,8 @@
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET    | `/program/api/programs/` | List all programs |
+| POST   | `/program/api/programs` | Create a new program |
+| GET    | `/program/api/<id>/` | Retrieve a specific program |
+| PUT    | `/program/api/<id>/` | Update an entire program (replace) |
+| PATCH  | `/program/api/<id>/` | Partially update a program |
+| DELETE | `/program/api/<id>/` | Delete a specific program |
