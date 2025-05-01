@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'volunteer',
     'program',
     'shelter',
+    'aid',
 ]
 
 MIDDLEWARE = [
