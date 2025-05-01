@@ -35,6 +35,8 @@ INSTALLED_APPS = [
     'program',
     'shelter',
     'aid',
+    'ticket',
+    'emergencyRequest',
 ]
 
 MIDDLEWARE = [
