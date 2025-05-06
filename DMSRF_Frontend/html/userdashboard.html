@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disaster Relief Fund - User Dashboard</title>
+  <!-- Tailwind CSS and DaisyUI CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Any additional custom styles */
+    .stat-figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @media (max-width: 1023px) {
+      .drawer-content {
+        padding-left: 0;
+      }
+    }
+    
+    .modal-box {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-base-200">
+  <div class="drawer lg:drawer-open">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+      <!-- Navbar -->
+      <div class="navbar bg-base-100 shadow-md ">
+        <div class="flex-none">
+          <label for="my-drawer-2" class="btn btn-square btn-ghost">
+            <i class="fas fa-bars"></i>
+          </label>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-heart text-error"></i>
+            <span class="text-xl font-bold">Relief Fund</span>
+          </div>
+        </div>
+        <div class="flex-none">
+          <button class="btn btn-ghost btn-circle">
+            <i class="fas fa-bell"></i>
+          </button>
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+              <div class="w-10 rounded-full">
+                <img id="profile-image" src="" alt="Profile" />
+              </div>
+            </label>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a>Profile</a></li>
+              <li><a>Settings</a></li>
+              <li><a>Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <main class="flex-1 p-4 md:p-6 lg:p-8">
+        <div class="grid gap-6">
+          <!-- Welcome section -->
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span id="welcome-text">Loading</span></h1>
+              <p class="text-base-content/70">Your generosity is making a difference.</p>
+            </div>
+            <div class="mt-4 md:mt-0">
+              <button class="btn btn-success">Donate Now</button>
+            </div>
+          </div>
+
+          <!-- Stats cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-primary">
+                <i class="fas text-2xl">৳</i>
+              </div>
+              <div class="stat-title">Total Donated</div>
+              <div id="Total-Donation" class="stat-value text-primary">Loading</div>
+              <div class="stat-desc">Since January 2023</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-secondary">
+                <i class="fas fa-hands-helping text-2xl"></i>
+              </div>
+              <div class="stat-title">Tier</div>
+              <div id="tier" class="stat-value text-secondary">12</div>
+              <div class="stat-desc">↗︎ 3 (30%) more than last year</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-accent">
+                <i class="fas fa-users text-2xl"></i>
+              </div>
+              <div class="stat-title">People Helped</div>
+              <div class="stat-value text-accent">~1,200</div>
+              <div class="stat-desc">Through your contributions</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-info">
+                <i class="fas fa-map-marker-alt text-2xl"></i>
+              </div>
+              <div class="stat-title">Countries Reached</div>
+              <div class="stat-value text-info">8</div>
+              <div class="stat-desc">Global impact</div>
+            </div>
+          </div>
+
+          <!-- Recent donations -->
+          <div class="bg-base-100 p-6 rounded-box shadow-md">
+            <h2 class="text-xl font-bold mb-4">Your Donation History</h2>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra w-full">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Campaign</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="donation-table-body">
+<!--Content Goes Here Dynamic one-->
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 text-right">
+              <a href="#" class="btn btn-ghost btn-sm">View All Donations</a>
+            </div>
+          </div>
+
+          <h2 class="text-xl font-bold mt-2">Active Campaigns</h2>
+          <div id="campaign-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4"></div>
+
+          <!-- Volunteer section -->
+          <div class="bg-base-100 p-6 rounded-box shadow-md mt-6">
+            <div class="flex flex-col md:flex-row gap-6">
+              <div class="md:w-1/2">
+                <h2 class="text-xl font-bold mb-4">Become a Volunteer</h2>
+                <p class="mb-4">
+                  Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need
+                  people with various skills and backgrounds.
+                </p>
+                <ul class="list-disc list-inside mb-4 space-y-1">
+                  <li>On-site disaster response</li>
+                  <li>Medical assistance</li>
+                  <li>Logistics and distribution</li>
+                  <li>Remote support and coordination</li>
+                  <li>Fundraising and awareness</li>
+                </ul>
+                <div class="flex gap-4 mt-6">
+                  <button class="btn btn-primary" id="volunteer-btn">Apply Now</button>
+                  <button class="btn btn-outline">Learn More</button>
+                </div>
+              </div>
+              <div class="md:w-1/2">
+                <img src="https://placehold.co/500x300" alt="Volunteers working" class="rounded-lg w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+
+          <!-- Volunteer form modal -->
+          <dialog id="volunteer_modal" class="modal">
+            <div class="modal-box w-11/12 max-w-3xl">
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+              </form>
+              <h3 class="font-bold text-lg mb-4">Volunteer Application</h3>
+              <form id="volunteer-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Full Name</span>
+                  </label>
+                  <input type="text" placeholder="Full Name" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Email</span>
+                  </label>
+                  <input type="email" placeholder="Email" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Phone</span>
+                  </label>
+                  <input type="tel" placeholder="Phone Number" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Location</span>
+                  </label>
+                  <input type="text" placeholder="City, Country" class="input input-bordered" required />
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Areas of Interest</span>
+                  </label>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Disaster Response</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Medical Aid</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Logistics</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Fundraising</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Remote Support</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Education</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Skills & Experience</span>
+                  </label>
+                  <textarea class="textarea textarea-bordered h-24" placeholder="Tell us about your relevant skills and experience"></textarea>
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Availability</span>
+                  </label>
+                  <select class="select select-bordered w-full">
+                    <option disabled selected>Select your availability</option>
+                    <option>Weekdays</option>
+                    <option>Weekends</option>
+                    <option>Evenings</option>
+                    <option>Full-time</option>
+                    <option>On-call for emergencies</option>
+                  </select>
+                </div>
+                <div class="form-control md:col-span-2 mt-4">
+                  <button type="submit" class="btn btn-primary">Submit Application</button>
+                </div>
+              </form>
+            </div>
+          </dialog>
+
+          <!-- Upcoming events -->
+          <h2 class="text-xl font-bold mt-6">Upcoming Events</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Event 1 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">15</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Disaster Preparedness Workshop</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Community Center, Downtown</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>10:00 AM - 2:00 PM</span>
+                    </div>
+                    <p class="mt-2">Learn essential skills for preparing your family for natural disasters.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 2 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">22</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Fundraising Gala Dinner</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Grand Hotel Ballroom</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>7:00 PM - 10:00 PM</span>
+                    </div>
+                    <p class="mt-2">Annual fundraising event with special guests and entertainment.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 3 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">29</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Volunteer Training Session</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Relief Fund Headquarters</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>9:00 AM - 12:00 PM</span>
+                    </div>
+                    <p class="mt-2">Training for new volunteers joining our emergency response teams.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div class="drawer-side z-10">
+      <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+      <aside class="min-h-screen w-64 bg-base-100 text-base-content">
+        <div class="p-4 flex items-center gap-2">
+          <i class="fas fa-heart text-error"></i>
+          <span class="text-xl font-bold">Relief Fund</span>
+        </div>
+        <div class="px-4 py-6">
+          <div class="flex flex-col items-center">
+            <div class="avatar">
+              <div  class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img id="big-profile-image" src="https://placehold.co/96x96" alt="Profile" />
+              </div>
+            </div>
+            <h2 id="profile-name-nav" name="profile-name" class="text-xl font-bold mt-4">Sarah Johnson</h2>
+            <p class="text-sm text-base-content/70">Premium Donor</p>
+          </div>
+        </div>
+        <ul class="menu p-4 pt-0">
+          <li>
+            <a href="#" class="active">
+              <i class="fas fa-home"></i>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-dollar-sign"></i>
+              My Donations
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-heart"></i>
+              Active Campaigns
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-hands-helping"></i>
+              Volunteer
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-chart-pie"></i>
+              Impact Report
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-calendar"></i>
+              Events
+            </a>
+          </li>
+        </ul>
+        <div class="p-4 mt-auto">
+          <div class="bg-base-200 p-4 rounded-box">
+            <h3 class="font-bold">Need Help?</h3>
+            <p class="text-sm mt-2">Contact our support team for assistance with donations or volunteering.</p>
+            <button class="btn btn-outline btn-sm w-full mt-4">Contact Support</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const volunteerBtn = document.getElementById("volunteer-btn");
+      const volunteerModal = document.getElementById("volunteer_modal");
+      const volunteerForm = document.getElementById("volunteer-form");
+  
+      if (volunteerBtn && volunteerModal) {
+        volunteerBtn.addEventListener("click", function () {
+          volunteerModal.showModal();
+        });
+      }
+  
+      if (volunteerForm) {
+        volunteerForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          alert("Thank you for your interest in volunteering! We will contact you soon.");
+          volunteerModal.close();
+        });
+      }
+  
+      // Mobile drawer toggle
+      const drawerToggle = document.getElementById("my-drawer-2");
+      const menuLinks = document.querySelectorAll(".drawer-side .menu a");
+  
+      menuLinks.forEach(link => {
+        link.addEventListener("click", () => {
+          if (window.innerWidth < 1024) {
+            drawerToggle.checked = false;
+          }
+        });
+      });
+  
+      // Utility: Capitalize words
+      function capitalizeFull(str) {
+        return str
+          .toLowerCase()
+          .split(' ')
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(' ');
+      }
+  
+      const accessToken = localStorage.getItem('access_token');
+      if (!accessToken) {
+        console.error('No access token found.');
+        return;
+      }
+  
+      // === Fetch User Profile ===
+      fetch('http://127.0.0.1:8000/account/api/users/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Failed to fetch user data');
+          return response.json();
+        })
+        .then(userData => {
+          const user = userData[0];  // Assuming the first object is the current user
+          const name = capitalizeFull(user.user_name);
+          const donationAmount = user.user_total_donate;
+          const tier = user.user_awards;
+          const profileImage = user.user_profile_image;
+  
+          document.getElementById('profile-name-nav').textContent = name;
+          document.getElementById('welcome-text').textContent = name;
+          document.getElementById('Total-Donation').textContent = donationAmount;
+          document.getElementById('tier').textContent = tier;
+          document.getElementById('profile-image').src = profileImage;
+          document.getElementById('big-profile-image').src = profileImage;
+        })
+        .catch(error => {
+          console.error('Error fetching user:', error);
+        });
+  
+      // === Fetch Donations (change to 'my-donations' if backend is updated) ===
+      fetch('http://127.0.0.1:8000/donation/api/donation/', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Failed to fetch donation data');
+          return response.json();
+        })
+        .then(donations => {
+          console.log('Donation Data:', donations);
+          const tableBody = document.getElementById('donation-table-body');
+          tableBody.innerHTML = ''; // Clear existing rows
+  
+          // Filter only successful donations
+          const successfulDonations = donations.filter(donation => donation.status === 'Success');
+  
+          // Sort donations by donation date (descending)
+          successfulDonations.sort((a, b) => new Date(b.donated_at) - new Date(a.donated_at));
+  
+          // Limit to the latest 3 successful donations
+          const latestDonations = successfulDonations.slice(0, 3);
+  
+          latestDonations.forEach(donation => {
+            const tr = document.createElement('tr');
+  
+            const date = new Date(donation.donated_at);
+            const formattedDate = date.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            });
+  
+            const amount = `${parseFloat(donation.donation_amount).toFixed(2)} ৳`;
+            const cause = donation.donation_cause_display || 'N/A';
+            const status = donation.status || 'Completed';
+  
+            tr.innerHTML = `
+              <td>${formattedDate}</td>
+              <td>${cause}</td>
+              <td>${amount}</td>
+              <td><span class="badge badge-success">${status}</span></td>
+            `;
+  
+            tableBody.appendChild(tr);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching donations:', error);
+        });
+        fetch('http://127.0.0.1:8000/api/campaigns/', {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${accessToken}`,
+    'Content-Type': 'application/json',
+  },
+})
+  .then(response => {
+    if (!response.ok) throw new Error('Failed to fetch campaign data');
+    return response.json();
+  })
+  .then(campaigns => {
+    console.log('Campaign Data:', campaigns);
+    const latestCampaigns = campaigns.slice(0, 3);
+    const campaignContainer = document.getElementById('campaign-container');
+    campaignContainer.innerHTML = '';
+
+    latestCampaigns.forEach(campaign => {
+      const latestUpdate = campaign.updates && campaign.updates.length > 0
+        ? campaign.updates[campaign.updates.length - 1]
+        : null;
+      const collected = latestUpdate ? latestUpdate.total_collected : 0;
+      const goal = campaign.goal_amount || 0;
+      const percentage = goal > 0 ? Math.min(100, Math.floor((collected / goal) * 100)) : 0;
+
+      const div = document.createElement('div');
+      div.className = 'bg-black text-white shadow-md rounded-lg p-4 border flex flex-col justify-between h-full';
+
+div.innerHTML = `
+  <h3 class="text-lg font-semibold mb-2">${campaign.title}</h3>
+  
+  <!-- Description with a fixed height to prevent shifting -->
+  <p class="text-white-600 mb-2 flex-grow">${campaign.description || 'No description provided.'}</p>
+  
+  <!-- Progress bar container with fixed height -->
+  <div class="w-full bg-gray-200 rounded-full h-3 mb-2">
+    <!-- Inner progress bar with dynamic width -->
+    <div class="bg-green-500 h-3 rounded-full" style="width: ${percentage}%"></div>
+  </div>
+
+  <p class="text-sm text-white-700">${collected.toLocaleString()} ৳ raised of ${goal.toLocaleString()} ৳ goal</p>
+  
+  <!-- Donate button fixed to bottom -->
+  <button class="text-xl btn btn-success mt-auto w-1/5">Donate</button>
+`;
+
+
+
+      campaignContainer.appendChild(div);
+    });
+  })
+  .catch(error => {
+    console.error('Error fetching campaigns:', error);
+  });
+    });
+  </script>
+  
+  
+</body>
+</html>

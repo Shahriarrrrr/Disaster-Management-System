@@ -12,6 +12,7 @@ from .serializers import DonationSerializer, FundsSerializer, FundTransactionSer
 import uuid
 from django.http import HttpResponse
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 
@@ -31,8 +32,11 @@ class FundTransactionView(generics.ListAPIView):
 
 
 class DonationListView(generics.ListAPIView):
-    queryset = Donation.objects.all()
     serializer_class = DonationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Donation.objects.filter(donor = self.request.user)
 
 
 
@@ -185,16 +189,63 @@ def payment_success(request):
 @csrf_exempt
 def payment_fail(request):
     tran_id = request.GET.get('tran_id')
-    donation = get_object_or_404(Donation, transaction_id=tran_id)
-    donation.status = "Failed"
-    print(donation.status)
-    donation.save()
-    return HttpResponse("Payment Failed.")
+
+    if not tran_id:
+        return HttpResponse("Missing transaction ID", status=400)
+
+    try:
+        # Start a transaction block
+        with transaction.atomic():
+            donation = Donation.objects.select_for_update().get(transaction_id=tran_id)
+
+            # Early exit if the donation status is already "Failed"
+            if donation.status == "Failed":
+                return HttpResponse(f"Payment already marked as failed for transaction ID: {tran_id}")
+
+            # Mark the donation status as "Failed"
+            donation.status = "Failed"
+            donation.save()
+
+            # Optionally, you can also perform some rollback logic if needed.
+            # For example, refund the user, update any related fund transactions, etc.
+
+            return HttpResponse(f"Payment Failed. Transaction ID: {tran_id}")
+
+    except Donation.DoesNotExist:
+        return HttpResponse(f"Donation with transaction ID {tran_id} not found", status=404)
+
+    except Exception as e:
+        print(f"Error processing payment failure: {e}")
+        return HttpResponse("An error occurred while processing your payment", status=500)
 
 @csrf_exempt
 def payment_cancel(request):
     tran_id = request.GET.get('tran_id')
-    donation = get_object_or_404(Donation, transaction_id=tran_id)
-    donation.status = "Cancelled"
-    donation.save()
-    return HttpResponse("Payment Cancelled.")
+
+    if not tran_id:
+        return HttpResponse("Missing transaction ID", status=400)
+
+    try:
+        # Start a transaction block
+        with transaction.atomic():
+            donation = Donation.objects.select_for_update().get(transaction_id=tran_id)
+
+            # Early exit if the donation status is already "Cancelled"
+            if donation.status == "Cancelled":
+                return HttpResponse(f"Payment already cancelled for transaction ID: {tran_id}")
+
+            # Mark the donation status as "Cancelled"
+            donation.status = "Cancelled"
+            donation.save()
+
+            # Optionally, you can perform rollback actions here too.
+            # For example, refunding the user or updating any related fund transactions.
+
+            return HttpResponse(f"Payment Cancelled. Transaction ID: {tran_id}")
+
+    except Donation.DoesNotExist:
+        return HttpResponse(f"Donation with transaction ID {tran_id} not found", status=404)
+
+    except Exception as e:
+        print(f"Error processing payment cancellation: {e}")
+        return HttpResponse("An error occurred while processing your payment", status=500)

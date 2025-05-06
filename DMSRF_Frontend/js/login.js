@@ -14,6 +14,7 @@ window.addEventListener('load', () => {
     };
   
     try {
+      console.log(data)
       const response = await fetch('http://127.0.0.1:8000/api/token/', {
         method: 'POST',
         headers: {
@@ -33,7 +34,7 @@ window.addEventListener('load', () => {
   
         // Redirect or show success
         //alert('Login successful!');
-        window.location.href = 'http://127.0.0.1:5500/DMSRF/DMSRF_Frontend/html/dashboard.html';
+        window.location.href = 'http://127.0.0.1:5500/DMSRF/DMSRF_Frontend/html/userdashboard.html';
       } else {
         const err = await response.json();
         alert('Login failed: ' + (err.detail || 'Check your credentials.'));
