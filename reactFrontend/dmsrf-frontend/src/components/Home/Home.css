@@ -1,0 +1,17 @@
+    /* Any additional custom styles */
+    .stat-figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @media (max-width: 1023px) {
+      .drawer-content {
+        padding-left: 0;
+      }
+    }
+    
+    .modal-box {
+      max-height: 85vh;
+      overflow-y: auto;
+    }

@@ -1,15 +1,22 @@
 // src/router.jsx
 import { createBrowserRouter } from "react-router-dom";
-import Root from "./components/Root/Root";
-import Home from "./components/Home/Home";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
-import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
-import NotFound from "./components/NotFound/NotFound";
-import Profile from "./components/Profile/Profile";
+import React from "react";
+
+// Lazy load components
+const Root = React.lazy(() => import("./components/Root/Root"));
+const Home = React.lazy(() => import("./components/Home/Home"));
+const Login = React.lazy(() => import("./components/Login/Login"));
+const Register = React.lazy(() => import("./components/Register/Register"));
+const ProtectedRoute = React.lazy(() => import("./components/ProtectedRoute/ProtectedRoute"));
+const NotFound = React.lazy(() => import("./components/NotFound/NotFound"));
+const Profile = React.lazy(() => import("./components/Profile/Profile"));
+
+import { homeLoader } from "./Loaders/homeLoader";
+import Donations from "./components/Donations/Donations";
+import { donationLoader } from "./Loaders/DonationsLoader";
+
 
 const router = createBrowserRouter([
-  // Public routes (no layout)
   {
     path: "/login",
     element: <Login />,
@@ -18,32 +25,38 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register />,
   },
-
-  // Protected layout with navbar/footer
   {
     path: "/",
     element: <Root />,
     children: [
       {
-        index: true, // same as path: "/"
+        index: true,
         element: (
           <ProtectedRoute>
             <Home />
           </ProtectedRoute>
         ),
+        loader: homeLoader,
       },
       {
-        path : '/profile',
-                element: (
+        path: "/profile",
+        element: (
           <ProtectedRoute>
-            <Profile></Profile>
+            <Profile />
           </ProtectedRoute>
         ),
       },
+      {
+        path: '/donations',
+        element : (
+          <ProtectedRoute>
+            <Donations></Donations>
+          </ProtectedRoute>
+        ),
+        loader:donationLoader,
+      },
     ],
   },
-
-  // Catch-all for 404
   {
     path: "*",
     element: <NotFound />,

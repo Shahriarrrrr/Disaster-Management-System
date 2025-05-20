@@ -4,10 +4,10 @@ import Footer from "../Footer/Footer";
 
 const Root = () => {
     return (
-        <div>
-            <Navbar></Navbar>
-            <Outlet></Outlet>
-            <Footer></Footer>
+        <div className="min-h-screen bg-stone-300">
+            <Navbar />
+            <Outlet />
+            <Footer />
         </div>
     );
 };
