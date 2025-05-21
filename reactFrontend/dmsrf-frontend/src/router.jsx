@@ -45,6 +45,7 @@ const router = createBrowserRouter([
             <Profile />
           </ProtectedRoute>
         ),
+        loader:donationLoader,
       },
       {
         path: '/donations',

@@ -1,52 +1,126 @@
-import React, { useContext } from 'react'; // ✅ Import useContext
-import { Link, useNavigate } from "react-router-dom"; // ✅ Correct import
-import { AuthContext } from "../../context/AuthContext"; // ✅ Context import
+import React, { useEffect } from 'react';
+import './navbar.css';
+import { IonIcon } from '@ionic/react';
+import {
+  homeOutline,
+  personOutline,
+  chatbubblesOutline,
+  barChartOutline,
+  cartOutline,
+  settingsOutline,
+  logOutOutline,
+  logoApple,
+} from 'ionicons/icons';
+import { Link } from 'react-router';
 
 const Navbar = () => {
-  const { logout } = useContext(AuthContext);
-  const navigate = useNavigate();
-    const handleLogout = () => {
-    logout();
-    navigate("/login"); // Redirect to login or landing page
-  };
+  useEffect(() => {
+    const menu = document.querySelector('.menu');
+    const sidebar = document.querySelector('.sidebar');
+    const Menulist = document.querySelectorAll('.Menulist li');
 
-    return (
-        <div className="sticky navbar bg-base-100 shadow-sm">
-  <div className="navbar-start">
-    <div className="dropdown">
-      <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /> </svg>
-      </div>
-      <ul
-        tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-        <li><a>Item 1</a></li>
-        <li>
-            <Link to={'/profile'}>Profiles</Link>
-          {/* <a>Profile</a> */}
-          <ul className="p-2">
-            <li><a>Submenu 1</a></li>
-            <li><a>Submenu 2</a></li>
-          </ul>
-        </li>
-        <li><a>Item 3</a></li>
-      </ul>
-    </div>
-    <a className="btn btn-ghost text-xl">daisyUI</a>
-  </div>
-  <div className="navbar-center hidden lg:flex">
-    <ul className="menu menu-horizontal px-1">
+    menu.onclick = () => {
+      menu.classList.toggle('active');
+      sidebar.classList.toggle('active');
+    };
 
-      <li><Link to='/'>Home</Link></li>
-      <li><Link to='/profile'>Profile</Link></li>
-
-    </ul>
-  </div>
-  <div className="navbar-end">
-    <a onClick={handleLogout} className="btn">LogOut</a>
-  </div>
-</div>
+    Menulist.forEach((item) =>
+      item.addEventListener('click', function () {
+        Menulist.forEach((item) => item.classList.remove('active'));
+        this.classList.add('active');
+      })
     );
+  }, []);
+
+  return (
+    <>
+      <div className="menu"></div>
+
+      <div className="sidebar">
+        <ul>
+          <li className="logo" style={{ '--bg': '#333' }}>
+            <a href="#">
+              <div className="icon">
+                <IonIcon icon={logoApple} />
+              </div>
+              <div className="text">Website Logo</div>
+            </a>
+          </li>
+          <div className="Menulist">
+            <li style={{ '--bg': '#f44336' }} className="active">
+              
+              <Link to="/">
+                <div className="icon">
+                  <IonIcon icon={homeOutline} />
+                </div>
+                <div className="text">Home</div>
+              </Link>
+            </li>
+            <li style={{ '--bg': '#ffa117' }}>
+              <Link to='/profile'>
+              <div className='icon'> 
+                <IonIcon icon={personOutline} />
+              </div>
+              <div className="text">Profile</div>
+              </Link>
+            </li>
+            <li style={{ '--bg': '#0fc70f' }}>
+              <a href="#">
+                <div className="icon">
+                  <IonIcon icon={chatbubblesOutline} />
+                </div>
+                <div className="text">Inbox</div>
+              </a>
+            </li>
+            <li style={{ '--bg': '#2196f3' }}>
+              <a href="#">
+                <div className="icon">
+                  <IonIcon icon={barChartOutline} />
+                </div>
+                <div className="text">Analytics</div>
+              </a>
+            </li>
+            <li style={{ '--bg': '#76d7c4' }}>
+              <a href="#">
+                <div className="icon">
+                  <IonIcon icon={cartOutline} />
+                </div>
+                <div className="text">Order</div>
+              </a>
+            </li>
+            <li style={{ '--bg': '#e91e63' }}>
+              <a href="#">
+                <div className="icon">
+                  <IonIcon icon={settingsOutline} />
+                </div>
+                <div className="text">Settings</div>
+              </a>
+            </li>
+          </div>
+          <div className="bottom">
+            <li style={{ '--bg': '#333' }}>
+              <a href="#">
+                <div className="icon">
+                  <div className="imgbx">
+                    <img src="/pro.png" alt="Profile" />
+                  </div>
+                </div>
+                <div className="text">Tintin</div>
+              </a>
+            </li>
+            <li style={{ '--bg': '#333' }}>
+              <a href="#">
+                <div className="icon">
+                  <IonIcon icon={logOutOutline} />
+                </div>
+                <div className="text">Logout</div>
+              </a>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </>
+  );
 };
 
 export default Navbar;

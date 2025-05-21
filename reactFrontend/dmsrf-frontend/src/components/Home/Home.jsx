@@ -20,8 +20,8 @@ const Home = () => {
   console.log(currentUser)
 
   return (
-    <div className='min-h-screen bg-stone-300'>
-            <main className="flex-1 p-4 md:p-6 lg:p-8">
+    <div  className='min-h-screen bg-stone-300 '>
+            <main className=" flex-1 p-4 md:p-6 lg:p-8">
         <div className="grid gap-6">
 
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
@@ -36,7 +36,7 @@ const Home = () => {
           </div>
 
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="stat bg-base-100 shadow-md rounded-box">
               <div className="stat-figure text-primary">
                 <i className="fas text-2xl">৳</i>
@@ -72,7 +72,7 @@ const Home = () => {
           </div>
 
 
-          <div className="bg-base-100 p-6 rounded-box shadow-md">
+          <div className="bg-base-100 p-6 pl-10  rounded-box shadow-md">
             <h2 className="text-xl font-bold mb-4">Your Donation History</h2>
             <div className="overflow-x-auto">
               <table className="table table-zebra w-full">

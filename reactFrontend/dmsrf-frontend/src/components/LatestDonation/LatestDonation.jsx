@@ -7,7 +7,7 @@ const LatestDonation = ({donation}) => {
     const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
     return (
 
-            <tr>
+            <tr  className='ml-10'>
             <td>{formattedDate}</td>
             <td>{donation_cause_display}</td>
             <td>{donation_amount}</td>
