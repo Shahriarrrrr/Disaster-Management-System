@@ -14,18 +14,13 @@ const Profile = React.lazy(() => import("./components/Profile/Profile"));
 import { homeLoader } from "./Loaders/homeLoader";
 import Donations from "./components/Donations/Donations";
 import { donationLoader } from "./Loaders/DonationsLoader";
+import News from "./components/News/News";
+import DonationPage from "./components/Donate/Donate";
+import DonateSuccess from "./components/DonateSuccess/DonateSuccess";
 
 
 const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
+    {
     path: "/",
     element: <Root />,
     children: [
@@ -56,8 +51,41 @@ const router = createBrowserRouter([
         ),
         loader:donationLoader,
       },
+      {
+        path: '/news',
+        element : (
+          <ProtectedRoute>
+            <News></News>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/donatePage',
+        element : (
+          <ProtectedRoute>
+            <DonationPage></DonationPage>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/donateSuccess',
+        element : (
+          <ProtectedRoute>
+            <DonateSuccess></DonateSuccess>
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+
   {
     path: "*",
     element: <NotFound />,

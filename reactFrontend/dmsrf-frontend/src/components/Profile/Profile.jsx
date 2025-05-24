@@ -22,11 +22,12 @@ const Profile = () => {
   // For demo purposes, assuming hardcoded values will be replaced later with actual user fields
 
   return (
-    <div>
+    <div className='bg-[#222831]'>
       <div className="container">
-        <div className="header">
-          <h1>DMSRF</h1>
+        <div className="header ">
+          <h1 className=''>PROFILE</h1>
           <p>Profile</p>
+          <button className='btn btn-secondary'>Donate</button>
         </div>
 
         <div className="profile-card">

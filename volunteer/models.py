@@ -27,3 +27,28 @@ class VolunteerProfile(models.Model):
 
     def total_programs_joined(self):
         return self.joined_programs.count()
+
+
+class VolunteerJoinRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending', 'Pending'
+        ACCEPTED = 'accepted', 'Accepted'
+        REJECTED = 'rejected', 'Rejected'
+
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name='volunteer_join_request'
+    )
+    request_date = models.TimeField(auto_now_add=True)
+    cause_of_joining = models.TextField()
+    emergency_contact = models.CharField(max_length=15, unique=True)
+    age = models.PositiveIntegerField()
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.PENDING
+    )
+
+    def __str__(self):
+        return f"{self.user.user_name} - {self.status}"

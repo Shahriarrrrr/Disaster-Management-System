@@ -15,6 +15,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 
 
 
@@ -59,6 +60,7 @@ class InitiateDonation(APIView):
             cause = serializer.validated_data['donation_cause']
             donor_remarks = serializer.validated_data.get('donor_remarks', '')
             #donor_name = serializer.validated_data.get('donor_name', 'Anonymous')
+            custom_phone = serializer.validated_data.get('custom_phone')
 
             donor = request.user if request.user.is_authenticated else None
             donor_name = (
@@ -97,7 +99,7 @@ class InitiateDonation(APIView):
                 'cus_email': donor.email if donor else "anonymous@email.com",
                 'cus_add1': donor.user_address if donor else "Bangladesh",
                 'cus_city': donor.user_state if donor else "Unknown",
-                'cus_phone': donor.user_phone if donor else "0100000000",
+                'cus_phone': ( custom_phone if custom_phone else donor.user_phone if donor else "0100000000"),
                 'cus_country':'Bangladesh',
                 'shipping_method': 'NO',
                 'product_name': cause.title,
@@ -152,7 +154,7 @@ def payment_success(request):
         user.user_last_donated_at = timezone.now()
         user.save()
     
-    return HttpResponse(f"Payment Success! Transaction ID: {tran_id}")
+    return redirect("http://localhost:5173/donateSuccess")
 @csrf_exempt
 def payment_fail(request):
     tran_id = request.GET.get('tran_id')

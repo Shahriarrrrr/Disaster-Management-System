@@ -3,16 +3,19 @@ import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 
 const Root = () => {
-    return (
-        <div className="min-h-screen bg-stone-300 ">
-            <Navbar />
-        <div style={{ marginLeft: "100px" }}>
+  return (
+    <div className="layout flex flex-col min-h-screen">
+      <header className="layout-navbar">
+        <Navbar />
+      </header>
+
+      <main className="layout-content flex-grow">
         <Outlet />
-        </div>
-            
-            <Footer />
-        </div>
-    );
+      </main>
+
+
+    </div>
+  );
 };
 
 export default Root;
