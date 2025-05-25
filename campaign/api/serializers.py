@@ -20,5 +20,5 @@ class CampaignSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'title', 'location', 'slug', 'description', 'goal_amount',
             'image', 'start_date', 'end_date', 'is_active', 'created_at',
-            'updates', 'comments'
+            'updates', 'comments','featured'
         ]

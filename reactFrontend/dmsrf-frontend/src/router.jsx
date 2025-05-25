@@ -17,6 +17,8 @@ import { donationLoader } from "./Loaders/DonationsLoader";
 import News from "./components/News/News";
 import DonationPage from "./components/Donate/Donate";
 import DonateSuccess from "./components/DonateSuccess/DonateSuccess";
+import Cause from "./components/Cause/Cause";
+import { CauseLoader } from "./Loaders/CauseLoader";
 
 
 const router = createBrowserRouter([
@@ -74,6 +76,15 @@ const router = createBrowserRouter([
             <DonateSuccess></DonateSuccess>
           </ProtectedRoute>
         ),
+      },
+      {
+        path: '/cause',
+        element : (
+          <ProtectedRoute>
+            <Cause></Cause>
+          </ProtectedRoute>
+        ),
+        loader : CauseLoader,
       },
     ],
   },
