@@ -1,0 +1,12 @@
+-> Testing Needed in POSTMAN
+
+
+Endpoint	     HTTP Method	            Description	                                                Permissions
+aid/api/Aid/	    GET	    List all aid requests (filtered by permissions).	Any authenticated user can view, but only their own requests (unless admin).
+aid/api/Aid/	    POST	Create a new aid request.	Any authenticated user (AidRequestPermissions allows POST).
+aid/api/Aid/{id}/	GET	    Retrieve a specific aid request by id.	User must own the request or be admin/staff.
+aid/api/Aid/{id}/	PUT	    Fully update a specific aid request (all fields required).	User must own the request and cannot modify restricted fields (unless admin).
+aid/api/Aid/{id}/	PATCH	Partially update a specific aid request (partial fields allowed).	User must own the request and cannot modify restricted fields (unless admin).
+aid/api/Aid/{id}/	DELETE	Delete a specific aid request.	User must own the request or be admin/staff.
+
+

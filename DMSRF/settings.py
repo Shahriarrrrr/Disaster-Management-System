@@ -1,5 +1,6 @@
 from decouple import config
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,9 +29,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'background_task',
     'accounts',
     'campaign',
     'donation',
+    'volunteer',
+    'program',
+    'shelter',
+    'aid',
+    'ticket',
+    'emergencyRequest',
 ]
 
 MIDDLEWARE = [
@@ -143,3 +151,12 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
 ]
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Default is 5 minutes
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # You can adjust this too
+}

@@ -1,0 +1,123 @@
+<!--WORKING FILE TESTING GROUND-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form id = "donation-form">
+        <label for="Amount">Amount</label>
+        <input type="number">
+        <label for="Remarks">Remarks</label>
+        <input type="text">
+        <button type="submit">Donate</button>
+    </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // Get form elements
+          const donationForm = document.getElementById('donation-form');
+          const amountInput = donationForm.querySelector('input[type="number"]');
+          const remarksInput = donationForm.querySelector('input[type="text"]');
+          const submitButton = donationForm.querySelector('button[type="submit"]');
+          
+          // Add IDs to help with validation and handling
+          amountInput.id = 'donation-amount';
+          remarksInput.id = 'donation-remarks';
+          submitButton.id = 'donation-submit';
+          
+          // Handle form submission
+          donationForm.addEventListener('submit', function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Get values
+            const amount = amountInput.value;
+            const remarks = remarksInput.value;
+            
+            // Validate amount
+            if (!amount || amount <= 0) {
+              alert('Please enter a valid donation amount.');
+              return;
+            }
+            
+            // Show processing state
+            submitButton.textContent = 'Processing...';
+            submitButton.disabled = true;
+            
+            // Prepare payload
+            const payload = {
+              donation_cause: 3,
+              donation_amount: Number(amount),
+              donor_remarks: remarks
+            };
+            
+            // Get access token
+            const accessToken = localStorage.getItem('access_token');
+            
+            // Make API request
+            fetch('http://127.0.0.1:8000/donation/api/donation/initiate/', {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+            })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Donation request failed');
+              }
+              return response.json();
+            })
+            .then(data => {
+              console.log('Payment URL:', data.payment_url);
+              
+              // Store URL in case something goes wrong
+              localStorage.setItem('last_payment_url', data.payment_url);
+              
+              // Create a hidden link to open payment in new tab
+              const paymentLink = document.createElement('a');
+              paymentLink.href = data.payment_url;
+              paymentLink.target = '_blank';
+              paymentLink.style.display = 'none';
+              document.body.appendChild(paymentLink);
+              
+              // Alert user
+              alert('Donation processed! Click OK to proceed to payment.');
+              
+              // Open payment page
+              paymentLink.click();
+              
+              // Clean up
+              document.body.removeChild(paymentLink);
+              
+              // Reset form
+              donationForm.reset();
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('There was an error processing your donation. Please try again.');
+            })
+            .finally(() => {
+              // Reset button state
+              submitButton.textContent = 'Donate';
+              submitButton.disabled = false;
+            });
+          });
+          
+          // Check for any stored payment URL from previous session
+          const storedPaymentUrl = localStorage.getItem('last_payment_url');
+          if (storedPaymentUrl) {
+            const shouldRedirect = confirm('Would you like to continue to the payment page from your previous donation?');
+            if (shouldRedirect) {
+              window.open(storedPaymentUrl, '_blank');
+            }
+            // Clear it after asking
+            localStorage.removeItem('last_payment_url');
+          }
+        });
+      </script>
+</body>
+</html>

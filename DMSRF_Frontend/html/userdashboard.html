@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Disaster Relief Fund - User Dashboard</title>
+  <!-- Tailwind CSS and DaisyUI CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Any additional custom styles */
+    .stat-figure {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    @media (max-width: 1023px) {
+      .drawer-content {
+        padding-left: 0;
+      }
+    }
+    
+    .modal-box {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-stone-300 ">
+  <div class="drawer lg:drawer-open">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+    <div class="drawer-content flex flex-col">
+      <!-- Navbar -->
+      <div class="navbar bg-base-100 shadow-md ">
+        <div class="flex-none">
+          <label for="my-drawer-2" class="btn btn-square btn-ghost">
+            <i class="fas fa-bars"></i>
+          </label>
+        </div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2">
+            <i class="fas fa-heart text-error"></i>
+            <span class="text-xl font-bold">Relief Fund</span>
+          </div>
+        </div>
+        <div class="flex-none">
+          <button class="btn btn-ghost btn-circle">
+            <i class="fas fa-bell"></i>
+          </button>
+          <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost btn-circle avatar">
+              <div class="w-10 rounded-full">
+                <img id="profile-image" src="" alt="Profile" />
+              </div>
+            </label>
+            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+              <li><a>Profile</a></li>
+              <li><a>Settings</a></li>
+              <li><a>Logout</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main content -->
+      <main class="flex-1 p-4 md:p-6 lg:p-8">
+        <div class="grid gap-6">
+          <!-- Welcome section -->
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+            <div>
+              <h1 class="text-2xl md:text-3xl font-bold">Welcome back, <span id="welcome-text">Loading</span></h1>
+              <p class="text-base-content/70">Your generosity is making a difference.</p>
+            </div>
+            <div class="mt-4 md:mt-0">
+              <a class="btn btn-success" href="donationHandler.html">Donate</a>
+              <!-- <label for="my_modal_7" class="btn btn-success">Donate Nows</label> -->
+            </div>
+          </div>
+
+          <!-- Stats cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-primary">
+                <i class="fas text-2xl">৳</i>
+              </div>
+              <div class="stat-title">Total Donated</div>
+              <div id="Total-Donation" class="stat-value text-primary">Loading</div>
+              <div class="stat-desc">Since January 2023</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-secondary">
+                <i class="fas fa-hands-helping text-2xl"></i>
+              </div>
+              <div class="stat-title">Tier</div>
+              <div id="tier" class="stat-value text-secondary">12</div>
+              <div class="stat-desc">↗︎ 3 (30%) more than last year</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-accent">
+                <i class="fas fa-users text-2xl"></i>
+              </div>
+              <div class="stat-title">People Helped</div>
+              <div class="stat-value text-accent">~1,200</div>
+              <div class="stat-desc">Through your contributions</div>
+            </div>
+            <div class="stat bg-base-100 shadow-md rounded-box">
+              <div class="stat-figure text-info">
+                <i class="fas fa-map-marker-alt text-2xl"></i>
+              </div>
+              <div class="stat-title">Countries Reached</div>
+              <div class="stat-value text-info">8</div>
+              <div class="stat-desc">Global impact</div>
+            </div>
+          </div>
+
+          <!-- Recent donations -->
+          <div class="bg-base-100 p-6 rounded-box shadow-md">
+            <h2 class="text-xl font-bold mb-4">Your Donation History</h2>
+            <div class="overflow-x-auto">
+              <table class="table table-zebra w-full">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Campaign</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="donation-table-body">
+<!--Content Goes Here Dynamic one-->
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 text-right">
+              <a href="#" class="btn btn-ghost btn-sm">View All Donations</a>
+            </div>
+          </div>
+
+          <h2 class="text-xl font-bold mt-2">Active Campaigns</h2>
+          <progress class="progress progress-success w-40"></progress>
+          <div id="campaign-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4"></div>
+
+          <!-- Volunteer section -->
+          <div class="bg-base-100 p-6 rounded-box shadow-md mt-6">
+            <div class="flex flex-col md:flex-row gap-6">
+              <div class="md:w-1/2">
+                <h2 class="text-xl font-bold mb-4">Become a Volunteer</h2>
+                <p class="mb-4">
+                  Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need
+                  people with various skills and backgrounds.
+                </p>
+                <ul class="list-disc list-inside mb-4 space-y-1">
+                  <li>On-site disaster response</li>
+                  <li>Medical assistance</li>
+                  <li>Logistics and distribution</li>
+                  <li>Remote support and coordination</li>
+                  <li>Fundraising and awareness</li>
+                </ul>
+                <div class="flex gap-4 mt-6">
+                  <button class="btn btn-primary" id="volunteer-btn">Apply Now</button>
+                  <button class="btn btn-outline">Learn More</button>
+                </div>
+              </div>
+              <div class="md:w-1/2">
+                <img src="https://placehold.co/500x300" alt="Volunteers working" class="rounded-lg w-full h-full object-cover">
+              </div>
+            </div>
+          </div>
+
+          <!-- Volunteer form modal -->
+          <dialog id="volunteer_modal" class="modal">
+            <div class="modal-box w-11/12 max-w-3xl">
+              <form method="dialog">
+                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+              </form>
+              <h3 class="font-bold text-lg mb-4">Volunteer Application</h3>
+              <form id="volunteer-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Full Name</span>
+                  </label>
+                  <input type="text" placeholder="Full Name" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Email</span>
+                  </label>
+                  <input type="email" placeholder="Email" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Phone</span>
+                  </label>
+                  <input type="tel" placeholder="Phone Number" class="input input-bordered" required />
+                </div>
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Location</span>
+                  </label>
+                  <input type="text" placeholder="City, Country" class="input input-bordered" required />
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Areas of Interest</span>
+                  </label>
+                  <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Disaster Response</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Medical Aid</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Logistics</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Fundraising</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Remote Support</span>
+                    </label>
+                    <label class="label cursor-pointer justify-start gap-2">
+                      <input type="checkbox" class="checkbox" />
+                      <span class="label-text">Education</span>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Skills & Experience</span>
+                  </label>
+                  <textarea class="textarea textarea-bordered h-24" placeholder="Tell us about your relevant skills and experience"></textarea>
+                </div>
+                <div class="form-control md:col-span-2">
+                  <label class="label">
+                    <span class="label-text">Availability</span>
+                  </label>
+                  <select class="select select-bordered w-full">
+                    <option disabled selected>Select your availability</option>
+                    <option>Weekdays</option>
+                    <option>Weekends</option>
+                    <option>Evenings</option>
+                    <option>Full-time</option>
+                    <option>On-call for emergencies</option>
+                  </select>
+                </div>
+                <div class="form-control md:col-span-2 mt-4">
+                  <button type="submit" class="btn btn-primary">Submit Application</button>
+                </div>
+              </form>
+            </div>
+          </dialog>
+
+          <!-- Upcoming events -->
+          <h2 class="text-xl font-bold mt-6">Upcoming Events</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Event 1 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">15</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Disaster Preparedness Workshop</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Community Center, Downtown</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>10:00 AM - 2:00 PM</span>
+                    </div>
+                    <p class="mt-2">Learn essential skills for preparing your family for natural disasters.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 2 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">22</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Fundraising Gala Dinner</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Grand Hotel Ballroom</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>7:00 PM - 10:00 PM</span>
+                    </div>
+                    <p class="mt-2">Annual fundraising event with special guests and entertainment.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Event 3 -->
+            <div class="card bg-base-100 shadow-md">
+              <div class="card-body">
+                <div class="flex items-start gap-4">
+                  <div class="bg-primary/10 p-3 rounded-box text-center min-w-16">
+                    <div class="text-primary font-bold text-xl">29</div>
+                    <div class="text-sm">May</div>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Volunteer Training Session</h3>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-map-marker-alt"></i>
+                      <span>Relief Fund Headquarters</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-base-content/70 mt-1">
+                      <i class="fas fa-calendar"></i>
+                      <span>9:00 AM - 12:00 PM</span>
+                    </div>
+                    <p class="mt-2">Training for new volunteers joining our emergency response teams.</p>
+                  </div>
+                </div>
+                <div class="card-actions justify-end mt-4">
+                  <button class="btn btn-outline btn-sm">RSVP</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div class="drawer-side z-10">
+      <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+      <aside class="min-h-screen w-64 bg-base-100 text-base-content">
+        <div class="p-4 flex items-center gap-2">
+          <i class="fas fa-heart text-error"></i>
+          <span class="text-xl font-bold">Relief Fund</span>
+        </div>
+        <div class="px-4 py-6">
+          <div class="flex flex-col items-center">
+            <div class="avatar">
+              <div  class="w-24 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                <img id="big-profile-image" src="https://placehold.co/96x96" alt="Profile" />
+              </div>
+            </div>
+            <h2 id="profile-name-nav" name="profile-name" class="text-xl font-bold mt-4">Sarah Johnson</h2>
+            <p class="text-sm text-base-content/70">Premium Donor</p>
+          </div>
+        </div>
+        <ul class="menu p-4 pt-0">
+          <li>
+            <a href="#" class="active">
+              <i class="fas fa-home"></i>
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-dollar-sign"></i>
+              My Donations
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-heart"></i>
+              Active Campaigns
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-hands-helping"></i>
+              Volunteer
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-chart-pie"></i>
+              Impact Report
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i class="fas fa-calendar"></i>
+              Events
+            </a>
+          </li>
+        </ul>
+        <div class="p-4 mt-auto">
+          <div class="bg-base-200 p-4 rounded-box">
+            <h3 class="font-bold">Need Help?</h3>
+            <p class="text-sm mt-2">Contact our support team for assistance with donations or volunteering.</p>
+            <button class="btn btn-outline btn-sm w-full mt-4">Contact Support</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+ 
+<!-- Replace your current modal form with this updated version -->
+<input type="checkbox" id="my_modal_7" class="modal-toggle" />
+
+<div class="modal" role="dialog">
+  <div class="modal-box">
+    <!-- Create an actual form with action attribute -->
+    <form id="donation-form" method="POST">
+      <div class="space-y-12">
+        <div class="border-b border-gray-900/10 pb-12">
+          <img class="mx-auto h-48 w-48" src="/DMSRF/DMSRF_Frontend/assets/img/logo.jpg" alt="Logo">
+          
+          <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+              <label for="general-donation-amount" class="block text-sm/6 font-medium text-gray-900">Amount</label>
+              <div class="mt-2">
+                <div class="flex items-center rounded-md bg-white pl-3 outline-1 -outline-offset-1 outline-gray-300 focus-within:outline-2 focus-within:-outline-offset-2 focus-within:outline-indigo-600">
+                  <div class="shrink-0 text-base text-gray-500 select-none sm:text-sm/6">Taka</div>
+                  <input id="general-donation-amount" name="donation_amount" type="number" min="1" max="100000" 
+                         class="block min-w-0 grow py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6" 
+                         placeholder="MAX 100000" required>
+                </div>
+                <div class="text-xs text-gray-500 mt-1">Maximum donation: 100,000 Taka</div>
+              </div>
+            </div>
+            
+            <div class="col-span-full">
+              <label for="general-donation-amount-remarks" class="block text-sm/6 font-medium text-gray-900">Message</label>
+              <div class="mt-2">
+                <textarea id="general-donation-amount-remarks" name="donor_remarks" rows="3" 
+                          class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                          placeholder="Optional message"></textarea>
+              </div>
+            </div>
+            
+            <!-- Hidden form field for the donation cause -->
+            <input type="hidden" name="donation_cause" value="3">
+          </div> <!-- closing grid -->
+        </div> <!-- closing border box -->
+      </div> <!-- closing space-y-12 -->
+      
+      <!-- Button for donation -->
+      <div class="flex justify-center mt-4">
+        <button type="submit" id="donateBtn" class="btn btn-success">Donate</button>
+      </div>
+    </form>
+  </div>
+  <label class="modal-backdrop" for="my_modal_7">Close</label>
+</div>
+<script src="/DMSRF/DMSRF_Frontend/js/userdashboard.js"></script> 
+</body>
+</html>

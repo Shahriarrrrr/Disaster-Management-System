@@ -1,28 +1,50 @@
 import requests
+from django.db import transaction
 import logging
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from donation.models import Donation
+from donation.models import Donation,Funds,FundTransaction
 from accounts.models import CustomUser
-from .serializers import DonationSerializer
+from .serializers import DonationSerializer, FundsSerializer, FundTransactionSerializer
 import uuid
 from django.http import HttpResponse
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
-
-class Fund(generics.ListAPIView):
-    pass
+from django.shortcuts import redirect
 
 
+
+            #'success_url': request.build_absolute_uri(f'/donation/api/payment/success/?tran_id={donation.transaction_id}'),
+            # 'success_url': request.build_absolute_uri(f'/donation/api/payment/success/?tran_id={donation.transaction_id}'),
+            # 'fail_url': request.build_absolute_uri('/donation/api/payment/fail/'),
+            # 'cancel_url': request.build_absolute_uri('/donation/api/payment/cancel/'),
+
+class FundsView(generics.ListAPIView):
+    queryset = Funds.objects.all()
+    serializer_class = FundsSerializer
+
+class FundTransactionView(generics.ListAPIView):
+    serializer_class = FundTransactionSerializer
+
+    def get_queryset(self):
+        fund_id = self.request.query_params.get('fund_id')
+        queryset = FundTransaction.objects.all()
+        if fund_id:
+            queryset = queryset.filter(fund__id=fund_id)
+        return queryset
 
 
 class DonationListView(generics.ListAPIView):
-    queryset = Donation.objects.all()
     serializer_class = DonationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Donation.objects.filter(donor = self.request.user)
 
 
 
@@ -38,6 +60,7 @@ class InitiateDonation(APIView):
             cause = serializer.validated_data['donation_cause']
             donor_remarks = serializer.validated_data.get('donor_remarks', '')
             #donor_name = serializer.validated_data.get('donor_name', 'Anonymous')
+            custom_phone = serializer.validated_data.get('custom_phone')
 
             donor = request.user if request.user.is_authenticated else None
             donor_name = (
@@ -69,14 +92,14 @@ class InitiateDonation(APIView):
                 'total_amount': str(donation.donation_amount),  # Convert amount to string
                 'currency': 'BDT',
                 'tran_id': donation.transaction_id,
-                'success_url': request.build_absolute_uri(f'/donation/api/success/?tran_id={transaction_id}'),
-                'fail_url': request.build_absolute_uri('/donation/api/fail/'),
-                'cancel_url': request.build_absolute_uri('/donation/api/cancel/'),
+                'success_url': request.build_absolute_uri(f'/donation/api/payment/success/?tran_id={donation.transaction_id}'),
+                'fail_url': request.build_absolute_uri('/donation/api/payment/fail/'),
+                'cancel_url': request.build_absolute_uri('/donation/api/payment/cancel/'),
                 'cus_name': donor_name,
                 'cus_email': donor.email if donor else "anonymous@email.com",
                 'cus_add1': donor.user_address if donor else "Bangladesh",
                 'cus_city': donor.user_state if donor else "Unknown",
-                'cus_phone': donor.user_phone if donor else "0100000000",
+                'cus_phone': ( custom_phone if custom_phone else donor.user_phone if donor else "0100000000"),
                 'cus_country':'Bangladesh',
                 'shipping_method': 'NO',
                 'product_name': cause.title,
@@ -131,7 +154,7 @@ def payment_success(request):
         user.user_last_donated_at = timezone.now()
         user.save()
     
-    return HttpResponse(f"Payment Success! Transaction ID: {tran_id}")
+    return redirect("http://localhost:5173/donateSuccess")
 @csrf_exempt
 def payment_fail(request):
     tran_id = request.GET.get('tran_id')

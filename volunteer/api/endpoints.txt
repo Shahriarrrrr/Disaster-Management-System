@@ -1,0 +1,111 @@
+| HTTP Method | URL Endpoint                             | Description               |
+|-------------|-------------------------------------------|---------------------------|
+| GET         | `/volunteer/api/volunteers/`              | List volunteer profiles *(you've filtered it to current user)* |
+| POST        | `/volunteer/api/volunteers/`              | Create a volunteer profile |
+| GET         | `/volunteer/api/volunteers/<id>/`         | Retrieve a single volunteer profile |
+| PUT         | `/volunteer/api/volunteers/<id>/`         | Update a volunteer profile |
+| PATCH       | `/volunteer/api/volunteers/<id>/`         | Partially update a volunteer profile |
+| DELETE      | `/volunteer/api/volunteers/<id>/`         | Delete a volunteer profile |
+
+
+Volunteer API Endpoints
+List All Volunteers
+
+Method: GET
+
+URL: /volunteer/api/volunteers/
+
+Description: Retrieve a list of all volunteer profiles.
+
+Permissions:
+
+Admins (staff or superuser) can view all volunteers.
+
+Regular users can only see their own volunteer profile.
+
+Create a Volunteer Profile
+
+Method: POST
+
+URL: /volunteer/api/volunteers/
+
+Description: Create a new volunteer profile (e.g., when a user enrolls as a volunteer).
+
+Parameters (in body):
+
+status: (Required) Active/Inactive.
+
+awards: (Optional) Text field with awards or recognition for the volunteer.
+
+causes_served: (Optional) List of causes (campaigns) the volunteer has served.
+
+working_hours: (Optional) Number of hours the volunteer has worked.
+
+Permissions: Requires authentication using a token.
+
+Retrieve a Specific Volunteer Profile
+
+Method: GET
+
+URL: /volunteer/api/volunteers/{id}/
+
+Description: Retrieve a specific volunteer profile using their unique id.
+
+Permissions:
+
+Admins can view any profile.
+
+Regular users can only view their own profile.
+
+Update a Volunteer Profile
+
+Method: PUT or PATCH
+
+URL: /volunteer/api/volunteers/{id}/
+
+Description: Update a volunteer profile (e.g., update status, awards, working hours, or causes served).
+
+Parameters (in body):
+
+status: (Required) Update the volunteer's status.
+
+awards: (Optional) Text field with updated awards or recognition.
+
+causes_served: (Optional) Updated list of causes.
+
+working_hours: (Optional) Updated working hours.
+
+Permissions:
+
+Admins can update any profile.
+
+Regular users can only update their own profile.
+
+Delete a Volunteer Profile
+
+Method: DELETE
+
+URL: /volunteer/api/volunteers/{id}/
+
+Description: Delete a volunteer profile (e.g., to remove a volunteer from the system).
+
+Permissions:
+
+Admins can delete any profile.
+
+Regular users can only delete their own profile.
+
+
+
+
+| Method  | Endpoint                        | Description                             | Permissions                                      |
+|---------|---------------------------------|-----------------------------------------|--------------------------------------------------|
+| `GET`   | `/volunteer/api/volunteers/`     | List all volunteer profiles             | Admins view all, Users view their own profile   |
+| `POST`  | `/volunteer/api/volunteers/`     | Create a volunteer profile (Enroll)     | Requires authentication (token)                |
+| `GET`   | `/volunteer/api/volunteers/{id}/` | Retrieve a specific volunteer profile   | Admins view any, Users view their own           |
+| `PUT/PATCH` | `/volunteer/api/volunteers/{id}/` | Update a volunteer profile              | Admins update any, Users update their own       |
+| `DELETE` | `/volunteer/api/volunteers/{id}/` | Delete a volunteer profile              | Admins delete any, Users delete their own       |
+
+personal Note: for POST only sending status: ACTIVE/INACTIVE in the body an token can create a profile linked to the user 
+need to finetune the logic
+http://127.0.0.1:8000//volunteer/api/volunteers/3/ this needs the volunteer profile id to patch

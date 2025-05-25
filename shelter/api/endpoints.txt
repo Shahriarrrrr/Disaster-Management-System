@@ -1,0 +1,7 @@
+Shelter -->
+
+GET /shelter/api/shelters/ – List shelters
+GET /shelter/api/shelters/<id>/ – Retrieve shelter by ID
+POST /shelter/api/shelters/ – Create a shelter (admin only)
+PUT /shelter/api/shelters/<id>/ – Update shelter by ID (admin only)
+DELETE /shelter/api/shelters/<id>/ – Delete shelter by ID (admin only)
