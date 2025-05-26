@@ -83,7 +83,7 @@ export default function DonationTable({ donation, user }) {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-4 md:p-8">
+    <div className="min-h-screen bg-gradient-to-br bg-[#222831] p-4 md:p-8 text-white">
       <div className="mx-auto max-w-7xl">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">

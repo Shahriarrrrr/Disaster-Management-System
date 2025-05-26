@@ -8,8 +8,8 @@ const LatestCampaigns = ({campaign}) => {
     
     return (
 <div>
-  <h3 className="text-lg font-semibold mb-2">{campaign.title}</h3>
-  <p className="text-white-600 mb-2 flex-grow">
+  <h3 className="text-lg text-white font-semibold mb-2">{campaign.title}</h3>
+  <p className="text-white mb-2 flex-grow">
     {campaign.description || 'No description provided.'}
   </p>
 
@@ -22,8 +22,8 @@ const LatestCampaigns = ({campaign}) => {
   </div>
 
   <div className="flex justify-between">
-    <p className="text-sm text-white-700">raised {totalCollected} ৳</p>
-    <p className="text-sm text-white-700">{goal.toLocaleString()} ৳ goal</p>
+    <p className="text-sm text-white">raised {totalCollected} ৳</p>
+    <p className="text-sm text-white">{goal.toLocaleString()} ৳ goal</p>
   </div>
 
   <button className="text-xl btn btn-success mt-auto w-1/5">Donate</button>

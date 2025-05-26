@@ -20,7 +20,7 @@ const Home = () => {
   console.log(currentUser)
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+<div className="min-h-screen bg-gradient-to-r from-gray-700 via-gray-900 to-black">
       <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
         <div className="grid gap-8">
           {/* Welcome Section */}
@@ -36,6 +36,13 @@ const Home = () => {
             </div>
             <div className="mt-4 md:mt-0">
               
+              <Link to= '/SOS'
+                className="mr-2.5 px-6 py-3 bg-gradient-to-r from-red-500 to-red-900 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center gap-2"
+                href="donationHandler.html"
+              >
+                <span>SOS</span>
+
+              </Link>
               <Link to= '/donatePage'
                 className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center gap-2"
                 href="donationHandler.html"
@@ -184,10 +191,10 @@ const Home = () => {
           {/* Active Campaigns */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-slate-800">Active Campaigns</h2>
+              <h2 className="text-xl font-bold text-white">Active Campaigns</h2>
               <div className="flex items-center gap-2">
                 <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-sm text-slate-500">Live updates</span>
+                <span className="text-sm text-white">Live updates</span>
               </div>
             </div>
             <div className="relative h-2 w-full bg-slate-100 rounded-full mb-8 overflow-hidden">

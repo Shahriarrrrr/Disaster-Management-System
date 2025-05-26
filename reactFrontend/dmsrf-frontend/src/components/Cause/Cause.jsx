@@ -16,6 +16,7 @@ import {
   Share2,
 } from "lucide-react"
 import { useLoaderData } from "react-router"
+import hr1Webp from '../../assets/hr1.webp'
 
 export default function Cause() {
   const [selectedAmount, setSelectedAmount] = useState("50")
@@ -169,6 +170,7 @@ export default function Cause() {
 
     const causes = useLoaderData()
     const camp = causes?.causes || [];
+    
 
 
   // const getUrgencyColor = (urgency) => {
@@ -187,12 +189,14 @@ export default function Cause() {
   const formatCurrency = (amount) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "BDT",
       minimumFractionDigits: 0,
     }).format(amount)
   }
 
   const calculateProgress = (raised, goal) => {
+    console.log('Raised',raised)
+    console.log('Goal',goal)
     return Math.min((raised / goal) * 100, 100)
   }
 
@@ -211,7 +215,7 @@ export default function Cause() {
   }
 
   const LoadingSkeleton = () => (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br bg-[#222831]">
       {/* Hero Skeleton */}
       <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -356,12 +360,12 @@ export default function Cause() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br bg-[#222831]">
       {/* Hero Section */}
       <div className="carousel w-full">
   <div id="slide1" className="carousel-item relative w-full">
     <img
-      src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp"
+      src={hr1Webp}
       className="w-full" />
     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
       <a href="#slide4" className="btn btn-circle">❮</a>
@@ -370,7 +374,7 @@ export default function Cause() {
   </div>
   <div id="slide2" className="carousel-item relative w-full">
     <img
-      src="https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp"
+      src="c:\Users\USER\Downloads\safeimagekit-pexels-omar-ramadan-1739260-20105308.webp"
       className="w-full" />
     <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
       <a href="#slide1" className="btn btn-circle">❮</a>
@@ -407,18 +411,20 @@ export default function Cause() {
           data-animate-id="featured-header"
           ref={observeElement}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Featured Campaigns</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Featured Campaigns</h2>
+          <p className="text-lg text-white max-w-2xl mx-auto leading-relaxed">
             These urgent campaigns need your immediate support to reach their goals and create lasting impact.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/*--FCK1-*/}
+
           {camp
             .filter((camps) => camps.featured)
             .map((camps, index) => (
+              
               <div
+              
                 key={camps.id}
                 className={`bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 group ${
                   visibleElements.has(`featured-${camps.id}`)
@@ -430,6 +436,7 @@ export default function Cause() {
                 ref={observeElement}
               >
                 <div className="relative overflow-hidden">
+                  
                   <img
                     src={camps.image || "/placeholder.svg"}
                     alt={camps.title}
@@ -468,15 +475,15 @@ export default function Cause() {
 
                   <div className="space-y-4">
                     <div className="flex justify-between text-sm font-medium">
-                      <span className="text-gray-900">{formatCurrency("10000")} raised</span>
-                      <span className="text-gray-500">of {formatCurrency(`10000`)} goal</span>
+                      <span className="text-gray-900">{formatCurrency(camps.updates?.[camps.updates.length - 1]?.total_collected)} raised</span>
+                      <span className="text-gray-500">of {formatCurrency(camps?.goal_amount)} goal</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                       <div
                         className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-1000 ease-out"
                         style={{
                           width: visibleElements.has(`featured-${camps.id}`)
-                            ? `${calculateProgress('1000', '10000')}%` //Nedd Changes Here and Below near funded
+                            ? `${calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount)}%` //Nedd Changes Here and Below near funded
                             : "0%",
                         }}
                       ></div>
@@ -484,7 +491,7 @@ export default function Cause() {
                     <div className="flex justify-between items-center text-sm">
                       {/* <span className="text-gray-500">{campaign.donors.toLocaleString()} donors</span> */}
                       <span className="font-medium text-purple-600">
-                        {Math.round(calculateProgress(1000, camps.goal))}% funded 
+                        {Math.round(calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount))}% funded 
                       </span>
                     </div>
                   </div>
@@ -508,7 +515,7 @@ export default function Cause() {
         {/* All Campaigns */}
         <div className="mb-12">
           <h2
-            className={`text-3xl md:text-4xl font-bold text-gray-900 mb-8 text-center transition-all duration-1000 ${
+            className={`text-3xl md:text-4xl font-bold text-white mb-8 text-center transition-all duration-1000 ${
               visibleElements.has("all-campaigns-header") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
             data-animate-id="all-campaigns-header"
@@ -570,15 +577,15 @@ export default function Cause() {
 
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
-                        <span className="font-medium text-gray-900">{formatCurrency(camps.updates?.[0]?.total_collected)}</span>
-                        <span className="text-gray-500">of {formatCurrency(camps.goal_amount)}</span>
+                        <span className="font-medium text-gray-900">{formatCurrency(camps.updates?.[camps.updates.length - 1]?.total_collected)}</span>
+                        <span className="text-gray-500">of {formatCurrency(camps?.goal_amount)}</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                         <div
                           className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-1000 ease-out"
                           style={{
                             width: visibleElements.has(`campaign-${camps.id}`)
-                              ? `${calculateProgress(parseInt(camps.updates?.[0]?.total_collected), camps.goal)}%`
+                              ? `${calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount)}%`
                               : "0%",
                           }}
                         ></div>
@@ -588,7 +595,7 @@ export default function Cause() {
 
                         
                         <span className="font-medium text-purple-600">
-                          {Math.round(calculateProgress(camps.updates?.[0]?.total_collected, camps.goal))}% funded
+                          {Math.round(calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount))}% funded
                         </span>
                       </div>
                     </div>

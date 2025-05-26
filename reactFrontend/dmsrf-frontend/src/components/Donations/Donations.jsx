@@ -11,7 +11,8 @@ const Donations = () => {
     const {donations} = data
     console.log(donations)
     return (
-        <div className="poppins-font h-screen">
+      <div className="bg-[#222831]">
+                <div className="poppins-font h-screen bg-[#222831]">
             <div className="ml-[500px] w-[1000px] mt-4 bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl p-8 mb-10 shadow-[0_10px_25px_rgba(102,126,234,0.5)] flex flex-wrap items-center justify-between transition-transform duration-300 ease-in-out hover:-translate-y-1">
   <div className="flex-1 min-w-[300px]">
     <div className="flex items-center text-[1.8rem] mb-1">
@@ -36,6 +37,8 @@ const Donations = () => {
 </div>
 <DonationList donation={donations} user = {user}></DonationList>
         </div>
+
+      </div>
 
 
 

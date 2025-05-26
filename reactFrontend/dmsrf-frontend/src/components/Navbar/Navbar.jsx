@@ -29,7 +29,7 @@ const Navbar = () => {
 
 
   return (
-    <div className="navbar bg-gradient-to-r from-purple-500 to-blue-600 text-white shadow-md transition-all duration-300">
+    <div className="navbar   bg-gradient-to-r from-gray-700 via-gray-900 to-black text-white shadow-md transition-all duration-300">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost hover:bg-white/10 lg:hidden">
@@ -76,6 +76,9 @@ const Navbar = () => {
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link to='/' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Home</Link>
+          </li>
+          <li>
+            <Link to='/cause' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Campaigns</Link>
           </li>
           <li>
             <details>
