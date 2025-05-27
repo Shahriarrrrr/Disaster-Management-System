@@ -1,206 +1,440 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import {
-  Heart,
-  Users,
-  Target,
-  Clock,
-  MapPin,
-  Droplets,
-  GraduationCap,
-  Home,
-  Leaf,
-  Stethoscope,
-  ArrowRight,
-  Share2,
-} from "lucide-react"
+import { Heart, Clock, MapPin, ArrowRight, Share2, X } from "lucide-react"
 import { useLoaderData } from "react-router"
-import hr1Webp from '../../assets/hr1.webp'
 
-export default function Cause() {
-  const [selectedAmount, setSelectedAmount] = useState("50")
-  const [customAmount, setCustomAmount] = useState("")
-  const [showDonationModal, setShowDonationModal] = useState(false)
-  const [selectedCampaign, setSelectedCampaign] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [visibleElements, setVisibleElements] = useState(new Set())
-  const observerRef = useRef(null)
+function useIntersectionObserver(ref, options = {}) {
+  const [isIntersecting, setIsIntersecting] = useState(false)
 
-
-  // Intersection Observer for scroll animations
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setVisibleElements((prev) => new Set([...prev, entry.target.dataset.animateId]))
-          }
-        })
-      },
-      { threshold: 0.1, rootMargin: "50px" },
-    )
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting)
+    }, options)
 
-    observerRef.current = observer
-
-    // Simulate loading
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
 
     return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-      clearTimeout(timer)
+      observer.disconnect()
     }
-  }, [])
+  }, [ref, options])
 
-  // Function to observe elements
-  const observeElement = (element) => {
-    if (element && observerRef.current) {
-      observerRef.current.observe(element)
+  return isIntersecting
+}
+
+function AnimatedProgressBar({ percentage, delay = 0, size = "large" }) {
+  const [animatedPercentage, setAnimatedPercentage] = useState(0)
+  const progressRef = useRef(null)
+  const isVisible = useIntersectionObserver(progressRef, { threshold: 0.1 })
+
+  useEffect(() => {
+    if (isVisible) {
+      const timer = setTimeout(() => {
+        setAnimatedPercentage(percentage)
+      }, delay)
+      return () => clearTimeout(timer)
     }
-  }
+  }, [isVisible, percentage, delay])
 
-  // const campaigns = [
-  //   {
-  //     id: 1,
-  //     title: "Emergency Relief for Flood Victims",
-  //     description:
-  //       "Providing immediate aid including food, water, and shelter to families affected by recent flooding in the coastal regions.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Disaster Relief",
-  //     categoryIcon: Droplets,
-  //     categoryColor: "bg-blue-500",
-  //     raised: 75420,
-  //     goal: 100000,
-  //     donors: 1247,
-  //     daysLeft: 12,
-  //     location: "Coastal Region",
-  //     urgency: "Critical",
-  //     featured: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Build Schools in Rural Communities",
-  //     description:
-  //       "Constructing educational facilities to provide quality education access for children in underserved rural areas.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Education",
-  //     categoryIcon: GraduationCap,
-  //     categoryColor: "bg-emerald-500",
-  //     raised: 45680,
-  //     goal: 80000,
-  //     donors: 892,
-  //     daysLeft: 45,
-  //     location: "Rural Districts",
-  //     urgency: "Ongoing",
-  //     featured: false,
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Clean Water Initiative",
-  //     description:
-  //       "Installing water purification systems and wells to provide clean, safe drinking water to communities in need.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Water & Sanitation",
-  //     categoryIcon: Droplets,
-  //     categoryColor: "bg-cyan-500",
-  //     raised: 32150,
-  //     goal: 60000,
-  //     donors: 567,
-  //     daysLeft: 28,
-  //     location: "Multiple Villages",
-  //     urgency: "High",
-  //     featured: false,
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Mobile Medical Clinics",
-  //     description:
-  //       "Bringing healthcare services directly to remote communities through fully equipped mobile medical units.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Healthcare",
-  //     categoryIcon: Stethoscope,
-  //     categoryColor: "bg-red-500",
-  //     raised: 89200,
-  //     goal: 120000,
-  //     donors: 1456,
-  //     daysLeft: 21,
-  //     location: "Remote Areas",
-  //     urgency: "High",
-  //     featured: true,
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Homeless Shelter Expansion",
-  //     description:
-  //       "Expanding shelter capacity and services to provide safe housing and support for homeless individuals and families.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Housing",
-  //     categoryIcon: Home,
-  //     categoryColor: "bg-orange-500",
-  //     raised: 67890,
-  //     goal: 95000,
-  //     donors: 1123,
-  //     daysLeft: 35,
-  //     location: "City Center",
-  //     urgency: "Ongoing",
-  //     featured: false,
-  //   },
-  //   {
-  //     id: 6,
-  //     title: "Reforestation Project",
-  //     description:
-  //       "Planting native trees and restoring degraded forest areas to combat climate change and preserve biodiversity.",
-  //     image: "/placeholder.svg?height=300&width=400",
-  //     category: "Environment",
-  //     categoryIcon: Leaf,
-  //     categoryColor: "bg-green-500",
-  //     raised: 23450,
-  //     goal: 50000,
-  //     donors: 678,
-  //     daysLeft: 60,
-  //     location: "National Forest",
-  //     urgency: "Ongoing",
-  //     featured: false,
-  //   },
-  // ]
+  const height = size === "large" ? "h-4" : "h-3"
 
-    const causes = useLoaderData()
-    const camp = causes?.causes || [];
-    
+  return (
+    <div
+      ref={progressRef}
+      className={`relative w-full bg-slate-800/50 rounded-full ${height} overflow-hidden backdrop-blur-sm`}
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-full"></div>
+      <div
+        className={`${height} bg-gradient-to-r from-emerald-500 via-teal-500 to-green-500 rounded-full shadow-lg transition-all duration-2000 ease-out relative overflow-hidden`}
+        style={{ width: `${animatedPercentage}%` }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-400 to-green-400 opacity-50 blur-sm"></div>
+      </div>
+      {animatedPercentage > 15 && size === "large" && (
+        <div
+          className="absolute top-1/2 transform -translate-y-1/2 text-white text-xs font-bold transition-all duration-2000 ease-out"
+          style={{ left: `${Math.max(animatedPercentage - 8, 2)}%` }}
+        >
+          {Math.round(animatedPercentage)}%
+        </div>
+      )}
+    </div>
+  )
+}
 
+function LoadingSkeleton() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      {/* Hero Skeleton */}
+      <div className="h-96 bg-slate-800/50 animate-pulse relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <div className="h-16 bg-slate-700/50 rounded-lg w-96 mx-auto"></div>
+            <div className="h-8 bg-slate-700/30 rounded-lg w-80 mx-auto"></div>
+          </div>
+        </div>
+      </div>
 
-  // const getUrgencyColor = (urgency) => {
-  //   switch (urgency) {
-  //     case "Critical":
-  //       return "bg-red-100 text-red-800 border-red-200"
-  //     case "High":
-  //       return "bg-orange-100 text-orange-800 border-orange-200"
-  //     case "Ongoing":
-  //       return "bg-green-100 text-green-800 border-green-200"
-  //     default:
-  //       return "bg-gray-100 text-gray-800 border-gray-200"
-  //   }
-  // }
+      {/* Content Skeleton */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <div className="h-12 bg-slate-700/50 rounded-lg mb-4 max-w-md mx-auto animate-pulse"></div>
+          <div className="h-6 bg-slate-700/30 rounded-lg max-w-2xl mx-auto animate-pulse"></div>
+        </div>
+
+        {/* Featured Campaign Skeletons */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          {[1, 2].map((i) => (
+            <div key={i} className="bg-slate-800/50 rounded-2xl overflow-hidden border border-slate-700 animate-pulse">
+              <div className="h-64 bg-slate-700/50"></div>
+              <div className="p-6 space-y-4">
+                <div className="h-4 bg-slate-700/40 rounded w-3/4"></div>
+                <div className="h-8 bg-slate-700/50 rounded w-full"></div>
+                <div className="h-20 bg-slate-700/30 rounded w-full"></div>
+                <div className="h-3 bg-slate-700/40 rounded w-full"></div>
+                <div className="h-12 bg-slate-700/50 rounded w-full"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Campaign Grid Skeletons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-slate-800/50 rounded-xl overflow-hidden border border-slate-700 animate-pulse">
+              <div className="h-48 bg-slate-700/50"></div>
+              <div className="p-5 space-y-3">
+                <div className="h-4 bg-slate-700/40 rounded w-2/3"></div>
+                <div className="h-6 bg-slate-700/50 rounded w-full"></div>
+                <div className="h-16 bg-slate-700/30 rounded w-full"></div>
+                <div className="h-2 bg-slate-700/40 rounded w-full"></div>
+                <div className="h-10 bg-slate-700/50 rounded w-full"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function AnimatedCard({ children, delay = 0, className = "" }) {
+  const cardRef = useRef(null)
+  const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 })
+
+  return (
+    <div
+      ref={cardRef}
+      className={`transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function CampaignCard({ campaign, featured = false, delay = 0, onDonate }) {
+  const cardRef = useRef(null)
+  const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 })
+  const [isHovered, setIsHovered] = useState(false)
+
+  const totalCollected = campaign.updates?.[campaign.updates.length - 1]?.total_collected || 0
+  const goal = campaign.goal_amount || 0
+  const percentage = goal > 0 ? Math.min(100, Math.floor((totalCollected / goal) * 100)) : 0
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat("en-BD", {
       style: "currency",
       currency: "BDT",
       minimumFractionDigits: 0,
-    }).format(amount)
+      maximumFractionDigits: 0,
+    })
+      .format(amount)
+      .replace("BDT", "৳")
   }
 
-  const calculateProgress = (raised, goal) => {
-    console.log('Raised',raised)
-    console.log('Goal',goal)
-    return Math.min((raised / goal) * 100, 100)
-  }
+  return (
+    <div
+      ref={cardRef}
+      className={`relative group transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+      } ${featured ? "lg:col-span-1" : ""}`}
+      style={{ transitionDelay: `${delay}ms` }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* Glow Effect */}
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+
+      <div
+        className={`relative bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-105 overflow-hidden ${
+          featured ? "h-full" : ""
+        }`}
+      >
+        {/* Image Section */}
+        <div className={`relative overflow-hidden ${featured ? "h-64" : "h-48"}`}>
+          <img
+            src={campaign.image || "/placeholder.svg?height=300&width=400"}
+            alt={campaign.title}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+          />
+
+          {/* Overlay Gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+          {/* Badges */}
+          <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
+            {featured && (
+              <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow-lg">
+                ⭐ Featured
+              </span>
+            )}
+            <span className="bg-gradient-to-r from-red-500 to-red-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow-lg ml-auto">
+              🚨 Urgent
+            </span>
+          </div>
+
+          {/* Floating particles effect */}
+          {isHovered && (
+            <div className="absolute inset-0 pointer-events-none">
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute w-1 h-1 bg-white rounded-full animate-float opacity-60"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animationDelay: `${Math.random() * 2}s`,
+                    animationDuration: `${2 + Math.random() * 2}s`,
+                  }}
+                ></div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Content Section */}
+        <div className={`p-${featured ? "8" : "6"} space-y-${featured ? "6" : "4"}`}>
+          {/* Location and Time */}
+          <div className="flex items-center space-x-4 text-sm text-slate-400">
+            <span className="flex items-center gap-1">
+              <MapPin className="h-4 w-4 text-purple-400" />
+              {campaign.location || "Global"}
+            </span>
+            <span className="flex items-center gap-1">
+              <Clock className="h-4 w-4 text-pink-400" />
+              {Math.floor(Math.random() * 30) + 5} days left
+            </span>
+          </div>
+
+          {/* Title */}
+          <h3
+            className={`${
+              featured ? "text-2xl" : "text-xl"
+            } font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent group-hover:from-purple-300 group-hover:to-pink-300 transition-all duration-300 leading-tight`}
+          >
+            {campaign.title}
+          </h3>
+
+          {/* Description */}
+          <p className="text-slate-300 leading-relaxed group-hover:text-slate-200 transition-colors duration-300">
+            {campaign.description}
+          </p>
+
+          {/* Progress Section */}
+          <div className="space-y-4">
+            <div className="flex justify-between text-sm font-medium">
+              <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                {formatCurrency(totalCollected)} raised
+              </span>
+              <span className="text-slate-400">of {formatCurrency(goal)} goal</span>
+            </div>
+
+            <AnimatedProgressBar percentage={percentage} delay={delay + 500} size={featured ? "large" : "small"} />
+
+            <div className="flex justify-between items-center text-sm">
+              <span className="text-slate-400">{Math.floor(Math.random() * 500) + 100} donors</span>
+              <span className="font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                {Math.round(percentage)}% funded
+              </span>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex space-x-3 pt-2">
+            <button
+              onClick={() => onDonate(campaign)}
+              className="flex-1 group/btn relative px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
+              <span className="relative flex items-center justify-center gap-2">
+                💝 Donate Now
+                <ArrowRight className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform duration-300" />
+              </span>
+            </button>
+            <button className="p-3 bg-slate-800/50 border border-slate-600 text-slate-300 rounded-xl hover:bg-slate-700/50 hover:text-white transition-all duration-300 transform hover:scale-110 backdrop-blur-sm">
+              <Share2 className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function DonationModal({ isOpen, campaign, onClose }) {
+  const [selectedAmount, setSelectedAmount] = useState("50")
+  const [customAmount, setCustomAmount] = useState("")
+  const modalRef = useRef(null)
 
   const donationAmounts = ["25", "50", "100", "250", "500"]
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-BD", {
+      style: "currency",
+      currency: "BDT",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
+      .format(amount)
+      .replace("BDT", "৳")
+  }
+
+  if (!isOpen || !campaign) return null
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
+      <div
+        ref={modalRef}
+        className="relative bg-slate-900/95 backdrop-blur-xl rounded-2xl max-w-md w-full border border-slate-700/50 shadow-2xl transform transition-all duration-300 scale-100"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Glow Effect */}
+        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-30"></div>
+
+        <div className="relative">
+          {/* Header */}
+          <div className="p-6 pb-0">
+            <div className="flex items-start justify-between">
+              <div className="flex-1 pr-4">
+                <h3 className="text-xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-2">
+                  Support: {campaign.title}
+                </h3>
+                <p className="text-slate-300 text-sm leading-relaxed">
+                  Choose your donation amount to help us reach our goal of {formatCurrency(campaign.goal_amount)}.
+                </p>
+              </div>
+              <button
+                onClick={onClose}
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg transition-all duration-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6 space-y-6">
+            {/* Amount Selection */}
+            <div>
+              <label className="block text-base font-medium text-white mb-3">Select Amount</label>
+              <div className="grid grid-cols-3 gap-3">
+                {donationAmounts.map((amount) => (
+                  <button
+                    key={amount}
+                    type="button"
+                    className={`px-3 py-3 text-sm font-medium border rounded-xl transition-all duration-300 ${
+                      selectedAmount === amount
+                        ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white border-purple-500 shadow-lg"
+                        : "bg-slate-800/50 text-slate-300 border-slate-600 hover:bg-slate-700/50 hover:border-slate-500"
+                    }`}
+                    onClick={() => setSelectedAmount(amount)}
+                  >
+                    ৳{amount}
+                  </button>
+                ))}
+                <button
+                  type="button"
+                  className={`px-3 py-3 text-sm font-medium border rounded-xl transition-all duration-300 ${
+                    selectedAmount === "custom"
+                      ? "bg-gradient-to-r from-purple-600 to-pink-600 text-white border-purple-500 shadow-lg"
+                      : "bg-slate-800/50 text-slate-300 border-slate-600 hover:bg-slate-700/50 hover:border-slate-500"
+                  }`}
+                  onClick={() => setSelectedAmount("custom")}
+                >
+                  Custom
+                </button>
+              </div>
+            </div>
+
+            {/* Custom Amount Input */}
+            {selectedAmount === "custom" && (
+              <div className="space-y-2">
+                <label htmlFor="customAmount" className="block font-medium text-white">
+                  Custom Amount
+                </label>
+                <input
+                  id="customAmount"
+                  type="number"
+                  placeholder="Enter amount"
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  className="w-full px-4 py-3 bg-slate-800/50 border border-slate-600 rounded-xl text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                />
+              </div>
+            )}
+
+            {/* Donate Button */}
+            <div className="space-y-3 text-center">
+              <button className="w-full group relative px-6 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <span className="relative flex items-center justify-center gap-2">
+                  💝 Donate ৳{selectedAmount === "custom" ? customAmount || "0" : selectedAmount}
+                </span>
+              </button>
+              <p className="text-xs text-slate-400">Your donation is secure and will be processed immediately.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function Cause() {
+  const [showDonationModal, setShowDonationModal] = useState(false)
+  const [selectedCampaign, setSelectedCampaign] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  const heroRef = useRef(null)
+  const featuredRef = useRef(null)
+  const allCampaignsRef = useRef(null)
+  const ctaRef = useRef(null)
+
+  const isHeroVisible = useIntersectionObserver(heroRef, { threshold: 0.1 })
+  const isFeaturedVisible = useIntersectionObserver(featuredRef, { threshold: 0.1 })
+  const isAllCampaignsVisible = useIntersectionObserver(allCampaignsRef, { threshold: 0.1 })
+  const isCtaVisible = useIntersectionObserver(ctaRef, { threshold: 0.1 })
+
+  const causes = useLoaderData()
+  const campaigns = causes?.causes || []
+
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
 
   const openDonationModal = (campaign) => {
     setSelectedCampaign(campaign)
@@ -210,440 +444,195 @@ export default function Cause() {
   const closeDonationModal = () => {
     setShowDonationModal(false)
     setSelectedCampaign(null)
-    setSelectedAmount("50")
-    setCustomAmount("")
-  }
-
-  const LoadingSkeleton = () => (
-    <div className="min-h-screen bg-gradient-to-br bg-[#222831]">
-      {/* Hero Skeleton */}
-      <div className="bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="h-16 bg-white/20 rounded-lg mb-6 animate-pulse"></div>
-          <div className="h-8 bg-white/20 rounded-lg mb-8 max-w-3xl mx-auto animate-pulse"></div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <div className="h-6 w-48 bg-white/20 rounded animate-pulse"></div>
-            <div className="h-6 w-48 bg-white/20 rounded animate-pulse"></div>
-          </div>
-        </div>
-      </div>
-
-      {/* Content Skeleton */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <div className="h-12 bg-gray-200 rounded-lg mb-4 max-w-md mx-auto animate-pulse"></div>
-          <div className="h-6 bg-gray-200 rounded-lg max-w-2xl mx-auto animate-pulse"></div>
-        </div>
-
-        {/* Featured Campaign Skeletons */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {[1, 2].map((i) => (
-            <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-xl">
-              <div className="h-64 bg-gray-200 animate-pulse"></div>
-              <div className="p-6 space-y-4">
-                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-20 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-3 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-12 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Campaign Grid Skeletons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-white rounded-xl overflow-hidden shadow-lg">
-              <div className="h-48 bg-gray-200 animate-pulse"></div>
-              <div className="p-5 space-y-3">
-                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-16 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-2 bg-gray-200 rounded animate-pulse"></div>
-                <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-
-  const DonationModal = () => {
-    if (!showDonationModal || !selectedCampaign) return null
-
-    return (
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-        onClick={closeDonationModal}
-      >
-        <div
-          className="bg-white rounded-xl max-w-md w-full max-h-[90vh] overflow-y-auto relative"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <div className="p-6 pb-0 relative">
-            <h3 className="text-xl font-bold text-gray-900 mb-2 pr-8">Support: {selectedCampaign.title}</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Choose your donation amount to help us reach our goal of {formatCurrency(selectedCampaign.goal)}.
-            </p>
-            <button
-              className="absolute top-0 right-0 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 text-2xl"
-              onClick={closeDonationModal}
-            >
-              ×
-            </button>
-          </div>
-
-          <div className="p-6 space-y-6">
-            <div>
-              <label className="block text-base font-medium text-gray-900 mb-3">Select Amount</label>
-              <div className="grid grid-cols-3 gap-3">
-                {donationAmounts.map((amount) => (
-                  <button
-                    key={amount}
-                    type="button"
-                    className={`px-3 py-2 text-sm font-medium border rounded-lg cursor-pointer transition-all ${
-                      selectedAmount === amount
-                        ? "bg-purple-600 text-white border-purple-600"
-                        : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                    }`}
-                    onClick={() => setSelectedAmount(amount)}
-                  >
-                    ${amount}
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  className={`px-3 py-2 text-sm font-medium border rounded-lg cursor-pointer transition-all ${
-                    selectedAmount === "custom"
-                      ? "bg-purple-600 text-white border-purple-600"
-                      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                  }`}
-                  onClick={() => setSelectedAmount("custom")}
-                >
-                  Custom
-                </button>
-              </div>
-            </div>
-
-            {selectedAmount === "custom" && (
-              <div>
-                <label htmlFor="customAmount" className="block font-medium text-gray-900 mb-1">
-                  Custom Amount
-                </label>
-                <input
-                  id="customAmount"
-                  type="number"
-                  placeholder="Enter amount"
-                  value={customAmount}
-                  onChange={(e) => setCustomAmount(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
-                />
-              </div>
-            )}
-
-            <div className="space-y-3 text-center">
-              <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-lg transition-all">
-                Donate ${selectedAmount === "custom" ? customAmount || "0" : selectedAmount}
-              </button>
-              <p className="text-xs text-gray-500">Your donation is secure and will be processed immediately.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
   }
 
   if (isLoading) {
     return <LoadingSkeleton />
   }
 
+  const featuredCampaigns = campaigns.filter((campaign) => campaign.featured)
+  const allCampaigns = campaigns
+
   return (
-    <div className="min-h-screen bg-gradient-to-br bg-[#222831]">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
       {/* Hero Section */}
-      <div className="carousel w-full">
-  <div id="slide1" className="carousel-item relative w-full">
-    <img
-      src={hr1Webp}
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide4" className="btn btn-circle">❮</a>
-      <a href="#slide2" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide2" className="carousel-item relative w-full">
-    <img
-      src="c:\Users\USER\Downloads\safeimagekit-pexels-omar-ramadan-1739260-20105308.webp"
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide1" className="btn btn-circle">❮</a>
-      <a href="#slide3" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide3" className="carousel-item relative w-full">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1414694762283-acccc27bca85.webp"
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide2" className="btn btn-circle">❮</a>
-      <a href="#slide4" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-  <div id="slide4" className="carousel-item relative w-full">
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1665553365602-b2fb8e5d1707.webp"
-      className="w-full" />
-    <div className="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between">
-      <a href="#slide3" className="btn btn-circle">❮</a>
-      <a href="#slide1" className="btn btn-circle">❯</a>
-    </div>
-  </div>
-</div>
+      <div
+        ref={heroRef}
+        className={`relative h-96 overflow-hidden transition-all duration-1000 ${
+          isHeroVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-pink-900/80 to-red-900/80"></div>
+        <img src="/placeholder.svg?height=400&width=1200" alt="Hero" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center space-y-6 max-w-4xl mx-auto px-4">
+            <h1
+              className={`text-5xl md:text-6xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent transition-all duration-1000 ${
+                isHeroVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+              }`}
+            >
+              Make a Difference Today
+            </h1>
+            <p
+              className={`text-xl text-white/90 leading-relaxed transition-all duration-1000 delay-300 ${
+                isHeroVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+              }`}
+            >
+              Join thousands of changemakers supporting causes that matter. Every donation creates ripples of positive
+              impact.
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Featured Campaigns */}
         <div
-          className={`text-center mb-12 transition-all duration-1000 ${
-            visibleElements.has("featured-header") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          ref={featuredRef}
+          className={`mb-16 transition-all duration-1000 ${
+            isFeaturedVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
-          data-animate-id="featured-header"
-          ref={observeElement}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Featured Campaigns</h2>
-          <p className="text-lg text-white max-w-2xl mx-auto leading-relaxed">
-            These urgent campaigns need your immediate support to reach their goals and create lasting impact.
-          </p>
-        </div>
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-4">
+              Featured Campaigns
+            </h2>
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
+              These urgent campaigns need your immediate support to reach their goals and create lasting impact.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-
-          {camp
-            .filter((camps) => camps.featured)
-            .map((camps, index) => (
-              
-              <div
-              
-                key={camps.id}
-                className={`bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-700 group ${
-                  visibleElements.has(`featured-${camps.id}`)
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-12"
-                }`}
-                style={{ transitionDelay: `${index * 200}ms` }}
-                data-animate-id={`featured-${camps.id}`}
-                ref={observeElement}
-              >
-                <div className="relative overflow-hidden">
-                  
-                  <img
-                    src={camps.image || "/placeholder.svg"}
-                    alt={camps.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-                    <span
-                      className={`bg-blue-500 text-white px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transform translate-x-[-100px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500`}
-                    >
-                      <Droplets className="h-3 w-3"></Droplets>
-                      {/* <campaign.categoryIcon className="h-3 w-3" /> */}
-                      {"Urgent"}
-                    </span>
-                    <span
-                      className={`px-3 py-1 rounded-lg text-xs font-semibold border bg-blue-500 transform translate-x-[100px] opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-500`}
-                    >
-                      {"urgent"}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center space-x-4 text-sm text-gray-500 mb-3 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 delay-100">
-                    <span className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {camps.location}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {1000} days left
-                    </span>
-                  </div>
-
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-tight">{camps.title}</h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed">{camps.description}</p>
-
-                  <div className="space-y-4">
-                    <div className="flex justify-between text-sm font-medium">
-                      <span className="text-gray-900">{formatCurrency(camps.updates?.[camps.updates.length - 1]?.total_collected)} raised</span>
-                      <span className="text-gray-500">of {formatCurrency(camps?.goal_amount)} goal</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-                      <div
-                        className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-1000 ease-out"
-                        style={{
-                          width: visibleElements.has(`featured-${camps.id}`)
-                            ? `${calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount)}%` //Nedd Changes Here and Below near funded
-                            : "0%",
-                        }}
-                      ></div>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      {/* <span className="text-gray-500">{campaign.donors.toLocaleString()} donors</span> */}
-                      <span className="font-medium text-purple-600">
-                        {Math.round(calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount))}% funded 
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex space-x-3 mt-6">
-                    <button
-                      className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:-translate-y-1 hover:shadow-lg active:scale-95"
-                      onClick={() => openDonationModal(camps)}
-                    >
-                      Donate Now
-                    </button>
-                    <button className="bg-white border border-gray-300 hover:bg-gray-50 p-3 rounded-lg transition-all flex items-center justify-center hover:scale-110 active:scale-95">
-                      <Share2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {featuredCampaigns.map((campaign, index) => (
+              <CampaignCard
+                key={campaign.id}
+                campaign={campaign}
+                featured={true}
+                delay={index * 200}
+                onDonate={openDonationModal}
+              />
             ))}
+          </div>
         </div>
 
         {/* All Campaigns */}
-        <div className="mb-12">
-          <h2
-            className={`text-3xl md:text-4xl font-bold text-white mb-8 text-center transition-all duration-1000 ${
-              visibleElements.has("all-campaigns-header") ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-            }`}
-            data-animate-id="all-campaigns-header"
-            ref={observeElement}
-          >
+        <div
+          ref={allCampaignsRef}
+          className={`mb-16 transition-all duration-1000 ${
+            isAllCampaignsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-12 text-center">
             All Active Campaigns
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {camp
-              .map((camps, index) => (
-                <div
-                  key={camps.id}
-                  className={`bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-700 group ${
-                    visibleElements.has(`campaign-${camps.id}`)
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-12"
-                  }`}
-                  style={{ transitionDelay: `${index * 150}ms` }}
-                  data-animate-id={`campaign-${camps.id}`}
-                  ref={observeElement}
-                >
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={camps.image || "/placeholder.svg"}
-                      alt={camps.title}
-                      className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 left-3 right-3 flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      {/* <span
-                        className={`${campaign.categoryColor} text-white px-2 py-1 rounded text-xs font-semibold flex items-center gap-1`}
-                      >
-                        <campaign.categoryIcon className="h-3 w-3" />
-                        {campaign.category}
-                      </span> */}
-                      {/* <span
-                        className={`px-2 py-1 rounded text-xs font-semibold border ${getUrgencyColor(campaign.urgency)}`}
-                      >
-                        {campaign.urgency}
-                      </span> */}
-                    </div>
-                  </div>
-
-                  <div className="p-5">
-                    <div className="flex items-center space-x-3 text-xs text-gray-500 mb-2">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {camps.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {'10'} days left
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight line-clamp-2">
-                      {camps.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4 leading-relaxed line-clamp-3">{camps.description}</p>
-
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="font-medium text-gray-900">{formatCurrency(camps.updates?.[camps.updates.length - 1]?.total_collected)}</span>
-                        <span className="text-gray-500">of {formatCurrency(camps?.goal_amount)}</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-purple-600 to-pink-600 transition-all duration-1000 ease-out"
-                          style={{
-                            width: visibleElements.has(`campaign-${camps.id}`)
-                              ? `${calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount)}%`
-                              : "0%",
-                          }}
-                        ></div>
-                      </div>
-                      <div className="flex justify-between items-center text-xs">
-                        {/* <span className="text-gray-500">{campaign.donors.toLocaleString()} donors</span> FUCK*/}
-
-                        
-                        <span className="font-medium text-purple-600">
-                          {Math.round(calculateProgress(camps.updates?.[camps.updates.length - 1]?.total_collected, camps?.goal_amount))}% funded
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex space-x-2 mt-4">
-                      <button
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all text-sm transform hover:-translate-y-0.5 active:scale-95"
-                        onClick={() => openDonationModal(camps)}
-                      >
-                        Donate Now
-                      </button>
-                      <button className="bg-white border border-gray-300 hover:bg-gray-50 p-2.5 rounded-lg transition-all flex items-center justify-center hover:scale-110 active:scale-95">
-                        <Share2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {allCampaigns.map((campaign, index) => (
+              <CampaignCard
+                key={campaign.id}
+                campaign={campaign}
+                featured={false}
+                delay={index * 150}
+                onDonate={openDonationModal}
+              />
+            ))}
           </div>
         </div>
 
         {/* Call to Action */}
         <div
-          className={`bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-8 md:p-12 text-center text-white transition-all duration-1000 ${
-            visibleElements.has("cta") ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"
+          ref={ctaRef}
+          className={`transition-all duration-1000 ${
+            isCtaVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-12 scale-95"
           }`}
-          data-animate-id="cta"
-          ref={observeElement}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Make an Impact?</h2>
-          <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
-            Every donation, no matter the size, creates ripples of positive change. Join our community of changemakers
-            today.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-emerald-600 hover:bg-gray-100 font-semibold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1 hover:shadow-lg active:scale-95">
-              <Heart className="h-5 w-5" />
-              Start a Campaign
-            </button>
-            <button className="border border-white text-white hover:bg-white hover:text-emerald-600 font-semibold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1 active:scale-95">
-              Learn More
-              <ArrowRight className="h-5 w-5" />
-            </button>
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+            <div className="relative bg-gradient-to-r from-emerald-500/90 to-teal-600/90 backdrop-blur-xl rounded-2xl p-12 text-center text-white border border-emerald-500/20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Make an Impact?</h2>
+              <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
+                Every donation, no matter the size, creates ripples of positive change. Join our community of
+                changemakers today.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="group relative px-8 py-4 bg-white text-emerald-600 font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden">
+                  <div className="absolute inset-0 bg-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <span className="relative flex items-center justify-center gap-2">
+                    <Heart className="h-5 w-5" />
+                    Start a Campaign
+                  </span>
+                </button>
+                <button className="group relative px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-emerald-600 transition-all duration-300 transform hover:scale-105">
+                  <span className="flex items-center justify-center gap-2">
+                    Learn More
+                    <ArrowRight className="h-5 w-5 transform group-hover:translate-x-1 transition-transform duration-300" />
+                  </span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <DonationModal />
+      {/* Donation Modal */}
+      <DonationModal isOpen={showDonationModal} campaign={selectedCampaign} onClose={closeDonationModal} />
+
+      <style jsx>{`
+        @keyframes blob {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+        }
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0px) rotate(0deg);
+            opacity: 0;
+          }
+          50% {
+            transform: translateY(-20px) rotate(180deg);
+            opacity: 1;
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+        .animate-float {
+          animation: float 3s infinite ease-in-out;
+        }
+      `}</style>
     </div>
   )
 }

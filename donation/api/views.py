@@ -16,7 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
-
+from rest_framework.permissions import AllowAny
+from rest_framework.generics import RetrieveAPIView
+from .serializers import PublicDonorSerializer
 
 
             #'success_url': request.build_absolute_uri(f'/donation/api/payment/success/?tran_id={donation.transaction_id}'),
@@ -44,7 +46,18 @@ class DonationListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Donation.objects.filter(donor = self.request.user)
+        queryset = Donation.objects.all()
+        mine_only = self.request.query_params.get('mine')
+        if mine_only == 'true':
+            queryset = queryset.filter(donor=self.request.user)
+        return queryset
+
+
+
+class PublicDonorProfileView(RetrieveAPIView):
+    queryset = CustomUser.objects.filter(is_active=True)  # Optional: filter only active users
+    serializer_class = PublicDonorSerializer
+    permission_classes = [AllowAny]  # Open to public
 
 
 

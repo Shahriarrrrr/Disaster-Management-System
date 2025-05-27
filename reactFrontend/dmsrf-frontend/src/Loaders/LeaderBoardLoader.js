@@ -2,16 +2,16 @@
 
 import api from "../api";
 
-export async function homeLoader() {
+export async function LeaderboarddonationLoader() {
   try {
-    const [donationsRes, causesRes] = await Promise.all([
-      api.get("donation/api/donation/?mine=true"),
-      api.get("api/campaigns/"),
+    const [donationsRes] = await Promise.all([
+      api.get("donation/api/donation/"),
+
     ]);
 
     return {
       donations: donationsRes.data,
-      causes: causesRes.data,
+
 
     };
   } catch (error) {

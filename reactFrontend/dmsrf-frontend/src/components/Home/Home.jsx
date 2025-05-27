@@ -1,437 +1,76 @@
-import React, { useContext } from 'react';
-import { AuthContext } from "../../context/AuthContext";
-import { Link, useLoaderData } from 'react-router';
-import LatestDonation from '../LatestDonation/LatestDonation';
-import LatestCampaigns from '../LatestCampaigns/LatestCampaigns';
+"use client"
 
-const Home = () => {
-  const { user, loading } = useContext(AuthContext);
-  const {donations, causes} = useLoaderData();
-  const successfulDonations = donations.filter(d => d.status === 'Success');
-  console.log(successfulDonations)// can be fixed 
-  console.log(causes)
+import { useContext, useState, useEffect, useRef } from "react"
+import { AuthContext } from "../../context/AuthContext"
+import { Link, useLoaderData } from "react-router"
+import LatestDonation from "../LatestDonation/LatestDonation"
+import LatestCampaigns from "../LatestCampaigns/LatestCampaigns"
 
-  if (loading) return <p>Loading user info...</p>;
-  if (!user || user.length === 0) return <p>No user data</p>;
+function useIntersectionObserver(ref, options = {}) {
+  const [isIntersecting, setIsIntersecting] = useState(false)
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting)
+    }, options)
 
-  const currentUser = user[0]; // assuming user is an array
-  const {user_total_donate, user_name, user_awards} = currentUser
-  console.log(currentUser)
+    if (ref.current) {
+      observer.observe(ref.current)
+    }
 
+    return () => {
+      observer.disconnect()
+    }
+  }, [ref, options])
+
+  return isIntersecting
+}
+
+function LoadingSkeleton() {
   return (
-<div className="min-h-screen bg-gradient-to-r from-gray-700 via-gray-900 to-black">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       <main className="flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
         <div className="grid gap-8">
-          {/* Welcome Section */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-800">
-                Welcome back,{" "}
-                <span id="welcome-text" className="text-blue-600">
-                  {user_name}
-                </span>
-              </h1>
-              <p className="text-slate-500 mt-1">Your generosity is making a difference.</p>
-            </div>
-            <div className="mt-4 md:mt-0">
-              
-              <Link to= '/SOS'
-                className="mr-2.5 px-6 py-3 bg-gradient-to-r from-red-500 to-red-900 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center gap-2"
-                href="donationHandler.html"
-              >
-                <span>SOS</span>
-
-              </Link>
-              <Link to= '/donatePage'
-                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200 inline-flex items-center gap-2"
-                href="donationHandler.html"
-              >
-                <span>Donate</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="ml-1"
-                >
-                  <path d="M12 5v14M19 12l-7 7-7-7" />
-                </svg>
-              </Link>
+          {/* Welcome Section Skeleton */}
+          <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700 animate-pulse">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+              <div className="space-y-3">
+                <div className="h-8 bg-slate-700/50 rounded w-80"></div>
+                <div className="h-4 bg-slate-700/30 rounded w-64"></div>
+              </div>
+              <div className="flex gap-3 mt-4 md:mt-0">
+                <div className="h-12 bg-slate-700/50 rounded-xl w-20"></div>
+                <div className="h-12 bg-slate-700/50 rounded-xl w-24"></div>
+              </div>
             </div>
           </div>
 
-          {/* Stats Cards */}
+          {/* Stats Cards Skeleton */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="stat bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all duration-300 hover:shadow-md">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-slate-500 text-sm font-medium mb-1">Total Donated</div>
-                  <div id="Total-Donation" className="text-3xl font-bold text-blue-600">
-                    {user_total_donate}
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 animate-pulse">
+                <div className="flex justify-between items-start">
+                  <div className="space-y-3">
+                    <div className="h-4 bg-slate-700/50 rounded w-20"></div>
+                    <div className="h-8 bg-slate-700/40 rounded w-16"></div>
+                    <div className="h-3 bg-slate-700/30 rounded w-24"></div>
                   </div>
-                  <div className="text-xs text-slate-400 mt-1">Since January 2023</div>
-                </div>
-                <div className="stat-figure bg-blue-50 p-3 rounded-xl text-blue-500">
-                  <i className="fas text-xl">৳</i>
+                  <div className="w-12 h-12 bg-slate-700/50 rounded-xl"></div>
                 </div>
               </div>
-            </div>
-
-            <div className="stat bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all duration-300 hover:shadow-md">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-slate-500 text-sm font-medium mb-1">Tier</div>
-                  <div id="tier" className="text-3xl font-bold text-purple-600">
-                    {user_awards}
-                  </div>
-                  <div className="text-xs text-slate-400 mt-1 flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="text-emerald-500 mr-1"
-                    >
-                      <path d="M18 15l-6-6-6 6" />
-                    </svg>
-                    <span>3 (30%) more than last year</span>
-                  </div>
-                </div>
-                <div className="stat-figure bg-purple-50 p-3 rounded-xl text-purple-500">
-                  <i className="fas fa-hands-helping text-xl"></i>
-                </div>
-              </div>
-            </div>
-
-            <div className="stat bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all duration-300 hover:shadow-md">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-slate-500 text-sm font-medium mb-1">People Helped</div>
-                  <div className="text-3xl font-bold text-amber-600">~1,200</div>
-                  <div className="text-xs text-slate-400 mt-1">Through your contributions</div>
-                </div>
-                <div className="stat-figure bg-amber-50 p-3 rounded-xl text-amber-500">
-                  <i className="fas fa-users text-xl"></i>
-                </div>
-              </div>
-            </div>
-
-            <div className="stat bg-white rounded-2xl shadow-sm border border-slate-100 p-6 transition-all duration-300 hover:shadow-md">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-slate-500 text-sm font-medium mb-1">Countries Reached</div>
-                  <div className="text-3xl font-bold text-teal-600">8</div>
-                  <div className="text-xs text-slate-400 mt-1">Global impact</div>
-                </div>
-                <div className="stat-figure bg-teal-50 p-3 rounded-xl text-teal-500">
-                  <i className="fas fa-map-marker-alt text-xl"></i>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
-          {/* Donation History */}
-          <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-slate-800">Your Donation History</h2>
-              <div className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-medium">Recent</div>
-            </div>
-            <div className="overflow-x-auto">
-              <table className="table-auto w-full">
-                <thead>
-                  <tr className="border-b border-slate-100">
-                    <th className="px-4 py-3 text-left text-sm font-medium text-slate-500">Date</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-slate-500">Campaign</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-slate-500">Amount</th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-slate-500">Status</th>
-                  </tr>
-                </thead>
-                <tbody id="donation-table-body">
-                  {successfulDonations.slice(0, 3).map((donation, index) => (
-                    <LatestDonation key={index} donation={donation} />
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-6 text-right">
-              <Link
-                className="text-blue-600 hover:text-blue-800 text-sm font-medium inline-flex items-center transition-colors duration-200"
-                to="/donations"
-              >
-                View All Donations
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="ml-1"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-
-          {/* Active Campaigns */}
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold text-white">Active Campaigns</h2>
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                <span className="text-sm text-white">Live updates</span>
-              </div>
-            </div>
-            <div className="relative h-2 w-full bg-slate-100 rounded-full mb-8 overflow-hidden">
-              <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full w-3/4"></div>
-            </div>
-            <div id="campaign-container" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {causes.map((campaign, index) => (
-                <LatestCampaigns key={index} campaign={campaign} />
-              ))}
-            </div>
-          </div>
-
-          {/* Volunteer Section */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
-            <div className="flex flex-col md:flex-row">
-              <div className="md:w-1/2 p-8">
-                <h2 className="text-xl font-bold text-slate-800 mb-4">Become a Volunteer</h2>
-                <p className="text-slate-600 mb-6">
-                  Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need
-                  people with various skills and backgrounds.
-                </p>
-                <ul className="space-y-2 mb-6">
-                  {[
-                    "On-site disaster response",
-                    "Medical assistance",
-                    "Logistics and distribution",
-                    "Remote support and coordination",
-                    "Fundraising and awareness",
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-center gap-2 text-slate-700">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="text-emerald-500"
-                      >
-                        <path d="M20 6L9 17l-5-5" />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="flex gap-4 mt-6">
-                  <button
-                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
-                    id="volunteer-btn"
-                  >
-                    Apply Now
-                  </button>
-                  <button className="px-6 py-3 border border-slate-200 text-slate-700 font-medium rounded-xl hover:bg-slate-50 transition-all duration-200">
-                    Learn More
-                  </button>
-                </div>
-              </div>
-              <div className="md:w-1/2 h-full min-h-[300px]">
-                <img
-                  src="https://placehold.co/500x300"
-                  alt="Volunteers working"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Volunteer Modal - Keeping the same structure */}
-          <dialog id="volunteer_modal" className="modal">
-            <div className="modal-box w-11/12 max-w-3xl bg-white rounded-2xl shadow-lg p-6">
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-              </form>
-              <h3 className="font-bold text-xl mb-6 text-slate-800">Volunteer Application</h3>
-              <form id="volunteer-form" className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Full Name</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="input input-bordered w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    required
-                  />
-                </div>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Email</span>
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    className="input input-bordered w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    required
-                  />
-                </div>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Phone</span>
-                  </label>
-                  <input
-                    type="tel"
-                    placeholder="Phone Number"
-                    className="input input-bordered w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    required
-                  />
-                </div>
-                <div className="form-control">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Location</span>
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="City, Country"
-                    className="input input-bordered w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    required
-                  />
-                </div>
-                <div className="form-control md:col-span-2">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Areas of Interest</span>
-                  </label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {[
-                      "Disaster Response",
-                      "Medical Aid",
-                      "Logistics",
-                      "Fundraising",
-                      "Remote Support",
-                      "Education",
-                    ].map((area, index) => (
-                      <label key={index} className="label cursor-pointer justify-start gap-2">
-                        <input type="checkbox" className="checkbox checkbox-sm checkbox-primary" />
-                        <span className="label-text text-slate-700">{area}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className="form-control md:col-span-2">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Skills & Experience</span>
-                  </label>
-                  <textarea
-                    className="textarea textarea-bordered h-24 w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all"
-                    placeholder="Tell us about your relevant skills and experience"
-                  ></textarea>
-                </div>
-                <div className="form-control md:col-span-2">
-                  <label className="label">
-                    <span className="label-text text-slate-700 font-medium">Availability</span>
-                  </label>
-                  <select className="select select-bordered w-full px-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all">
-                    <option disabled selected>
-                      Select your availability
-                    </option>
-                    <option>Weekdays</option>
-                    <option>Weekends</option>
-                    <option>Evenings</option>
-                    <option>Full-time</option>
-                    <option>On-call for emergencies</option>
-                  </select>
-                </div>
-                <div className="form-control md:col-span-2 mt-6">
-                  <button
-                    type="submit"
-                    className="btn btn-primary w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl shadow-md hover:shadow-lg transition-all duration-200"
-                  >
-                    Submit Application
-                  </button>
-                </div>
-              </form>
-            </div>
-          </dialog>
-
-          {/* Upcoming Events */}
-          <div>
-            <h2 className="text-xl font-bold text-slate-800 mb-6">Upcoming Events</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  day: "15",
-                  month: "May",
-                  title: "Disaster Preparedness Workshop",
-                  location: "Community Center, Downtown",
-                  time: "10:00 AM - 2:00 PM",
-                  description: "Learn essential skills for preparing your family for natural disasters.",
-                },
-                {
-                  day: "22",
-                  month: "May",
-                  title: "Fundraising Gala Dinner",
-                  location: "Grand Hotel Ballroom",
-                  time: "7:00 PM - 10:00 PM",
-                  description: "Annual fundraising event with special guests and entertainment.",
-                },
-                {
-                  day: "29",
-                  month: "May",
-                  title: "Volunteer Training Session",
-                  location: "Relief Fund Headquarters",
-                  time: "9:00 AM - 12:00 PM",
-                  description: "Training for new volunteers joining our emergency response teams.",
-                },
-              ].map((event, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden transition-all duration-300 hover:shadow-md"
-                >
-                  <div className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-blue-50 p-3 rounded-xl text-center min-w-16 flex flex-col items-center">
-                        <div className="text-blue-600 font-bold text-xl">{event.day}</div>
-                        <div className="text-sm text-blue-500">{event.month}</div>
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-lg text-slate-800">{event.title}</h3>
-                        <div className="flex items-center gap-1 text-sm text-slate-500 mt-2">
-                          <i className="fas fa-map-marker-alt text-slate-400"></i>
-                          <span>{event.location}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-slate-500 mt-1">
-                          <i className="fas fa-calendar text-slate-400"></i>
-                          <span>{event.time}</span>
-                        </div>
-                        <p className="mt-3 text-slate-600">{event.description}</p>
-                      </div>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <button className="px-4 py-2 border border-slate-200 text-blue-600 font-medium rounded-lg hover:bg-blue-50 transition-all duration-200 text-sm">
-                        RSVP
-                      </button>
-                    </div>
-                  </div>
+          {/* Table Skeleton */}
+          <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700 animate-pulse">
+            <div className="h-6 bg-slate-700/50 rounded w-48 mb-6"></div>
+            <div className="space-y-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="flex items-center space-x-4">
+                  <div className="h-4 bg-slate-700/40 rounded flex-1"></div>
+                  <div className="h-4 bg-slate-700/40 rounded w-24"></div>
+                  <div className="h-4 bg-slate-700/40 rounded w-16"></div>
+                  <div className="h-4 bg-slate-700/40 rounded w-20"></div>
                 </div>
               ))}
             </div>
@@ -439,7 +78,467 @@ const Home = () => {
         </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+function AnimatedCard({ children, delay = 0, className = "" }) {
+  const cardRef = useRef(null)
+  const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 })
+
+  return (
+    <div
+      ref={cardRef}
+      className={`transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+      } ${className}`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      {children}
+    </div>
+  )
+}
+
+function StatsCard({ title, value, subtitle, icon, color, delay = 0 }) {
+  const cardRef = useRef(null)
+  const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 })
+
+  return (
+    <div
+      ref={cardRef}
+      className={`relative group transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+      <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-105">
+        <div className="flex justify-between items-start">
+          <div className="space-y-2">
+            <div className="text-slate-300 text-sm font-medium tracking-wide">{title}</div>
+            <div className={`text-3xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent`}>{value}</div>
+            <div className="text-xs text-slate-400 flex items-center gap-1">{subtitle}</div>
+          </div>
+          <div
+            className={`p-3 rounded-xl bg-gradient-to-r ${color.replace("text-transparent", "from-opacity-20 to-opacity-30")} backdrop-blur-sm`}
+          >
+            <div className="text-xl">{icon}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function EventCard({ event, delay = 0 }) {
+  const cardRef = useRef(null)
+  const isVisible = useIntersectionObserver(cardRef, { threshold: 0.1 })
+
+  return (
+    <div
+      ref={cardRef}
+      className={`relative group transition-all duration-1000 ${
+        isVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"
+      }`}
+      style={{ transitionDelay: `${delay}ms` }}
+    >
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+      <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl p-6 border border-slate-700/50 shadow-xl group-hover:shadow-2xl transition-all duration-500 group-hover:scale-105 overflow-hidden">
+        <div className="flex items-start gap-4">
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-3 rounded-xl text-center min-w-16 flex flex-col items-center shadow-lg">
+            <div className="text-white font-bold text-xl">{event.day}</div>
+            <div className="text-sm text-purple-100">{event.month}</div>
+          </div>
+          <div className="flex-1">
+            <h3 className="font-bold text-lg text-white mb-2 group-hover:text-purple-300 transition-colors duration-300">
+              {event.title}
+            </h3>
+            <div className="flex items-center gap-2 text-sm text-slate-300 mb-1">
+              <div className="w-4 h-4 text-purple-400">📍</div>
+              <span>{event.location}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-slate-300 mb-3">
+              <div className="w-4 h-4 text-purple-400">🕒</div>
+              <span>{event.time}</span>
+            </div>
+            <p className="text-slate-400 text-sm leading-relaxed">{event.description}</p>
+          </div>
+        </div>
+        <div className="flex justify-end mt-4">
+          <button className="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-medium rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+            RSVP
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const Home = () => {
+  const { user, loading } = useContext(AuthContext)
+  const { donations, causes } = useLoaderData()
+  const [isPageLoading, setIsPageLoading] = useState(true)
+
+  const welcomeRef = useRef(null)
+  const statsRef = useRef(null)
+  const historyRef = useRef(null)
+  const campaignsRef = useRef(null)
+  const volunteerRef = useRef(null)
+  const eventsRef = useRef(null)
+
+  const isWelcomeVisible = useIntersectionObserver(welcomeRef, { threshold: 0.1 })
+  const isStatsVisible = useIntersectionObserver(statsRef, { threshold: 0.1 })
+  const isHistoryVisible = useIntersectionObserver(historyRef, { threshold: 0.1 })
+  const isCampaignsVisible = useIntersectionObserver(campaignsRef, { threshold: 0.1 })
+  const isVolunteerVisible = useIntersectionObserver(volunteerRef, { threshold: 0.1 })
+  const isEventsVisible = useIntersectionObserver(eventsRef, { threshold: 0.1 })
+
+  const successfulDonations = donations?.filter((d) => d.status === "Success") || []
+
+  // Simulate loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageLoading(false)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (loading || isPageLoading) return <LoadingSkeleton />
+  if (!user || user.length === 0) return <p className="text-white text-center">No user data</p>
+
+  const currentUser = user[0]
+  const { user_total_donate, user_name, user_awards } = currentUser
+
+  const events = [
+    {
+      day: "15",
+      month: "May",
+      title: "Disaster Preparedness Workshop",
+      location: "Community Center, Downtown",
+      time: "10:00 AM - 2:00 PM",
+      description: "Learn essential skills for preparing your family for natural disasters.",
+    },
+    {
+      day: "22",
+      month: "May",
+      title: "Fundraising Gala Dinner",
+      location: "Grand Hotel Ballroom",
+      time: "7:00 PM - 10:00 PM",
+      description: "Annual fundraising event with special guests and entertainment.",
+    },
+    {
+      day: "29",
+      month: "May",
+      title: "Volunteer Training Session",
+      location: "Relief Fund Headquarters",
+      time: "9:00 AM - 12:00 PM",
+      description: "Training for new volunteers joining our emergency response teams.",
+    },
+  ]
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute top-40 left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <main className="relative z-10 flex-1 p-4 md:p-6 lg:p-8 max-w-7xl mx-auto">
+        <div className="grid gap-12">
+          {/* Welcome Section */}
+          <div
+            ref={welcomeRef}
+            className={`transition-all duration-1000 ${
+              isWelcomeVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
+            }`}
+          >
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+              <div className="relative bg-slate-900/90 backdrop-blur-xl p-8 rounded-2xl border border-slate-700/50 shadow-2xl">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+                  <div className="space-y-3">
+                    <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-white via-purple-200 to-pink-200 bg-clip-text text-transparent tracking-tight">
+                      Welcome back,{" "}
+                      <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        {user_name}
+                      </span>
+                    </h1>
+                    <p className="text-slate-300 text-lg font-light">Your generosity is making a difference.</p>
+                  </div>
+                  <div className="flex gap-4 mt-6 md:mt-0">
+                    <Link
+                      to="/SOS"
+                      className="group relative px-8 py-4 bg-gradient-to-r from-red-500 to-red-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative flex items-center gap-2">🚨 SOS</span>
+                    </Link>
+                    <Link
+                      to="/donatePage"
+                      className="group relative px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 overflow-hidden"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      <span className="relative flex items-center gap-2">
+                        💝 Donate
+                        <svg
+                          className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                          />
+                        </svg>
+                      </span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Cards */}
+          <div
+            ref={statsRef}
+            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 transition-all duration-1000 ${
+              isStatsVisible ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <StatsCard
+              title="Total Donated"
+              value={`৳${user_total_donate}`}
+              subtitle="Since January 2023"
+              icon="💰"
+              color="from-blue-400 to-blue-600"
+              delay={0}
+            />
+            <StatsCard
+              title="Tier"
+              value={user_awards}
+              subtitle="3 (30%) more than last year"
+              icon="🏆"
+              color="from-purple-400 to-purple-600"
+              delay={200}
+            />
+            <StatsCard
+              title="People Helped"
+              value="~1,200"
+              subtitle="Through your contributions"
+              icon="👥"
+              color="from-amber-400 to-amber-600"
+              delay={400}
+            />
+            <StatsCard
+              title="Countries Reached"
+              value="8"
+              subtitle="Global impact"
+              icon="🌍"
+              color="from-teal-400 to-teal-600"
+              delay={600}
+            />
+          </div>
+
+          {/* Donation History */}
+          <div
+            ref={historyRef}
+            className={`transition-all duration-1000 ${
+              isHistoryVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+              <div className="relative bg-slate-900/90 backdrop-blur-xl p-8 rounded-2xl border border-slate-700/50 shadow-xl">
+                <div className="flex justify-between items-center mb-8">
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                    Your Donation History
+                  </h2>
+                  <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg">
+                    Recent
+                  </div>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="table-auto w-full">
+                    <thead>
+                      <tr className="border-b border-slate-700/50">
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 tracking-wider">
+                          Date
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 tracking-wider">
+                          Campaign
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 tracking-wider">
+                          Amount
+                        </th>
+                        <th className="px-6 py-4 text-left text-sm font-semibold text-slate-300 tracking-wider">
+                          Status
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {successfulDonations.slice(0, 3).map((donation, index) => (
+                        <LatestDonation key={index} donation={donation} />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-8 text-right">
+                  <Link
+                    className="group inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-all duration-300"
+                    to="/donations"
+                  >
+                    View All Donations
+                    <svg
+                      className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Campaigns */}
+          <div
+            ref={campaignsRef}
+            className={`transition-all duration-1000 ${
+              isCampaignsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-8">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+                Active Campaigns
+              </h2>
+              <div className="flex items-center gap-3">
+                <div className="h-3 w-3 rounded-full bg-emerald-500 animate-pulse shadow-lg shadow-emerald-500/50"></div>
+                <span className="text-emerald-400 font-medium">Live updates</span>
+              </div>
+            </div>
+            <div className="relative h-3 w-full bg-slate-800/50 rounded-full mb-10 overflow-hidden backdrop-blur-sm">
+              <div className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full w-3/4 shadow-lg animate-pulse"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {causes?.map((campaign, index) => (
+                <AnimatedCard key={index} delay={index * 200}>
+                  <LatestCampaigns campaign={campaign} />
+                </AnimatedCard>
+              ))}
+            </div>
+          </div>
+
+          {/* Volunteer Section */}
+          <div
+            ref={volunteerRef}
+            className={`transition-all duration-1000 ${
+              isVolunteerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+              <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+                <div className="flex flex-col md:flex-row">
+                  <div className="md:w-1/2 p-10">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-6">
+                      Become a Volunteer
+                    </h2>
+                    <p className="text-slate-300 mb-8 leading-relaxed">
+                      Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need
+                      people with various skills and backgrounds.
+                    </p>
+                    <ul className="space-y-4 mb-8">
+                      {[
+                        "On-site disaster response",
+                        "Medical assistance",
+                        "Logistics and distribution",
+                        "Remote support and coordination",
+                        "Fundraising and awareness",
+                      ].map((item, index) => (
+                        <li key={index} className="flex items-center gap-3 text-slate-300">
+                          <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-4">
+                      <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        Apply Now
+                      </button>
+                      <button className="px-8 py-4 border border-slate-600 text-slate-300 font-semibold rounded-xl hover:bg-slate-800/50 transition-all duration-300 backdrop-blur-sm">
+                        Learn More
+                      </button>
+                    </div>
+                  </div>
+                  <div className="md:w-1/2 h-full min-h-[400px] relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
+                    <img
+                      src="https://placehold.co/500x400"
+                      alt="Volunteers working"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Upcoming Events */}
+          <div
+            ref={eventsRef}
+            className={`transition-all duration-1000 ${
+              isEventsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+            }`}
+          >
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-8">
+              Upcoming Events
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {events.map((event, index) => (
+                <EventCard key={index} event={event} delay={index * 200} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <style jsx>{`
+        @keyframes blob {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
+    </div>
+  )
+}
+
+export default Home

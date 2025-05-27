@@ -5,7 +5,7 @@ import api from "../api";
 export async function donationLoader() {
   try {
     const [donationsRes] = await Promise.all([
-      api.get("donation/api/donation/"),
+      api.get("donation/api/donation/?mine=true"),
 
     ]);
 

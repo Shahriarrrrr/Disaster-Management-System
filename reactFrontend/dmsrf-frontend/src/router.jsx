@@ -19,6 +19,8 @@ import DonationPage from "./components/Donate/Donate";
 import DonateSuccess from "./components/DonateSuccess/DonateSuccess";
 import Cause from "./components/Cause/Cause";
 import { CauseLoader } from "./Loaders/CauseLoader";
+import Leaderboard from "./components/LeaderBoard/LeaderBoard";
+import { LeaderboarddonationLoader } from "./Loaders/LeaderBoardLoader";
 
 
 const router = createBrowserRouter([
@@ -85,6 +87,15 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader : CauseLoader,
+      },
+      {
+        path: '/leaderboard',
+        element : (
+          <ProtectedRoute>
+            <Leaderboard></Leaderboard>
+          </ProtectedRoute>
+        ),
+        loader : LeaderboarddonationLoader,
       },
     ],
   },
