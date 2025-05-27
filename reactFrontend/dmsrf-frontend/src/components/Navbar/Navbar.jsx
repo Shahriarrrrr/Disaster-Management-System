@@ -68,8 +68,8 @@ const Navbar = () => {
           </ul>
         </div>
         <a className="btn btn-ghost text-xl font-bold tracking-wide hover:bg-white/10">
-          <span className="bg-white/20 text-white px-2 py-1 rounded mr-2">d</span>
-          aisyUI
+          <span className="bg-white/20 text-white px-2 py-1 rounded mr-2">D</span>
+          MSRF
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
@@ -81,6 +81,9 @@ const Navbar = () => {
             <Link to='/cause' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Campaigns</Link>
           </li>
           <li>
+            <Link to='/leaderboard' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Leader Boards</Link>
+          </li>
+          {/* <li>
             <details>
               <summary className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Parent</summary>
               <ul className="p-2 bg-purple-500 rounded-md border border-white/10 shadow-lg mt-1">
@@ -92,7 +95,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </details>
-          </li>
+          </li> */}
           <li>
             <Link to='/profile' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Profile</Link>
           </li>
