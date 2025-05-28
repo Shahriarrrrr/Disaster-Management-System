@@ -1,0 +1,7 @@
+| Method | Endpoint                      | Description        |
+| ------ | ----------------------------- | ------------------ |
+| GET    | `/heatmap/api/heatmaps/`      | List all heatmaps  |
+| POST   | `/heatmap/api/heatmaps/`      | Create a heatmap   |
+| GET    | `/heatmap/api/heatmaps/{id}/` | Retrieve a heatmap |
+| PUT    | `/heatmap/api/heatmaps/{id}/` | Update a heatmap   |
+| DELETE | `/heatmap/api/heatmaps/{id}/` | Delete a heatmap   |

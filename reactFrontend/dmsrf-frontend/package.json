@@ -13,6 +13,7 @@
     "@ionic/react": "^8.5.7",
     "@tailwindcss/vite": "^4.1.7",
     "axios": "^1.9.0",
+    "framer-motion": "^12.15.0",
     "ionicons": "^8.0.8",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.511.0",

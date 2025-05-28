@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/AuthContext"
 import { Link, useLoaderData } from "react-router"
 import LatestDonation from "../LatestDonation/LatestDonation"
 import LatestCampaigns from "../LatestCampaigns/LatestCampaigns"
+import api from "../../api"
 
 function useIntersectionObserver(ref, options = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false)
@@ -173,10 +174,19 @@ function EventCard({ event, delay = 0 }) {
   )
 }
 
+
+
 const Home = () => {
   const { user, loading } = useContext(AuthContext)
   const { donations, causes } = useLoaderData()
   const [isPageLoading, setIsPageLoading] = useState(true)
+  const [cause, setCause] = useState('');
+  const [contact, setContact] = useState('');
+  const [age, setAge] = useState('');
+  const [success, setSuccess] = useState(null);
+  const [message, setMessage] = useState(null);
+  const [loadings, setLoadings] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
 
   const welcomeRef = useRef(null)
   const statsRef = useRef(null)
@@ -191,8 +201,49 @@ const Home = () => {
   const isCampaignsVisible = useIntersectionObserver(campaignsRef, { threshold: 0.1 })
   const isVolunteerVisible = useIntersectionObserver(volunteerRef, { threshold: 0.1 })
   const isEventsVisible = useIntersectionObserver(eventsRef, { threshold: 0.1 })
-
   const successfulDonations = donations?.filter((d) => d.status === "Success") || []
+
+
+  const applyVolunteer = async () => {
+    setLoadings(true);
+    setMessage(null);
+    try {
+      const response = await api.post('/volunteer/api/join-requests/', {
+        cause_of_joining: cause,
+        emergency_contact: contact,
+        age: parseInt(age),
+      });
+
+      setMessage({ type: 'success', text: 'Application submitted successfully!' });
+      setCause('');
+      setContact('');
+      setAge('');
+    } catch (error) {
+      console.error('Apply error:', error);
+      setMessage({
+        type: 'error',
+        text: error.response?.data?.detail || 'Failed to apply. You may have already submitted.',
+      });
+    } finally {
+      setLoadings(false);
+    }
+  };
+  useEffect(() => {
+  const fetchExistingRequest = async () => {
+    try {
+      const response = await api.get('volunteer/api/join-requests/');
+      if (response.data.length > 0) {
+        setMessage({ type: 'info', text: 'You have already submitted a request.' });
+        setIsApplied(true);
+      }
+    } catch (err) {
+      console.error('Error checking request:', err);
+    }
+  };
+
+  fetchExistingRequest();
+}, []);
+
 
   // Simulate loading
   useEffect(() => {
@@ -441,56 +492,100 @@ const Home = () => {
               isVolunteerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
-              <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                  <div className="md:w-1/2 p-10">
-                    <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-6">
-                      Become a Volunteer
-                    </h2>
-                    <p className="text-slate-300 mb-8 leading-relaxed">
-                      Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need
-                      people with various skills and backgrounds.
-                    </p>
-                    <ul className="space-y-4 mb-8">
-                      {[
-                        "On-site disaster response",
-                        "Medical assistance",
-                        "Logistics and distribution",
-                        "Remote support and coordination",
-                        "Fundraising and awareness",
-                      ].map((item, index) => (
-                        <li key={index} className="flex items-center gap-3 text-slate-300">
-                          <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
-                            <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                    <div className="flex gap-4">
-                      <button className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-                        Apply Now
-                      </button>
-                      <button className="px-8 py-4 border border-slate-600 text-slate-300 font-semibold rounded-xl hover:bg-slate-800/50 transition-all duration-300 backdrop-blur-sm">
-                        Learn More
-                      </button>
-                    </div>
-                  </div>
-                  <div className="md:w-1/2 h-full min-h-[400px] relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
-                    <img
-                      src="https://placehold.co/500x400"
-                      alt="Volunteers working"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                </div>
-              </div>
+    <div className="relative group">
+      <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+      <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-2xl border border-slate-700/50 shadow-xl overflow-hidden">
+        <div className="flex flex-col md:flex-row">
+          <div className="md:w-1/2 p-10">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent mb-6">
+              Become a Volunteer
+            </h2>
+            <p className="text-slate-300 mb-8 leading-relaxed">
+              Join our team of dedicated volunteers and make a direct impact in disaster-affected areas. We need people
+              with various skills and backgrounds.
+            </p>
+
+            <div className="space-y-4 mb-6">
+              <textarea
+                placeholder="Why do you want to join?"
+                value={cause}
+                onChange={(e) => setCause(e.target.value)}
+                className="w-full p-3 rounded-lg bg-slate-800 text-white placeholder-slate-400"
+              />
+              <input
+                type="text"
+                placeholder="Emergency Contact"
+                value={contact}
+                onChange={(e) => setContact(e.target.value)}
+                className="w-full p-3 rounded-lg bg-slate-800 text-white placeholder-slate-400"
+              />
+              <input
+                type="number"
+                placeholder="Your Age"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+                className="w-full p-3 rounded-lg bg-slate-800 text-white placeholder-slate-400"
+              />
             </div>
+
+            {message && (
+              <p
+                className={`mb-4 text-sm ${
+                  message.type === 'error' ? 'text-red-500' : 'text-green-500'
+                }`}
+              >
+                {message.text}
+              </p>
+            )}
+
+            <ul className="space-y-4 mb-8">
+              {[
+                'On-site disaster response',
+                'Medical assistance',
+                'Logistics and distribution',
+                'Remote support and coordination',
+                'Fundraising and awareness',
+              ].map((item, index) => (
+                <li key={index} className="flex items-center gap-3 text-slate-300">
+                  <div className="w-6 h-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full flex items-center justify-center">
+                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex gap-4">
+<button
+  onClick={applyVolunteer}
+  disabled={loading || isApplied}
+  className={`px-8 py-4 font-semibold rounded-xl shadow-lg transition-all duration-300 transform ${
+    loading || isApplied
+      ? 'bg-gray-500 cursor-not-allowed'
+      : 'bg-gradient-to-r from-blue-500 to-indigo-600 hover:scale-105'
+  } text-white`}
+>
+  {isApplied ? 'Already Applied' : loading ? 'Applying...' : 'Apply Now'}
+</button>
+              <button className="px-8 py-4 border border-slate-600 text-slate-300 font-semibold rounded-xl hover:bg-slate-800/50 transition-all duration-300 backdrop-blur-sm">
+                Learn More
+              </button>
+            </div>
+          </div>
+
+          <div className="md:w-1/2 h-full min-h-[400px] relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
+            <img
+              src="https://placehold.co/500x400"
+              alt="Volunteers working"
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
           </div>
 
           {/* Upcoming Events */}

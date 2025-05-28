@@ -21,6 +21,9 @@ import Cause from "./components/Cause/Cause";
 import { CauseLoader } from "./Loaders/CauseLoader";
 import Leaderboard from "./components/LeaderBoard/LeaderBoard";
 import { LeaderboarddonationLoader } from "./Loaders/LeaderBoardLoader";
+import DisasterMapPage from "./components/DisasterMap/DisasterMap";
+import { heatmapLoader } from "./Loaders/Heatmap";
+import VolunteerDashboard from "./components/VolunteerDashboard/VolunteerDashboard";
 
 
 const router = createBrowserRouter([
@@ -96,6 +99,24 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader : LeaderboarddonationLoader,
+      },
+      {
+        path: '/heatmap',
+        element : (
+          <ProtectedRoute>
+            <DisasterMapPage></DisasterMapPage>
+          </ProtectedRoute>
+        ),
+        loader: heatmapLoader,
+      },
+      {
+        path: '/volunteer',
+        element : (
+          <ProtectedRoute>
+            <VolunteerDashboard></VolunteerDashboard>
+          </ProtectedRoute>
+        ),
+
       },
     ],
   },
