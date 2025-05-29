@@ -4,10 +4,11 @@ import api from "../api";
 
 export async function VolunteerProfileLoader() {
   try {
-    const [volunteerProfileRes, missionDataRes, requestedDataRes] = await Promise.all([
+    const [volunteerProfileRes, missionDataRes, requestedDataRes, workshopDataRes] = await Promise.all([
       api.get("/volunteer/api/volunteers/"),
       api.get("/mission/api/missions/"),
       api.get("/mission/api/mission-requests/"),
+      api.get("/workshop/api/courses/"),
 
 
     ]);
@@ -16,6 +17,7 @@ export async function VolunteerProfileLoader() {
       volunData: volunteerProfileRes.data,
       missionData: missionDataRes.data,
       requestedData: requestedDataRes.data,
+      coursedData: workshopDataRes.data,
 
 
     };

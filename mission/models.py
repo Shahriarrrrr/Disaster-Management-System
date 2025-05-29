@@ -68,7 +68,7 @@ class MissionJoinRequest(models.Model):
         self.mission.volunteers_joined += 1
         self.mission.save()
 
-    print("Mission added to volunteer's joined_missions and count incremented")
+
     def reject(self):
         self.status = 'REJECTED'
         self.reviewed_at = timezone.now()

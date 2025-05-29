@@ -8,11 +8,12 @@ import { useLoaderData } from "react-router"
 import api from "../../api"
 //ongoingMissions,skillprograms loader deye kehane pass koraite hbe
 // Mock API functions
-const fetchVolunteerData = (data, volundata, missionData, requestedData) => {
+const fetchVolunteerData = (data, volundata, missionData, requestedData, coursedData) => {
   const datas = volundata.joined_missions
   console.log('joined' , datas)
   console.log('REQ : ', requestedData[0]) //Array of objects
   //volunData[0].joined_missions
+  console.log('Coooooooourse: ',coursedData)
   
 
   return {
@@ -79,121 +80,25 @@ availableMissions: missionData?.map((mission) => {
       status: mission.status || "Active",
       progress: mission.progress || 0,
     })) || [],
+skillPrograms : coursedData.map((data) => ({
+        id: data.id,
+        title: data.title,
+        category: data.category,
+        duration: data.duration,
+        level: data.level,
+        instructor: data.instructor,
+        startDate: data.start_date,
+        endDate: data.end_date,
+        maxParticipants: data.max_participants || 0,
+        enrolled: data.enrolled || 0,
+        description: data.description,
+        skills: data.skills?.map(skill => skill.name) || [],
+        certification: data.certification,
+        cost: data.cost,
+        location: data.location,
+        status: data.status,
 
-    skillPrograms: [
-      {
-        id: 1,
-        title: "Emergency First Aid Certification",
-        category: "Medical",
-        duration: "16 hours",
-        level: "Beginner",
-        instructor: "Dr. Emily Carter",
-        startDate: "2024-02-10",
-        endDate: "2024-02-12",
-        maxParticipants: 20,
-        enrolled: 15,
-        description: "Comprehensive first aid training covering CPR, wound care, and emergency response procedures.",
-        skills: ["CPR", "Wound Care", "Emergency Assessment", "AED Usage"],
-        certification: "Red Cross Certified",
-        cost: "Free",
-        location: "Training Center, Manhattan",
-        status: "Open",
-      },
-      {
-        id: 2,
-        title: "Disaster Response Leadership",
-        category: "Leadership",
-        duration: "24 hours",
-        level: "Intermediate",
-        instructor: "Captain James Miller",
-        startDate: "2024-02-15",
-        endDate: "2024-02-18",
-        maxParticipants: 15,
-        enrolled: 12,
-        description:
-          "Advanced training for volunteers who want to lead disaster response teams and coordinate relief efforts.",
-        skills: ["Team Leadership", "Crisis Management", "Resource Coordination", "Communication"],
-        certification: "FEMA Certified",
-        cost: "Free",
-        location: "Emergency Training Facility",
-        status: "Open",
-      },
-      {
-        id: 3,
-        title: "Psychological First Aid",
-        category: "Mental Health",
-        duration: "12 hours",
-        level: "Beginner",
-        instructor: "Dr. Sarah Thompson",
-        startDate: "2024-02-20",
-        endDate: "2024-02-21",
-        maxParticipants: 25,
-        enrolled: 20,
-        description: "Learn to provide emotional support and psychological assistance to disaster survivors.",
-        skills: ["Active Listening", "Trauma Response", "Emotional Support", "Crisis Counseling"],
-        certification: "National Center for PTSD",
-        cost: "Free",
-        location: "Community Center, Brooklyn",
-        status: "Almost Full",
-      },
-      {
-        id: 4,
-        title: "Logistics and Supply Chain Management",
-        category: "Operations",
-        duration: "20 hours",
-        level: "Intermediate",
-        instructor: "Maria Gonzalez",
-        startDate: "2024-03-01",
-        endDate: "2024-03-05",
-        maxParticipants: 18,
-        enrolled: 8,
-        description:
-          "Master the coordination of supplies, resources, and distribution networks in disaster relief operations.",
-        skills: ["Supply Chain", "Inventory Management", "Distribution", "Vendor Relations"],
-        certification: "Professional Certificate",
-        cost: "Free",
-        location: "Logistics Training Center",
-        status: "Open",
-      },
-      {
-        id: 5,
-        title: "Community Outreach and Engagement",
-        category: "Communication",
-        duration: "14 hours",
-        level: "Beginner",
-        instructor: "Alex Rivera",
-        startDate: "2024-03-10",
-        endDate: "2024-03-12",
-        maxParticipants: 30,
-        enrolled: 25,
-        description:
-          "Develop skills in community engagement, public speaking, and building relationships with local organizations.",
-        skills: ["Public Speaking", "Community Building", "Networking", "Cultural Sensitivity"],
-        certification: "Community Engagement Certificate",
-        cost: "Free",
-        location: "Community Outreach Center",
-        status: "Almost Full",
-      },
-      {
-        id: 6,
-        title: "Digital Communication and Social Media",
-        category: "Technology",
-        duration: "10 hours",
-        level: "Beginner",
-        instructor: "Tech Team",
-        startDate: "2024-03-15",
-        endDate: "2024-03-16",
-        maxParticipants: 25,
-        enrolled: 10,
-        description:
-          "Learn to effectively use digital platforms and social media for disaster communication and awareness.",
-        skills: ["Social Media", "Digital Marketing", "Crisis Communication", "Content Creation"],
-        certification: "Digital Communication Certificate",
-        cost: "Free",
-        location: "Online/Virtual",
-        status: "Open",
-      },
-    ],
+    })),
   }
 }
 
@@ -951,7 +856,7 @@ export default function VolunteerDashboard() {
   const [filterType, setFilterType] = useState("All")
   const [filterLevel, setFilterLevel] = useState("All")
   const { user } = useContext(AuthContext);
-  const {volunData, missionData, requestedData} = useLoaderData()
+  const {volunData, missionData, requestedData, coursedData} = useLoaderData()
   const [requestedMissions, setRequestedMissions] = useState(new Set());
   // console.log('Volundata', volunData[0])
   // console.log('MissionData' , missionData)
@@ -971,7 +876,7 @@ export default function VolunteerDashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const volunteerData =  fetchVolunteerData(user, volunData, missionData, requestedData)
+        const volunteerData =  fetchVolunteerData(user, volunData, missionData, requestedData, coursedData)
         console.log(volunteerData)
         setData(volunteerData)
       } catch (error) {

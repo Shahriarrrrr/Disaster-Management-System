@@ -21,6 +21,7 @@ urlpatterns = [
     path('ticket/api/', include('ticket.api.urls')),
     path('heatmap/api/', include('heatmap.api.urls')),
     path('mission/api/', include('mission.api.urls')),
+    path('workshop/api/', include('workshop.api.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
