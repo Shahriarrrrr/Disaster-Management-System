@@ -2,126 +2,47 @@
 
 import { useState, useEffect, useRef } from "react"
 import { MapPin, Calendar, Clock, Award, BookOpen, Target, Filter, Search, Send, User, X, Globe } from "lucide-react"
-
+import { AuthContext } from "../../context/AuthContext"
+import { useContext } from "react"
+import { useLoaderData } from "react-router"
+import api from "../../api"
+//ongoingMissions,skillprograms loader deye kehane pass koraite hbe
 // Mock API functions
-async function fetchVolunteerData() {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+const fetchVolunteerData = (data, volundata, missionData) => {
+  
 
   return {
     volunteer: {
-      id: 1,
-      name: "Sarah Johnson",
-      email: "sarah.johnson@email.com",
-      phone: "+1 (555) 123-4567",
-      location: "New York, NY",
+      id: data[0].id,
+      name: data[0].user_name,
+      email: data[0].email,
+      phone: data[0].user_phone,
+      location: data[0].user_state,
       joinDate: "2023-01-15",
-      totalCauses: 12,
-      totalHours: 156,
+      totalCauses : volundata.volunData?.[0]?.joined_missions?.length || 0,
+      totalHours: volundata.volunData?.[0]?.working_hours?.length || 0,
       skillLevel: "Advanced",
       badges: ["First Aid Certified", "Team Leader", "Emergency Response", "Community Builder"],
-      avatar: "/placeholder.svg?height=100&width=100",
+      avatar: data[0].user_profile_image,
     },
-    ongoingMissions: [
-      {
-        id: 1,
-        title: "Hurricane Relief - Florida",
-        type: "Emergency Response",
-        location: "Miami, FL",
-        startDate: "2024-01-15",
-        endDate: "2024-02-15",
-        urgency: "High",
-        volunteersNeeded: 25,
-        volunteersJoined: 18,
-        description: "Providing immediate relief and support to hurricane-affected communities in South Florida.",
-        skills: ["First Aid", "Logistics", "Communication"],
-        coordinator: "Mike Rodriguez",
-        status: "Active",
-        progress: 72,
-      },
-      {
-        id: 2,
-        title: "Food Distribution Program",
-        type: "Community Support",
-        location: "Brooklyn, NY",
-        startDate: "2024-01-20",
-        endDate: "2024-03-20",
-        urgency: "Medium",
-        volunteersNeeded: 15,
-        volunteersJoined: 12,
-        description: "Weekly food distribution to families in need across Brooklyn neighborhoods.",
-        skills: ["Organization", "Customer Service", "Physical Work"],
-        coordinator: "Lisa Chen",
-        status: "Active",
-        progress: 80,
-      },
-      {
-        id: 3,
-        title: "Disaster Preparedness Training",
-        type: "Education",
-        location: "Queens, NY",
-        startDate: "2024-02-01",
-        endDate: "2024-02-28",
-        urgency: "Low",
-        volunteersNeeded: 10,
-        volunteersJoined: 8,
-        description: "Teaching community members essential disaster preparedness skills and emergency planning.",
-        skills: ["Teaching", "Public Speaking", "Emergency Planning"],
-        coordinator: "David Kim",
-        status: "Active",
-        progress: 80,
-      },
-    ],
-    availableMissions: [
-      {
-        id: 4,
-        title: "Wildfire Recovery - California",
-        type: "Recovery",
-        location: "Los Angeles, CA",
-        startDate: "2024-02-20",
-        endDate: "2024-04-20",
-        urgency: "High",
-        volunteersNeeded: 30,
-        volunteersJoined: 5,
-        description:
-          "Supporting communities recovering from recent wildfire damage through cleanup and rebuilding efforts.",
-        skills: ["Construction", "Cleanup", "Emotional Support"],
-        coordinator: "Jennifer Martinez",
-        status: "Recruiting",
-        progress: 17,
-      },
-      {
-        id: 5,
-        title: "Elderly Care Support",
-        type: "Community Support",
-        location: "Boston, MA",
-        startDate: "2024-02-15",
-        endDate: "2024-05-15",
-        urgency: "Medium",
-        volunteersNeeded: 20,
-        volunteersJoined: 14,
-        description: "Providing companionship and assistance to elderly residents in assisted living facilities.",
-        skills: ["Companionship", "Basic Care", "Communication"],
-        coordinator: "Robert Wilson",
-        status: "Recruiting",
-        progress: 70,
-      },
-      {
-        id: 6,
-        title: "Youth Education Program",
-        type: "Education",
-        location: "Chicago, IL",
-        startDate: "2024-03-01",
-        endDate: "2024-06-01",
-        urgency: "Low",
-        volunteersNeeded: 12,
-        volunteersJoined: 3,
-        description: "Mentoring and tutoring underprivileged youth in STEM subjects and life skills.",
-        skills: ["Teaching", "Mentoring", "STEM Knowledge"],
-        coordinator: "Amanda Foster",
-        status: "Recruiting",
-        progress: 25,
-      },
-    ],
+
+    availableMissions: missionData?.map((mission) => ({
+      id: mission.id,
+      title: mission.title,
+      type: mission.type || "General", // fallback if `type` missing
+      location: mission.location || "Unknown",
+      startDate: mission.start_date,
+      endDate: mission.end_date,
+      urgency: mission.urgency || "Medium",
+      volunteersNeeded: mission.volunteers_needed || 0,
+      volunteersJoined: mission.volunteers_joined || 0,
+      description: mission.description || "",
+      skills: mission.skills || [],
+      coordinator: mission.coordinator || "N/A",
+      status: mission.status || "Active",
+      progress: mission.progress || 0,
+    })) || [],
+    ongoingMissions: [],
     skillPrograms: [
       {
         id: 1,
@@ -834,6 +755,7 @@ function SkillProgramCard({ program, onEnroll }) {
 }
 
 function JoinRequestModal({ isOpen, mission, onClose, onSubmit }) {
+  
   const [formData, setFormData] = useState({
     motivation: "",
     experience: "",
@@ -841,10 +763,22 @@ function JoinRequestModal({ isOpen, mission, onClose, onSubmit }) {
     skills: "",
   })
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    onSubmit(mission, formData)
-    setFormData({ motivation: "", experience: "", availability: "", skills: "" })
+try {
+    const response = await api.post('/mission/api/mission-requests/', {
+      mission_id: mission.id,
+    });
+
+    console.log('Join request successful:', response.data);
+
+    onSubmit?.(mission, response.data); // optional callback
+    setFormData({ motivation: "", experience: "", availability: "", skills: "" });
+    onClose();
+
+  } catch (error) {
+    console.error('Error submitting join request:', error.response?.data || error.message);
+  }
   }
 
   if (!isOpen || !mission) return null
@@ -952,6 +886,11 @@ export default function VolunteerDashboard() {
   const [searchTerm, setSearchTerm] = useState("")
   const [filterType, setFilterType] = useState("All")
   const [filterLevel, setFilterLevel] = useState("All")
+  const { user } = useContext(AuthContext);
+  const {volunData, missionData} = useLoaderData()
+  console.log('Volundata', volunData)
+  console.log('MissionData' , missionData)
+  console.log(user)
 
   const headerRef = useRef(null)
   const statsRef = useRef(null)
@@ -964,7 +903,8 @@ export default function VolunteerDashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const volunteerData = await fetchVolunteerData()
+        const volunteerData =  fetchVolunteerData(user, volunData, missionData)
+        console.log(volunteerData)
         setData(volunteerData)
       } catch (error) {
         console.error("Error loading volunteer data:", error)
@@ -1018,7 +958,7 @@ export default function VolunteerDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden pb-200">
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>

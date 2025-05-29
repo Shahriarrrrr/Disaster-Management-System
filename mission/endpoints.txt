@@ -1,0 +1,8 @@
+| Method | Endpoint                      | Description                            |
+| ------ | ----------------------------- | -------------------------------------- |
+| GET    | `/mission/api/missions/`      | List all missions                      |
+| POST   | `/mission/api/missions/`      | Create a new mission                   |
+| GET    | `/mission/api/missions/<id>/` | Retrieve details of a specific mission |
+| PUT    | `/mission/api/missions/<id>/` | Update a mission (full update)         |
+| PATCH  | `/mission/api/missions/<id>/` | Update part of a mission (partial)     |
+| DELETE | `/mission/api/missions/<id>/` | Delete a mission                       |

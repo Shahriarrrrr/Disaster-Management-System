@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'ticket',
     'emergencyRequest',
     'heatmap',
+    'mission',
 ]
 
 MIDDLEWARE = [
