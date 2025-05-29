@@ -53,6 +53,7 @@ class MissionJoinRequest(models.Model):
 
     def __str__(self):
         return f"{self.volunteer.user.email} - {self.mission.title} ({self.status})"
+    
 
     def approve(self):
         print(f"Approving request for volunteer {self.volunteer} on mission {self.mission}")
@@ -60,8 +61,14 @@ class MissionJoinRequest(models.Model):
         self.reviewed_at = timezone.now()
         self.save()
 
+        # Add mission to volunteer's joined missions
         self.volunteer.joined_missions.add(self.mission)
-        print("Mission added to volunteer's joined_missions")
+
+        # Increment volunteers_joined count
+        self.mission.volunteers_joined += 1
+        self.mission.save()
+
+    print("Mission added to volunteer's joined_missions and count incremented")
     def reject(self):
         self.status = 'REJECTED'
         self.reviewed_at = timezone.now()

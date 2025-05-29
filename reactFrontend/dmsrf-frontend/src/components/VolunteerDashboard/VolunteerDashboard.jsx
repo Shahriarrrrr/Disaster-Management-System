@@ -8,7 +8,11 @@ import { useLoaderData } from "react-router"
 import api from "../../api"
 //ongoingMissions,skillprograms loader deye kehane pass koraite hbe
 // Mock API functions
-const fetchVolunteerData = (data, volundata, missionData) => {
+const fetchVolunteerData = (data, volundata, missionData, requestedData) => {
+  const datas = volundata.joined_missions
+  console.log('joined' , datas)
+  console.log('REQ : ', requestedData[0]) //Array of objects
+  //volunData[0].joined_missions
   
 
   return {
@@ -26,7 +30,40 @@ const fetchVolunteerData = (data, volundata, missionData) => {
       avatar: data[0].user_profile_image,
     },
 
-    availableMissions: missionData?.map((mission) => ({
+availableMissions: missionData?.map((mission) => {
+  const matchedRequest = requestedData.find(
+    (request) => request.mission === mission.title
+  );
+
+  const requestStatus = matchedRequest
+    ? matchedRequest.status.toLowerCase()
+    : null;
+
+  return {
+    id: mission.id,
+    title: mission.title,
+    type: mission.type || "General",
+    location: mission.location || "Unknown",
+    startDate: mission.start_date,
+    endDate: mission.end_date,
+    urgency: mission.urgency || "Medium",
+    volunteersNeeded: mission.volunteers_needed || 0,
+    volunteersJoined: parseInt(mission.volunteers_joined) || 0,
+    description: mission.description || "",
+    skills: mission.skills || [],
+    coordinator: mission.coordinator || "N/A",
+    status: mission.status || "Active",
+    progress: mission.progress || 0,
+
+    // New field to represent request status (null if none found)
+    requested: requestStatus, // "accepted", "pending", "rejected", or null
+  };
+}) || [],
+
+
+
+
+     ongoingMissions: volundata[0].joined_missions?.map((mission) => ({
       id: mission.id,
       title: mission.title,
       type: mission.type || "General", // fallback if `type` missing
@@ -42,7 +79,7 @@ const fetchVolunteerData = (data, volundata, missionData) => {
       status: mission.status || "Active",
       progress: mission.progress || 0,
     })) || [],
-    ongoingMissions: [],
+
     skillPrograms: [
       {
         id: 1,
@@ -269,6 +306,7 @@ function StatsCard({ title, value, subtitle, icon, color, delay = 0 }) {
 
 function MissionCard({ mission, type = "ongoing", onJoinRequest }) {
   const [showDetails, setShowDetails] = useState(false)
+  console.log('BOOL: ',mission)
 
   const getUrgencyColor = (urgency) => {
     switch (urgency) {
@@ -390,22 +428,48 @@ function MissionCard({ mission, type = "ongoing", onJoinRequest }) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-3">
-          <button
-            onClick={() => setShowDetails(true)}
-            className="flex-1 px-4 py-2 bg-slate-800/50 text-slate-300 rounded-lg hover:bg-slate-700/50 transition-all duration-300 border border-slate-600"
-          >
-            View Details
-          </button>
-          {type === "available" && (
-            <button
-              onClick={() => onJoinRequest(mission)}
-              className="flex-1 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105"
-            >
-              Request to Join
-            </button>
-          )}
-        </div>
+<div className="flex gap-3">
+  <button
+    onClick={() => setShowDetails(true)}
+    className="flex-1 px-4 py-2 bg-slate-800/50 text-slate-300 rounded-lg hover:bg-slate-700/50 transition-all duration-300 border border-slate-600"
+  >
+    View Details
+  </button>
+
+{type === "available" && (
+  <button
+    onClick={() => onJoinRequest(mission)}
+    disabled={
+  mission.requested === "accepted" ||
+  mission.requested === "pending" ||
+  mission.requested === "rejected"
+}
+    className={`flex-1 px-4 py-2 rounded-lg transition-all duration-300 transform
+      ${
+        mission.requested === "accepted"
+          ? "bg-green-600 text-white cursor-not-allowed"
+          : mission.requested === "pending"
+          ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+          : mission.requested === "rejected"
+          ? "bg-red-600 text-white hover:bg-red-700"
+          : "bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 hover:scale-105"
+      }`}
+  >
+    {
+      mission.requested === "accepted"
+        ? "Already Joined"
+        : mission.requested === "pending"
+        ? "Request Sent"
+        : mission.requested === "rejected"
+        ? "Not Eligible"
+        : "Request to Join"
+    }
+  </button>
+)}
+
+
+      </div>
+
 
         {/* Details Modal */}
         {showDetails && (
@@ -887,10 +951,14 @@ export default function VolunteerDashboard() {
   const [filterType, setFilterType] = useState("All")
   const [filterLevel, setFilterLevel] = useState("All")
   const { user } = useContext(AuthContext);
-  const {volunData, missionData} = useLoaderData()
-  console.log('Volundata', volunData)
-  console.log('MissionData' , missionData)
-  console.log(user)
+  const {volunData, missionData, requestedData} = useLoaderData()
+  const [requestedMissions, setRequestedMissions] = useState(new Set());
+  // console.log('Volundata', volunData[0])
+  // console.log('MissionData' , missionData)
+  // console.log('RequestedData' , requestedData[0].id)
+  // console.log(requestedMissions)
+  // //have to setRequested
+  // console.log(user)
 
   const headerRef = useRef(null)
   const statsRef = useRef(null)
@@ -903,7 +971,7 @@ export default function VolunteerDashboard() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const volunteerData =  fetchVolunteerData(user, volunData, missionData)
+        const volunteerData =  fetchVolunteerData(user, volunData, missionData, requestedData)
         console.log(volunteerData)
         setData(volunteerData)
       } catch (error) {
@@ -917,11 +985,13 @@ export default function VolunteerDashboard() {
   }, [])
 
   const handleJoinRequest = (mission) => {
+    
     setSelectedMission(mission)
     setShowJoinModal(true)
   }
 
-  const handleSubmitJoinRequest = (mission, formData) => {
+  const handleSubmitJoinRequest = (mission, formData ,) => {
+
     console.log("Join request submitted:", { mission: mission.id, formData })
     setShowJoinModal(false)
     setSelectedMission(null)
