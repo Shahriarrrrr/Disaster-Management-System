@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'heatmap',
     'mission',
     'workshop',
+    'alerts',
 ]
 
 MIDDLEWARE = [

@@ -25,6 +25,7 @@ import DisasterMapPage from "./components/DisasterMap/DisasterMap";
 import { heatmapLoader } from "./Loaders/Heatmap";
 import VolunteerDashboard from "./components/VolunteerDashboard/VolunteerDashboard";
 import { VolunteerProfileLoader } from "./Loaders/VolunteerProfile";
+import SOSPage from "./components/SOS/SOS";
 
 
 const router = createBrowserRouter([
@@ -115,6 +116,15 @@ const router = createBrowserRouter([
         element : (
           <ProtectedRoute>
             <VolunteerDashboard></VolunteerDashboard>
+          </ProtectedRoute>
+        ),
+        loader:VolunteerProfileLoader
+      },
+      {
+        path: '/sos',
+        element : (
+          <ProtectedRoute>
+            <SOSPage></SOSPage>
           </ProtectedRoute>
         ),
         loader:VolunteerProfileLoader
