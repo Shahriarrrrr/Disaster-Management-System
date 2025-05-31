@@ -1,112 +1,239 @@
 "use client"
 
-import { useEffect, useContext } from "react"
+import { useEffect, useContext, useState } from "react"
 import { Link } from "react-router"
 import { AuthContext } from "../../context/AuthContext"
+import { Menu, X, Home, Target, Trophy, Map, User, Shield, LogOut, Bell, Search } from "lucide-react"
 
 const Navbar = () => {
-  const { volunteerStatus } = useContext(AuthContext);
+  const { volunteerStatus } = useContext(AuthContext)
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [activeItem, setActiveItem] = useState("/")
+  const [showNotifications, setShowNotifications] = useState(false)
 
   useEffect(() => {
-    const menu = document.querySelector(".menu")
-    const sidebar = document.querySelector(".sidebar")
-    const Menulist = document.querySelectorAll(".Menulist li")
-
-    menu.onclick = () => {
-      menu.classList.toggle("active")
-      sidebar.classList.toggle("active")
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20)
     }
-
-    Menulist.forEach((item) =>
-      item.addEventListener("click", function () {
-        Menulist.forEach((item) => item.classList.remove("active"))
-        this.classList.add("active")
-      }),
-    )
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
   function logout() {
-    localStorage.removeItem('access');
-    localStorage.removeItem('refresh');
-    window.location.href = '/login'; // or '/' or any route you prefer
+    localStorage.removeItem("access")
+    localStorage.removeItem("refresh")
+    window.location.href = "/login"
   }
 
-  const isAccepted = volunteerStatus === "accepted";
+  const isAccepted = volunteerStatus === "accepted"
+
+  const navItems = [
+    { path: "/", label: "Home", icon: Home },
+    { path: "/cause", label: "Campaigns", icon: Target },
+    { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
+    { path: "/heatmap", label: "Heat Map", icon: Map },
+    { path: "/profile", label: "Profile", icon: User },
+  ]
 
   return (
-    <div className="navbar bg-gradient-to-r from-gray-700 via-gray-900 to-black text-white shadow-md transition-all duration-300">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost hover:bg-white/10 lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
-            </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content rounded-box z-10 mt-3 w-52 p-2 shadow-lg bg-purple-500 border border-white/10 text-white"
-          >
-            <li><a className="hover:bg-white/10 rounded-md transition-colors duration-200">Home</a></li>
-            <li>
-              <a className="hover:bg-white/10 rounded-md transition-colors duration-200">Parent</a>
-              <ul className="p-2 bg-purple-600/80 rounded-md mt-1">
-                <li><a className="hover:bg-white/10 rounded-md transition-colors duration-200">Submenu 1</a></li>
-                <li><a className="hover:bg-white/10 rounded-md transition-colors duration-200">Submenu 2</a></li>
-              </ul>
-            </li>
-            <li><a className="hover:bg-white/10 rounded-md transition-colors duration-200">Item 3</a></li>
-          </ul>
-        </div>
-        <a className="btn btn-ghost text-xl font-bold tracking-wide hover:bg-white/10">
-          <span className="bg-white/20 text-white px-2 py-1 rounded mr-2">D</span>
-          MSRF
-        </a>
-      </div>
-
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          <li><Link to='/' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Home</Link></li>
-          <li><Link to='/cause' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Campaigns</Link></li>
-          <li><Link to='/leaderboard' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Leader Boards</Link></li>
-          <li><Link to='/heatmap' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Heat Map</Link></li>
-          <li><Link to='/profile' className="hover:bg-white/10 rounded-md mx-1 transition-colors duration-200">Profile</Link></li>
-
-          {/* Volunteer Dashboard: enabled only if accepted */}
-          <li>
-            {isAccepted ? (
-              <Link
-                to="/volunteer"
-                className="hover:bg-green-600 rounded-md mx-1 px-3 py-1 bg-green-600 text-white transition-colors duration-200"
-              >
-                Volunteer Dashboard
+    <>
+      {/* Main Navbar */}
+      <nav
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ease-out ${
+          isScrolled
+            ? "bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-2xl shadow-black/10"
+            : "bg-transparent backdrop-blur-sm"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
+            {/* Logo Section */}
+            <div className="flex items-center space-x-4">
+              <Link to="/" className="flex items-center group cursor-pointer">
+                <div className="relative">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm border border-white/30 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-all duration-300 shadow-lg group-hover:shadow-white/20">
+                    <span className="text-white font-bold text-lg drop-shadow-lg">D</span>
+                  </div>
+                  <div className="absolute -inset-1 bg-white/10 rounded-2xl blur opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
+                </div>
+                <span className="ml-3 text-xl font-bold text-white drop-shadow-lg">MSRF</span>
               </Link>
-            ) : (
-              <span
-                className="rounded-md mx-1 px-3 py-1 bg-gray-400 text-gray-700 cursor-not-allowed select-none"
-                title="Volunteer request not accepted yet"
-              >
-                Volunteer Dashboard
-              </span>
-            )}
-          </li>
-        </ul>
-      </div>
+            </div>
 
-      <div className="navbar-end">
-        <button className="btn btn-soft btn-error" onClick={logout}>
-          <svg height="20" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg">
-            <path d="m33.749 7.759-.93 1.55a1 1 0 0 0 .314 1.339 16.2 16.2 0 1 1 -18.258 0 1 1 0 0 0 .313-1.338l-.926-1.546a1.012 1.012 0 0 0 -1.418-.334 20 20 0 1 0 22.315 0 1 1 0 0 0 -1.41.329z" />
-            <rect height="20" rx="1" width="4" x="22" y="2" />
-          </svg>
-        </button>
-      </div>
-    </div>
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-1">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setActiveItem(item.path)}
+                    className={`relative px-4 py-2 rounded-2xl transition-all duration-300 flex items-center space-x-2 group ${
+                      activeItem === item.path
+                        ? "bg-white/20 text-white shadow-lg backdrop-blur-sm border border-white/30"
+                        : "text-white/80 hover:text-white hover:bg-white/10 backdrop-blur-sm"
+                    }`}
+                  >
+                    <Icon
+                      size={16}
+                      className="transition-transform duration-300 group-hover:scale-110 drop-shadow-sm"
+                    />
+                    <span className="font-medium drop-shadow-sm">{item.label}</span>
+                    {activeItem === item.path && (
+                      <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-white rounded-full shadow-lg"></div>
+                    )}
+                  </Link>
+                )
+              })}
+
+              {/* Volunteer Dashboard */}
+              <div className="ml-4">
+                {isAccepted ? (
+                  <Link
+                    to="/volunteer"
+                    className="relative px-6 py-2 bg-green-500/80 backdrop-blur-sm border border-green-400/50 text-white rounded-2xl font-medium transition-all duration-300 hover:bg-green-500/90 hover:scale-105 shadow-lg hover:shadow-green-500/30 flex items-center space-x-2"
+                  >
+                    <Shield size={16} className="drop-shadow-sm" />
+                    <span className="drop-shadow-sm">Volunteer Dashboard</span>
+                  </Link>
+                ) : (
+                  <div className="relative group">
+                    <span className="px-6 py-2 bg-gray-500/30 backdrop-blur-sm border border-gray-400/30 text-gray-300 rounded-2xl font-medium cursor-not-allowed flex items-center space-x-2">
+                      <Shield size={16} />
+                      <span>Volunteer Dashboard</span>
+                    </span>
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-black/90 backdrop-blur-sm text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap border border-white/10">
+                      Volunteer request pending approval
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Section */}
+            <div className="flex items-center space-x-2">
+              {/* Search Button */}
+              <button className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 backdrop-blur-sm">
+                <Search size={20} className="drop-shadow-sm" />
+              </button>
+
+              {/* Notifications */}
+              <div className="relative">
+                <button
+                  onClick={() => setShowNotifications(!showNotifications)}
+                  className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 relative backdrop-blur-sm"
+                >
+                  <Bell size={20} className="drop-shadow-sm" />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
+                </button>
+
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-black/80 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-2xl p-4 animate-in slide-in-from-top-2 duration-300">
+                    <h3 className="text-white font-semibold mb-3 drop-shadow-sm">Notifications</h3>
+                    <div className="space-y-2">
+                      <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/15 transition-colors duration-200 cursor-pointer border border-white/10">
+                        <p className="text-white text-sm drop-shadow-sm">New campaign available</p>
+                        <p className="text-gray-300 text-xs mt-1">2 minutes ago</p>
+                      </div>
+                      <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/15 transition-colors duration-200 cursor-pointer border border-white/10">
+                        <p className="text-white text-sm drop-shadow-sm">Volunteer status updated</p>
+                        <p className="text-gray-300 text-xs mt-1">1 hour ago</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Logout Button */}
+              <button
+                onClick={logout}
+                className="p-2 text-white/80 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-300 group backdrop-blur-sm"
+              >
+                <LogOut size={20} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-sm" />
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="lg:hidden p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 backdrop-blur-sm"
+              >
+                {isMenuOpen ? (
+                  <X size={24} className="drop-shadow-sm" />
+                ) : (
+                  <Menu size={24} className="drop-shadow-sm" />
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`lg:hidden transition-all duration-500 overflow-hidden ${
+            isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="bg-black/90 backdrop-blur-2xl border-t border-white/20">
+            <div className="px-4 py-6 space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => {
+                      setActiveItem(item.path)
+                      setIsMenuOpen(false)
+                    }}
+                    className={`flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 backdrop-blur-sm ${
+                      activeItem === item.path
+                        ? "bg-white/20 text-white border border-white/30 shadow-lg"
+                        : "text-white/80 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    <Icon size={20} className="drop-shadow-sm" />
+                    <span className="font-medium drop-shadow-sm">{item.label}</span>
+                  </Link>
+                )
+              })}
+
+              {/* Mobile Volunteer Dashboard */}
+              <div className="pt-4 border-t border-white/20">
+                {isAccepted ? (
+                  <Link
+                    to="/volunteer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="flex items-center space-x-3 px-4 py-3 bg-green-500/80 backdrop-blur-sm border border-green-400/50 text-white rounded-xl font-medium shadow-lg"
+                  >
+                    <Shield size={20} className="drop-shadow-sm" />
+                    <span className="drop-shadow-sm">Volunteer Dashboard</span>
+                  </Link>
+                ) : (
+                  <div className="flex items-center space-x-3 px-4 py-3 bg-gray-500/30 backdrop-blur-sm border border-gray-400/30 text-gray-300 rounded-xl">
+                    <Shield size={20} />
+                    <span>Volunteer Dashboard (Pending)</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Spacer to prevent content from hiding behind fixed navbar */}
+      <div className="h-16"></div>
+
+      {/* Background overlay when mobile menu is open */}
+      {isMenuOpen && (
+        <div
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+    </>
   )
 }
 
