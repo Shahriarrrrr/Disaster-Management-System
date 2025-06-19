@@ -468,8 +468,8 @@ function MissionCard({ mission, type = "ongoing", onJoinRequest }) {
     </div>
   )
 }
-
-function SkillProgramCard({ program, onEnroll }) {
+//work here with user
+function SkillProgramCard({ program, onEnroll ,user}) {
   const [showDetails, setShowDetails] = useState(false)
 
   const getLevelColor = (level) => {
@@ -904,11 +904,18 @@ export default function VolunteerDashboard() {
     alert("Your join request has been submitted! You'll hear back from the coordinator soon.")
   }
 
-  const handleEnrollProgram = (program) => {
-    console.log("Enrolling in program:", program.id)
-    // Here you would typically send the enrollment request to your backend
+  const handleEnrollProgram = async (program , user) => {
+   try {
+    await api.post('/workshop/api/join-requests/', {
+      course: program.id,
+    });
+    console.log("Enrolling in program:", program.id)  // changed from 'id' to 'program.id'
     alert(`You've successfully enrolled in "${program.title}"! Check your email for further details.`)
+  } catch (error) {
+    console.error("Failed to enroll in program:", error);
+    alert("Enrollment failed. Please try again later.");
   }
+}
 
   const filteredMissions =
     data?.availableMissions?.filter((mission) => {
@@ -1207,7 +1214,7 @@ export default function VolunteerDashboard() {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {filteredPrograms.map((program, index) => (
                     <AnimatedCard key={program.id} delay={index * 200}>
-                      <SkillProgramCard program={program} onEnroll={handleEnrollProgram} />
+                      <SkillProgramCard program={program} user = {user} onEnroll={() => handleEnrollProgram(program ,user)} />
                     </AnimatedCard>
                   ))}
                 </div>

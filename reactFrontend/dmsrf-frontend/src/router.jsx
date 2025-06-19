@@ -26,6 +26,8 @@ import { heatmapLoader } from "./Loaders/Heatmap";
 import VolunteerDashboard from "./components/VolunteerDashboard/VolunteerDashboard";
 import { VolunteerProfileLoader } from "./Loaders/VolunteerProfile";
 import SOSPage from "./components/SOS/SOS";
+import Aid from "./components/Aid/Aid";
+import { disastersLoader } from "./Loaders/NewsLoader";
 
 
 const router = createBrowserRouter([
@@ -65,6 +67,15 @@ const router = createBrowserRouter([
         element : (
           <ProtectedRoute>
             <News></News>
+          </ProtectedRoute>
+        ),
+        loader : disastersLoader
+      },
+      {
+        path: '/aid',
+        element : (
+          <ProtectedRoute>
+            <Aid></Aid>
           </ProtectedRoute>
         ),
       },
