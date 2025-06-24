@@ -8,10 +8,10 @@ const LatestDonation = ({donation}) => {
     return (
 
             <tr  className='ml-10'>
-            <td>{formattedDate}</td>
-            <td>{donation_cause_display}</td>
-            <td>{donation_amount}</td>
-            <td><span className="badge badge-success">{status}</span></td>
+            <td className='text-white'>{formattedDate}</td>
+            <td className='text-white'>{donation_cause_display}</td>
+            <td className='text-white'>{donation_amount}</td>
+            <td><span className="text-green-400">{status}</span></td>
             </tr>
 
 

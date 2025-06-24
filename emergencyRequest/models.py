@@ -9,8 +9,8 @@ class EmergencyRequest(models.Model):
     )
     location_address = models.CharField(max_length=255)
 
-    latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+    latitude = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)
+    longitude = models.DecimalField(max_digits=11, decimal_places=8, null=True, blank=True)
 
     emergency_type = models.CharField(max_length=100, default="Flood")
     additional_details = models.TextField(blank=True)

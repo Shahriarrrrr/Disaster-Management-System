@@ -14,4 +14,7 @@ urlpatterns = [
     path('payment/success/', views.payment_success, name='payment-success'),
     path('payment/fail/', views.payment_fail, name='payment-fail'),
     path('payment/cancel/', views.payment_cancel, name='payment-cancel'),
+
+    # Public donor profile (lightweight, public-safe)
+    path('public-donors/<int:pk>/', views.PublicDonorProfileView.as_view(), name='public-donor-profile'),
 ]

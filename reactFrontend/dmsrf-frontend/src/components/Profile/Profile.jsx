@@ -22,7 +22,7 @@ const Profile = () => {
   // For demo purposes, assuming hardcoded values will be replaced later with actual user fields
 
   return (
-    <div className='bg-[#222831]'>
+    <div className='bg-gradient-to-r from-gray-700 via-gray-900 to-black'>
       <div className="container">
         <div className="header ">
           <h1 className=''>PROFILE</h1>

@@ -19,6 +19,15 @@ import DonationPage from "./components/Donate/Donate";
 import DonateSuccess from "./components/DonateSuccess/DonateSuccess";
 import Cause from "./components/Cause/Cause";
 import { CauseLoader } from "./Loaders/CauseLoader";
+import Leaderboard from "./components/LeaderBoard/LeaderBoard";
+import { LeaderboarddonationLoader } from "./Loaders/LeaderBoardLoader";
+import DisasterMapPage from "./components/DisasterMap/DisasterMap";
+import { heatmapLoader } from "./Loaders/Heatmap";
+import VolunteerDashboard from "./components/VolunteerDashboard/VolunteerDashboard";
+import { VolunteerProfileLoader } from "./Loaders/VolunteerProfile";
+import SOSPage from "./components/SOS/SOS";
+import Aid from "./components/Aid/Aid";
+import { disastersLoader } from "./Loaders/NewsLoader";
 
 
 const router = createBrowserRouter([
@@ -60,6 +69,15 @@ const router = createBrowserRouter([
             <News></News>
           </ProtectedRoute>
         ),
+        loader : disastersLoader
+      },
+      {
+        path: '/aid',
+        element : (
+          <ProtectedRoute>
+            <Aid></Aid>
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/donatePage',
@@ -85,6 +103,42 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader : CauseLoader,
+      },
+      {
+        path: '/leaderboard',
+        element : (
+          <ProtectedRoute>
+            <Leaderboard></Leaderboard>
+          </ProtectedRoute>
+        ),
+        loader : LeaderboarddonationLoader,
+      },
+      {
+        path: '/heatmap',
+        element : (
+          <ProtectedRoute>
+            <DisasterMapPage></DisasterMapPage>
+          </ProtectedRoute>
+        ),
+        loader: heatmapLoader,
+      },
+      {
+        path: '/volunteer',
+        element : (
+          <ProtectedRoute>
+            <VolunteerDashboard></VolunteerDashboard>
+          </ProtectedRoute>
+        ),
+        loader:VolunteerProfileLoader
+      },
+      {
+        path: '/sos',
+        element : (
+          <ProtectedRoute>
+            <SOSPage></SOSPage>
+          </ProtectedRoute>
+        ),
+        loader:VolunteerProfileLoader
       },
     ],
   },
