@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useContext, useState } from "react"
-import { Link } from "react-router"
+import { Link , useNavigate} from "react-router"
 import { AuthContext } from "../../context/AuthContext"
-import { Menu, X, Home, Target, Trophy, Map, User, Shield, LogOut, Bell, Search } from "lucide-react"
+import { Menu, X, Home, Target, Trophy, Map, User, Shield, LogOut, Bell, Search, Bot, Newspaper} from "lucide-react"
 
 const Navbar = () => {
+  
   const { volunteerStatus } = useContext(AuthContext)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
@@ -26,6 +27,10 @@ const Navbar = () => {
     window.location.href = "/login"
   }
 
+    
+
+
+
   const isAccepted = volunteerStatus === "accepted"
 
   const navItems = [
@@ -34,6 +39,7 @@ const Navbar = () => {
     { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
     { path: "/heatmap", label: "Heat Map", icon: Map },
     { path: "/profile", label: "Profile", icon: User },
+
   ]
 
   return (
@@ -114,40 +120,25 @@ const Navbar = () => {
 
             {/* Right Section */}
             <div className="flex items-center space-x-2">
-              {/* Search Button */}
-              <button className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 backdrop-blur-sm">
-                <Search size={20} className="drop-shadow-sm" />
-              </button>
+              {/* NewsPapper Button */}
+              <Link
+                to="/news"
+                className="p-2 text-white/80 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-300 group backdrop-blur-sm"
+              >
+                <Newspaper size={20} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-sm" />
+              </Link>
 
               {/* Notifications */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  className="p-2 text-white/80 hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 relative backdrop-blur-sm"
-                >
-                  <Bell size={20} className="drop-shadow-sm" />
-                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-lg"></div>
-                </button>
 
-                {/* Notifications Dropdown */}
-                {showNotifications && (
-                  <div className="absolute right-0 top-full mt-2 w-80 bg-black/80 backdrop-blur-2xl border border-white/20 rounded-2xl shadow-2xl p-4 animate-in slide-in-from-top-2 duration-300">
-                    <h3 className="text-white font-semibold mb-3 drop-shadow-sm">Notifications</h3>
-                    <div className="space-y-2">
-                      <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/15 transition-colors duration-200 cursor-pointer border border-white/10">
-                        <p className="text-white text-sm drop-shadow-sm">New campaign available</p>
-                        <p className="text-gray-300 text-xs mt-1">2 minutes ago</p>
-                      </div>
-                      <div className="p-3 bg-white/10 backdrop-blur-sm rounded-xl hover:bg-white/15 transition-colors duration-200 cursor-pointer border border-white/10">
-                        <p className="text-white text-sm drop-shadow-sm">Volunteer status updated</p>
-                        <p className="text-gray-300 text-xs mt-1">1 hour ago</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
 
               {/* Logout Button */}
+              <Link
+                to="/rescuebot"
+                className="p-2 text-white/80 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-300 group backdrop-blur-sm"
+              >
+                <Bot size={20} className="group-hover:scale-110 transition-transform duration-300 drop-shadow-sm" />
+              </Link>
+               {/* Logout Button */}
               <button
                 onClick={logout}
                 className="p-2 text-white/80 hover:text-red-300 hover:bg-red-500/20 rounded-xl transition-all duration-300 group backdrop-blur-sm"

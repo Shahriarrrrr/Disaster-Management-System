@@ -6,6 +6,8 @@ import { Link, useLoaderData } from "react-router"
 import LatestDonation from "../LatestDonation/LatestDonation"
 import LatestCampaigns from "../LatestCampaigns/LatestCampaigns"
 import api from "../../api"
+import volunteerIMG from "../../assets/VolunteerIMG.jpg"
+
 
 function useIntersectionObserver(ref, options = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false)
@@ -598,9 +600,9 @@ const Home = () => {
           </div>
 
           <div className="md:w-1/2 h-full min-h-[400px] relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-pink-600/20"></div>
+            <div className="absolute inset-0 "></div>
             <img
-              src="https://placehold.co/500x400"
+              src= {volunteerIMG}
               alt="Volunteers working"
               className="w-full h-full object-cover"
             />

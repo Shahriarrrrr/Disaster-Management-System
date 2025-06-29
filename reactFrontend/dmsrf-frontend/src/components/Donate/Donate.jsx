@@ -380,7 +380,7 @@ const DonationPage = () => {
                 </div>
 
                 {/* Donor Information */}
-                <div className="mb-8">
+                {/* <div className="mb-8">
                   <h3 className="text-lg font-semibold text-white mb-4">Donor Information</h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
@@ -408,10 +408,10 @@ const DonationPage = () => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Payment Method */}
-                <div className="mb-8">
+                {/* <div className="mb-8">
                   <h3 className="text-lg font-semibold text-white mb-4">Payment Method</h3>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
                     {[
@@ -464,7 +464,7 @@ const DonationPage = () => {
                       </div>
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* Privacy & Terms */}
                 <div className="mb-8">
