@@ -120,7 +120,7 @@ export default function DonationList({ donation, user, searchTerm = "" }) {
               <p className="text-green-400 text-sm font-medium">Total Amount</p>
               <p className="text-2xl font-bold text-white">{formatCurrency(user_total_donate)}</p>
             </div>
-            <DollarSign className="h-8 w-8 text-green-400" />
+
           </div>
         </div>
         <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-6">

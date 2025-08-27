@@ -164,3 +164,10 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Default is 5 minutes
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # You can adjust this too
 }
+
+
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # <-- Add this
