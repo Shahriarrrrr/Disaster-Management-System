@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { Heart, Clock, MapPin, ArrowRight, Share2, X } from "lucide-react"
 import { useLoaderData } from "react-router"
+import { useNavigate } from "react-router-dom";
 
 function useIntersectionObserver(ref, options = {}) {
   const [isIntersecting, setIsIntersecting] = useState(false)
@@ -23,6 +24,9 @@ function useIntersectionObserver(ref, options = {}) {
 
   return isIntersecting
 }
+
+
+
 
 function AnimatedProgressBar({ percentage, delay = 0, size = "large" }) {
   const [animatedPercentage, setAnimatedPercentage] = useState(0)
@@ -83,6 +87,7 @@ function LoadingSkeleton() {
 }
 
 function HeroCampaign({ campaign, delay = 0, onDonate }) {
+
   const heroRef = useRef(null)
   const isVisible = useIntersectionObserver(heroRef, { threshold: 0.1 })
 
@@ -555,11 +560,18 @@ function DonationModal({ isOpen, campaign, onClose }) {
   )
 }
 
+
+
+
 export default function Cause() {
   const [showDonationModal, setShowDonationModal] = useState(false)
   const [selectedCampaign, setSelectedCampaign] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const navigate = useNavigate();
 
+  const handleDonateRedirect = () => {
+    navigate('/donatePage'); // Navigate to /donate
+  };
   const causes = useLoaderData()
   const campaigns = causes?.causes || []
 
@@ -600,7 +612,7 @@ export default function Cause() {
       {/* Featured Campaigns - Hero Style */}
       <div className="relative z-10">
         {featuredCampaigns.map((campaign, index) => (
-          <HeroCampaign key={campaign.id} campaign={campaign} delay={index * 300} onDonate={openDonationModal} />
+          <HeroCampaign key={campaign.id} campaign={campaign} delay={index * 300} onDonate={handleDonateRedirect} />
         ))}
       </div>
 

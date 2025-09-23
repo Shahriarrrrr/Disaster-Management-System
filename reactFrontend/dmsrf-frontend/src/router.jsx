@@ -28,6 +28,7 @@ import { VolunteerProfileLoader } from "./Loaders/VolunteerProfile";
 import SOSPage from "./components/SOS/SOS";
 import Aid from "./components/Aid/Aid";
 import { disastersLoader } from "./Loaders/NewsLoader";
+import Chatbot from "./components/chatbot/Chatbot";
 
 
 const router = createBrowserRouter([
@@ -139,6 +140,14 @@ const router = createBrowserRouter([
           </ProtectedRoute>
         ),
         loader:VolunteerProfileLoader
+      },
+      {
+        path: '/rescuebot',
+        element : (
+          <ProtectedRoute>
+            <Chatbot></Chatbot>
+          </ProtectedRoute>
+        ),
       },
     ],
   },

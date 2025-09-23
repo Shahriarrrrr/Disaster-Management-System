@@ -162,7 +162,6 @@ const Aid = () => {
             <div className="px-8 py-6 bg-gradient-to-r from-emerald-50 to-teal-50 border-b border-emerald-100">
               <h3 className="text-xl font-semibold text-emerald-800 flex items-center gap-3">
                 <div className="p-2 bg-emerald-100 rounded-lg">
-                  <DollarSign className="h-5 w-5 text-emerald-600" />
                 </div>
                 Basic Information
               </h3>

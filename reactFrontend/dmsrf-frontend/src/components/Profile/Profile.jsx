@@ -26,8 +26,6 @@ const Profile = () => {
       <div className="container">
         <div className="header ">
           <h1 className=''>PROFILE</h1>
-          <p>Profile</p>
-          <button className='btn btn-secondary'>Donate</button>
         </div>
 
         <div className="profile-card">
@@ -94,7 +92,7 @@ const Profile = () => {
       </div>
 
       <div className="footer">
-        © 2023 Disaster Relief Foundation. All rights reserved.
+        © 2025 Disaster Management Relief Foundation. All rights reserved.
       </div>
     </div>
   );

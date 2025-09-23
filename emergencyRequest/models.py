@@ -16,6 +16,7 @@ class EmergencyRequest(models.Model):
     additional_details = models.TextField(blank=True)
     contact_number = models.CharField(max_length=20)
     requested_at = models.DateTimeField(auto_now_add=True)
+    emergency_contact = models.CharField(max_length=20, default='')
 
     def __str__(self):
         return f"Emergency by {self.user.email} at {self.location_address}"
