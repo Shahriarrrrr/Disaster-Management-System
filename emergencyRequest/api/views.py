@@ -14,3 +14,7 @@ class EmergencyRequestViewSet(viewsets.ModelViewSet):
         if user.is_staff:
             return EmergencyRequest.objects.all()
         return EmergencyRequest.objects.filter(user=user)
+    #Have to check in frontend
+    def perform_create(self, serializer):
+        # Attach the authenticated user automatically
+        serializer.save(user=self.request.user)

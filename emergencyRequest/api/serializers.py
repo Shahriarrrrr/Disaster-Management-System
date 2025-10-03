@@ -6,4 +6,5 @@ class EmergencyRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyRequest
         fields = "__all__"
+        read_only_fields = ("user", "requested_at")
         
