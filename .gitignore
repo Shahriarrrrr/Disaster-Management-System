@@ -1,8 +1,13 @@
- **/__pycache__/
-DMSRF-env/
-.env
+# Python cache files
+__pycache__/
 **/__pycache__/
- DMSRF-env/
+*.pyc
+
+# Environment directories
+DMSRF-env/
+
+# Environment variables
 .env
-# Python compiled files 
-*.pyc __pycache__/
+
+# React frontend
+.reactFrontend
