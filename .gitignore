@@ -1,4 +1,8 @@
  **/__pycache__/
 DMSRF-env/
 .env
-.reactFrontend
+**/__pycache__/
+ DMSRF-env/
+.env
+# Python compiled files 
+*.pyc __pycache__/
