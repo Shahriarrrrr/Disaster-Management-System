@@ -1,0 +1,5107 @@
+openapi: 3.0.3
+info:
+  title: DISASTER MANAGEMENT SYSTEM
+  version: 1.0.0
+  description: TO CONNECT THE PERSON IN NEED TO THE PERSON WHO WANT TO GIVE
+paths:
+  /account/api/register/:
+    post:
+      operationId: account_api_register_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+  /account/api/users/:
+    get:
+      operationId: account_api_users_list
+      tags:
+      - account
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomUser'
+          description: ''
+    post:
+      operationId: account_api_users_create
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+  /account/api/users/{id}/:
+    get:
+      operationId: account_api_users_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - account
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    put:
+      operationId: account_api_users_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomUser'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    patch:
+      operationId: account_api_users_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCustomUser'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomUser'
+          description: ''
+    delete:
+      operationId: account_api_users_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this custom user.
+        required: true
+      tags:
+      - account
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /aid/api/Aid/:
+    get:
+      operationId: aid_api_Aid_list
+      tags:
+      - aid
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AidRequest'
+          description: ''
+    post:
+      operationId: aid_api_Aid_create
+      tags:
+      - aid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AidRequest'
+          description: ''
+  /aid/api/Aid/{id}/:
+    get:
+      operationId: aid_api_Aid_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Aid Request.
+        required: true
+      tags:
+      - aid
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AidRequest'
+          description: ''
+    put:
+      operationId: aid_api_Aid_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Aid Request.
+        required: true
+      tags:
+      - aid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AidRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AidRequest'
+          description: ''
+    patch:
+      operationId: aid_api_Aid_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Aid Request.
+        required: true
+      tags:
+      - aid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAidRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAidRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAidRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AidRequest'
+          description: ''
+    delete:
+      operationId: aid_api_Aid_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Aid Request.
+        required: true
+      tags:
+      - aid
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/campaigns/:
+    get:
+      operationId: api_campaigns_list
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Campaign'
+          description: ''
+    post:
+      operationId: api_campaigns_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+  /api/campaigns/{campaign_pk}/comments/:
+    get:
+      operationId: api_campaigns_comments_list
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignComment'
+          description: ''
+    post:
+      operationId: api_campaigns_comments_create
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignComment'
+          description: ''
+  /api/campaigns/{campaign_pk}/comments/{id}/:
+    get:
+      operationId: api_campaigns_comments_retrieve
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignComment'
+          description: ''
+    put:
+      operationId: api_campaigns_comments_update
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignComment'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignComment'
+          description: ''
+    patch:
+      operationId: api_campaigns_comments_partial_update
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignComment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignComment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignComment'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignComment'
+          description: ''
+    delete:
+      operationId: api_campaigns_comments_destroy
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/campaigns/{campaign_pk}/updates/:
+    get:
+      operationId: api_campaigns_updates_list
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CampaignUpdate'
+          description: ''
+    post:
+      operationId: api_campaigns_updates_create
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignUpdate'
+          description: ''
+  /api/campaigns/{campaign_pk}/updates/{id}/:
+    get:
+      operationId: api_campaigns_updates_retrieve
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignUpdate'
+          description: ''
+    put:
+      operationId: api_campaigns_updates_update
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CampaignUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignUpdate'
+          description: ''
+    patch:
+      operationId: api_campaigns_updates_partial_update
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaignUpdate'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CampaignUpdate'
+          description: ''
+    delete:
+      operationId: api_campaigns_updates_destroy
+      parameters:
+      - in: path
+        name: campaign_pk
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/campaigns/{id}/:
+    get:
+      operationId: api_campaigns_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    put:
+      operationId: api_campaigns_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Campaign'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    patch:
+      operationId: api_campaigns_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCampaign'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Campaign'
+          description: ''
+    delete:
+      operationId: api_campaigns_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this campaign.
+        required: true
+      tags:
+      - api
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/token/:
+    post:
+      operationId: api_token_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/token/refresh/:
+    post:
+      operationId: api_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /donation/api/donation/:
+    get:
+      operationId: donation_api_donation_list
+      tags:
+      - donation
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Donation'
+          description: ''
+  /donation/api/donation/initiate/:
+    post:
+      operationId: donation_api_donation_initiate_create
+      tags:
+      - donation
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /donation/api/fund-transactions/:
+    get:
+      operationId: donation_api_fund_transactions_list
+      tags:
+      - donation
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FundTransaction'
+          description: ''
+  /donation/api/funds/:
+    get:
+      operationId: donation_api_funds_list
+      tags:
+      - donation
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Funds'
+          description: ''
+  /donation/api/public-donors/{id}/:
+    get:
+      operationId: donation_api_public_donors_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - donation
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicDonor'
+          description: ''
+  /emergency/api/EmergencyRequest/:
+    get:
+      operationId: emergency_api_EmergencyRequest_list
+      tags:
+      - emergency
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmergencyRequest'
+          description: ''
+    post:
+      operationId: emergency_api_EmergencyRequest_create
+      tags:
+      - emergency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyRequest'
+          description: ''
+  /emergency/api/EmergencyRequest/{id}/:
+    get:
+      operationId: emergency_api_EmergencyRequest_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this emergency request.
+        required: true
+      tags:
+      - emergency
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyRequest'
+          description: ''
+    put:
+      operationId: emergency_api_EmergencyRequest_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this emergency request.
+        required: true
+      tags:
+      - emergency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EmergencyRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyRequest'
+          description: ''
+    patch:
+      operationId: emergency_api_EmergencyRequest_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this emergency request.
+        required: true
+      tags:
+      - emergency
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEmergencyRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEmergencyRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEmergencyRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyRequest'
+          description: ''
+    delete:
+      operationId: emergency_api_EmergencyRequest_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this emergency request.
+        required: true
+      tags:
+      - emergency
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /heatmap/api/heatmaps/:
+    get:
+      operationId: heatmap_api_heatmaps_list
+      tags:
+      - heatmap
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Heatmap'
+          description: ''
+    post:
+      operationId: heatmap_api_heatmaps_create
+      tags:
+      - heatmap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Heatmap'
+          description: ''
+  /heatmap/api/heatmaps/{id}/:
+    get:
+      operationId: heatmap_api_heatmaps_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this heatmap.
+        required: true
+      tags:
+      - heatmap
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Heatmap'
+          description: ''
+    put:
+      operationId: heatmap_api_heatmaps_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this heatmap.
+        required: true
+      tags:
+      - heatmap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Heatmap'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Heatmap'
+          description: ''
+    patch:
+      operationId: heatmap_api_heatmaps_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this heatmap.
+        required: true
+      tags:
+      - heatmap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedHeatmap'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedHeatmap'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedHeatmap'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Heatmap'
+          description: ''
+    delete:
+      operationId: heatmap_api_heatmaps_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this heatmap.
+        required: true
+      tags:
+      - heatmap
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /mission/api/mission-requests/:
+    get:
+      operationId: mission_api_mission_requests_list
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+    post:
+      operationId: mission_api_mission_requests_create
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+  /mission/api/mission-requests/{id}/:
+    get:
+      operationId: mission_api_mission_requests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+    put:
+      operationId: mission_api_mission_requests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+    patch:
+      operationId: mission_api_mission_requests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMissionJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMissionJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMissionJoinRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+    delete:
+      operationId: mission_api_mission_requests_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /mission/api/mission-requests/{id}/approve/:
+    post:
+      operationId: mission_api_mission_requests_approve_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+  /mission/api/mission-requests/{id}/reject/:
+    post:
+      operationId: mission_api_mission_requests_reject_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MissionJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MissionJoinRequest'
+          description: ''
+  /mission/api/missions/:
+    get:
+      operationId: mission_api_missions_list
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Mission'
+          description: ''
+    post:
+      operationId: mission_api_missions_create
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mission'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+          description: ''
+  /mission/api/missions/{id}/:
+    get:
+      operationId: mission_api_missions_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mission.
+        required: true
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+          description: ''
+    put:
+      operationId: mission_api_missions_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mission.
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Mission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Mission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Mission'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+          description: ''
+    patch:
+      operationId: mission_api_missions_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mission.
+        required: true
+      tags:
+      - mission
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMission'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMission'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMission'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mission'
+          description: ''
+    delete:
+      operationId: mission_api_missions_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this mission.
+        required: true
+      tags:
+      - mission
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /program/api/programs/:
+    get:
+      operationId: program_api_programs_list
+      tags:
+      - program
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Program'
+          description: ''
+    post:
+      operationId: program_api_programs_create
+      tags:
+      - program
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Program'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Program'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+  /program/api/programs/{id}/:
+    get:
+      operationId: program_api_programs_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - program
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    put:
+      operationId: program_api_programs_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - program
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Program'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Program'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Program'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    patch:
+      operationId: program_api_programs_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - program
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProgram'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Program'
+          description: ''
+    delete:
+      operationId: program_api_programs_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this program.
+        required: true
+      tags:
+      - program
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /shelter/api/shelters/:
+    get:
+      operationId: shelter_api_shelters_list
+      tags:
+      - shelter
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shelter'
+          description: ''
+    post:
+      operationId: shelter_api_shelters_create
+      tags:
+      - shelter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+  /shelter/api/shelters/{id}/:
+    get:
+      operationId: shelter_api_shelters_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this shelter.
+        required: true
+      tags:
+      - shelter
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+    put:
+      operationId: shelter_api_shelters_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this shelter.
+        required: true
+      tags:
+      - shelter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Shelter'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+    patch:
+      operationId: shelter_api_shelters_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this shelter.
+        required: true
+      tags:
+      - shelter
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedShelter'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedShelter'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedShelter'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shelter'
+          description: ''
+    delete:
+      operationId: shelter_api_shelters_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this shelter.
+        required: true
+      tags:
+      - shelter
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /ticket/api/ticket-responses/:
+    get:
+      operationId: ticket_api_ticket_responses_list
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TicketResponse'
+          description: ''
+    post:
+      operationId: ticket_api_ticket_responses_create
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+          description: ''
+  /ticket/api/ticket-responses/{id}/:
+    get:
+      operationId: ticket_api_ticket_responses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket response.
+        required: true
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+          description: ''
+    put:
+      operationId: ticket_api_ticket_responses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket response.
+        required: true
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TicketResponse'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+          description: ''
+    patch:
+      operationId: ticket_api_ticket_responses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket response.
+        required: true
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTicketResponse'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTicketResponse'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTicketResponse'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+          description: ''
+    delete:
+      operationId: ticket_api_ticket_responses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket response.
+        required: true
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /ticket/api/tickets/:
+    get:
+      operationId: ticket_api_tickets_list
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ticket'
+          description: ''
+    post:
+      operationId: ticket_api_tickets_create
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: ''
+  /ticket/api/tickets/{id}/:
+    get:
+      operationId: ticket_api_tickets_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket.
+        required: true
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: ''
+    put:
+      operationId: ticket_api_tickets_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket.
+        required: true
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Ticket'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: ''
+    patch:
+      operationId: ticket_api_tickets_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket.
+        required: true
+      tags:
+      - ticket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTicket'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTicket'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTicket'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+          description: ''
+    delete:
+      operationId: ticket_api_tickets_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this ticket.
+        required: true
+      tags:
+      - ticket
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /volunteer/api/join-requests/:
+    get:
+      operationId: volunteer_api_join_requests_list
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VolunteerJoinRequest'
+          description: ''
+    post:
+      operationId: volunteer_api_join_requests_create
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolunteerJoinRequest'
+          description: ''
+  /volunteer/api/join-requests/{id}/:
+    get:
+      operationId: volunteer_api_join_requests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolunteerJoinRequest'
+          description: ''
+    put:
+      operationId: volunteer_api_join_requests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VolunteerJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolunteerJoinRequest'
+          description: ''
+    patch:
+      operationId: volunteer_api_join_requests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteerJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteerJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteerJoinRequest'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolunteerJoinRequest'
+          description: ''
+    delete:
+      operationId: volunteer_api_join_requests_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /volunteer/api/volunteers/:
+    get:
+      operationId: volunteer_api_volunteers_list
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Volunteer'
+          description: ''
+    post:
+      operationId: volunteer_api_volunteers_create
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Volunteer'
+          description: ''
+  /volunteer/api/volunteers/{id}/:
+    get:
+      operationId: volunteer_api_volunteers_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Volunteer'
+          description: ''
+    put:
+      operationId: volunteer_api_volunteers_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Volunteer'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Volunteer'
+          description: ''
+    patch:
+      operationId: volunteer_api_volunteers_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVolunteer'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Volunteer'
+          description: ''
+    delete:
+      operationId: volunteer_api_volunteers_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - volunteer
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /workshop/api/courses/:
+    get:
+      operationId: workshop_api_courses_list
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+          description: ''
+    post:
+      operationId: workshop_api_courses_create
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseCreateUpdate'
+          description: ''
+  /workshop/api/courses/{id}/:
+    get:
+      operationId: workshop_api_courses_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+          description: ''
+    put:
+      operationId: workshop_api_courses_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseCreateUpdate'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseCreateUpdate'
+          description: ''
+    patch:
+      operationId: workshop_api_courses_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseCreateUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseCreateUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseCreateUpdate'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseCreateUpdate'
+          description: ''
+    delete:
+      operationId: workshop_api_courses_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /workshop/api/join-requests/:
+    get:
+      operationId: workshop_api_join_requests_list
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseJoinRequest'
+          description: ''
+    post:
+      operationId: workshop_api_join_requests_create
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseJoinRequest'
+          description: ''
+  /workshop/api/join-requests/{id}/:
+    get:
+      operationId: workshop_api_join_requests_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course join request.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseJoinRequest'
+          description: ''
+    put:
+      operationId: workshop_api_join_requests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course join request.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequestUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequestUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseJoinRequestUpdate'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseJoinRequestUpdate'
+          description: ''
+    patch:
+      operationId: workshop_api_join_requests_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course join request.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseJoinRequestUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseJoinRequestUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedCourseJoinRequestUpdate'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseJoinRequestUpdate'
+          description: ''
+    delete:
+      operationId: workshop_api_join_requests_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this course join request.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /workshop/api/skills/:
+    get:
+      operationId: workshop_api_skills_list
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Skill'
+          description: ''
+    post:
+      operationId: workshop_api_skills_create
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Skill'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+  /workshop/api/skills/{id}/:
+    get:
+      operationId: workshop_api_skills_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    put:
+      operationId: workshop_api_skills_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Skill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Skill'
+        required: true
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    patch:
+      operationId: workshop_api_skills_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill.
+        required: true
+      tags:
+      - workshop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSkill'
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+          description: ''
+    delete:
+      operationId: workshop_api_skills_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this skill.
+        required: true
+      tags:
+      - workshop
+      security:
+      - jwtAuth: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    AidRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        amount_needed:
+          type: integer
+          maximum: 999999
+          minimum: -9223372036854775808
+          format: int64
+        address:
+          type: string
+        state:
+          type: string
+          maxLength: 255
+        contact_number:
+          type: string
+          maxLength: 20
+        reason:
+          type: string
+        proof_of_cause:
+          type: string
+          format: uri
+        related_pictures:
+          type: string
+          format: uri
+        total_family_members:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        urgency:
+          $ref: '#/components/schemas/AidRequestUrgencyEnum'
+        needed_by:
+          type: string
+          format: date
+          nullable: true
+        is_verified:
+          type: boolean
+          readOnly: true
+        is_funded:
+          type: boolean
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/AidRequestStatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        bkash_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        bank_name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BankNameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        bank_account_name:
+          type: string
+          nullable: true
+          maxLength: 255
+        bank_account_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        review_note:
+          type: string
+          readOnly: true
+          nullable: true
+        user:
+          type: integer
+      required:
+      - address
+      - amount_needed
+      - category
+      - contact_number
+      - created_at
+      - id
+      - is_funded
+      - is_verified
+      - proof_of_cause
+      - reason
+      - related_pictures
+      - review_note
+      - state
+      - status
+      - title
+      - total_family_members
+      - user
+      - user_name
+    AidRequestStatusEnum:
+      enum:
+      - open
+      - rejected
+      - resolved
+      type: string
+      description: |-
+        * `open` - Open
+        * `rejected` - Rejected
+        * `resolved` - Resolved
+    AidRequestUrgencyEnum:
+      enum:
+      - low
+      - medium
+      - high
+      type: string
+      description: |-
+        * `low` - Low
+        * `medium` - Medium
+        * `high` - High
+    BankNameEnum:
+      enum:
+      - AB Bank
+      - Agrani Bank
+      - Al-Arafah Islami Bank
+      - Bangladesh Commerce Bank
+      - Bangladesh Development Bank
+      - Bangladesh Krishi Bank
+      - Bank Asia
+      - BASIC Bank
+      - Brac Bank
+      - Citibank N.A.
+      - Commercial Bank of Ceylon
+      - Community Bank
+      - Dhaka Bank
+      - Dutch-Bangla Bank
+      - Eastern Bank
+      - Exim Bank
+      - First Security Islami Bank
+      - Habib Bank
+      - ICB Islamic Bank
+      - IFIC Bank
+      - Islami Bank Bangladesh
+      - Jamuna Bank
+      - Janata Bank
+      - Meghna Bank
+      - Mercantile Bank
+      - Midland Bank
+      - Modhumoti Bank
+      - Mutual Trust Bank
+      - National Bank
+      - National Bank of Pakistan
+      - NRB Bank
+      - NRB Commercial Bank
+      - NRB Global Bank
+      - One Bank
+      - Padma Bank
+      - Palli Sanchay Bank
+      - Premier Bank
+      - Prime Bank
+      - Pubali Bank
+      - Rupali Bank
+      - Shahjalal Islami Bank
+      - Shimanto Bank
+      - Social Islami Bank
+      - Sonali Bank
+      - South Bangla Agriculture and Commerce Bank
+      - Southeast Bank
+      - Standard Bank
+      - Standard Chartered Bank
+      - State Bank of India
+      - The City Bank
+      - Trust Bank
+      - Union Bank
+      - United Commercial Bank
+      - Uttara Bank
+      type: string
+      description: |-
+        * `AB Bank` - AB Bank
+        * `Agrani Bank` - Agrani Bank
+        * `Al-Arafah Islami Bank` - Al-Arafah Islami Bank
+        * `Bangladesh Commerce Bank` - Bangladesh Commerce Bank
+        * `Bangladesh Development Bank` - Bangladesh Development Bank
+        * `Bangladesh Krishi Bank` - Bangladesh Krishi Bank
+        * `Bank Asia` - Bank Asia
+        * `BASIC Bank` - BASIC Bank
+        * `Brac Bank` - Brac Bank
+        * `Citibank N.A.` - Citibank N.A.
+        * `Commercial Bank of Ceylon` - Commercial Bank of Ceylon
+        * `Community Bank` - Community Bank
+        * `Dhaka Bank` - Dhaka Bank
+        * `Dutch-Bangla Bank` - Dutch-Bangla Bank
+        * `Eastern Bank` - Eastern Bank
+        * `Exim Bank` - Exim Bank
+        * `First Security Islami Bank` - First Security Islami Bank
+        * `Habib Bank` - Habib Bank
+        * `ICB Islamic Bank` - ICB Islamic Bank
+        * `IFIC Bank` - IFIC Bank
+        * `Islami Bank Bangladesh` - Islami Bank Bangladesh
+        * `Jamuna Bank` - Jamuna Bank
+        * `Janata Bank` - Janata Bank
+        * `Meghna Bank` - Meghna Bank
+        * `Mercantile Bank` - Mercantile Bank
+        * `Midland Bank` - Midland Bank
+        * `Modhumoti Bank` - Modhumoti Bank
+        * `Mutual Trust Bank` - Mutual Trust Bank
+        * `National Bank` - National Bank
+        * `National Bank of Pakistan` - National Bank of Pakistan
+        * `NRB Bank` - NRB Bank
+        * `NRB Commercial Bank` - NRB Commercial Bank
+        * `NRB Global Bank` - NRB Global Bank
+        * `One Bank` - One Bank
+        * `Padma Bank` - Padma Bank
+        * `Palli Sanchay Bank` - Palli Sanchay Bank
+        * `Premier Bank` - Premier Bank
+        * `Prime Bank` - Prime Bank
+        * `Pubali Bank` - Pubali Bank
+        * `Rupali Bank` - Rupali Bank
+        * `Shahjalal Islami Bank` - Shahjalal Islami Bank
+        * `Shimanto Bank` - Shimanto Bank
+        * `Social Islami Bank` - Social Islami Bank
+        * `Sonali Bank` - Sonali Bank
+        * `South Bangla Agriculture and Commerce Bank` - South Bangla Agriculture and Commerce Bank
+        * `Southeast Bank` - Southeast Bank
+        * `Standard Bank` - Standard Bank
+        * `Standard Chartered Bank` - Standard Chartered Bank
+        * `State Bank of India` - State Bank of India
+        * `The City Bank` - The City Bank
+        * `Trust Bank` - Trust Bank
+        * `Union Bank` - Union Bank
+        * `United Commercial Bank` - United Commercial Bank
+        * `Uttara Bank` - Uttara Bank
+    BlankEnum:
+      enum:
+      - ''
+    Campaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        location:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        goal_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        image:
+          type: string
+          format: uri
+          nullable: true
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignUpdate'
+          readOnly: true
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignComment'
+          readOnly: true
+        featured:
+          type: boolean
+      required:
+      - comments
+      - created_at
+      - description
+      - end_date
+      - goal_amount
+      - id
+      - location
+      - start_date
+      - title
+      - updates
+    CampaignComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        content:
+          type: string
+        posted_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - id
+      - posted_at
+      - user
+    CampaignUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        image:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        total_collected:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - content
+      - created_at
+      - id
+      - title
+      - total_collected
+    CategoryEnum:
+      enum:
+      - medical
+      - education
+      - food
+      - shelter
+      - other
+      type: string
+      description: |-
+        * `medical` - Medical
+        * `education` - Education
+        * `food` - Food
+        * `shelter` - Shelter
+        * `other` - Other
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        category:
+          type: string
+          maxLength: 100
+        duration:
+          type: string
+          maxLength: 50
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        instructor:
+          type: string
+          maxLength: 100
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        max_participants:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        enrolled:
+          type: string
+          readOnly: true
+        description:
+          type: string
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Skill'
+          readOnly: true
+        certification:
+          type: string
+          maxLength: 150
+        cost:
+          type: string
+          maxLength: 50
+        location:
+          type: string
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/Status9c3Enum'
+      required:
+      - category
+      - certification
+      - cost
+      - description
+      - duration
+      - end_date
+      - enrolled
+      - id
+      - instructor
+      - level
+      - location
+      - max_participants
+      - skills
+      - start_date
+      - status
+      - title
+    CourseCreateUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        category:
+          type: string
+          maxLength: 100
+        duration:
+          type: string
+          maxLength: 50
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        instructor:
+          type: string
+          maxLength: 100
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        max_participants:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        enrolled:
+          type: string
+          readOnly: true
+        description:
+          type: string
+        skill_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        certification:
+          type: string
+          maxLength: 150
+        cost:
+          type: string
+          maxLength: 50
+        location:
+          type: string
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/Status9c3Enum'
+      required:
+      - category
+      - certification
+      - cost
+      - description
+      - duration
+      - end_date
+      - enrolled
+      - instructor
+      - level
+      - location
+      - max_participants
+      - skill_ids
+      - start_date
+      - status
+      - title
+    CourseJoinRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: string
+          readOnly: true
+        course:
+          type: integer
+        course_title:
+          type: string
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status4ffEnum'
+          readOnly: true
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - course
+      - course_title
+      - created_at
+      - id
+      - status
+      - user
+    CourseJoinRequestUpdate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status4ffEnum'
+        message:
+          type: string
+    CustomUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        user_name:
+          type: string
+          maxLength: 100
+        user_gender:
+          $ref: '#/components/schemas/UserGenderEnum'
+        user_age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        user_phone:
+          type: string
+          maxLength: 15
+        user_state:
+          $ref: '#/components/schemas/UserStateEnum'
+        user_address:
+          type: string
+        user_profile_image:
+          type: string
+          format: uri
+          nullable: true
+        user_nid:
+          type: string
+          format: uri
+          nullable: true
+        user_awards:
+          $ref: '#/components/schemas/UserAwardsEnum'
+        user_total_donate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        user_last_donated_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_superuser:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+      required:
+      - email
+      - id
+      - password
+      - user_address
+      - user_gender
+      - user_name
+      - user_phone
+      - user_state
+    Donation:
+      type: object
+      properties:
+        donation_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        donation_cause:
+          type: integer
+        donor_name:
+          type: string
+          nullable: true
+          maxLength: 255
+        donor_remarks:
+          type: string
+        donated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        donation_cause_display:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/DonationStatusEnum'
+        custom_phone:
+          type: string
+          writeOnly: true
+        donor:
+          type: integer
+          nullable: true
+      required:
+      - donated_at
+      - donation_amount
+      - donation_cause
+      - donation_cause_display
+      - donor_remarks
+    DonationStatusEnum:
+      enum:
+      - Pending
+      - Success
+      - Failed
+      - Cancelled
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Success` - Success
+        * `Failed` - Failed
+        * `Cancelled` - Cancelled
+    EmergencyRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        location_address:
+          type: string
+          maxLength: 255
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,8})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,8})?$
+          nullable: true
+        emergency_type:
+          type: string
+          maxLength: 100
+        additional_details:
+          type: string
+        contact_number:
+          type: string
+          maxLength: 20
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+        emergency_contact:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - contact_number
+      - id
+      - location_address
+      - requested_at
+      - user
+    FundTransaction:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        transaction_type:
+          $ref: '#/components/schemas/TransactionTypeEnum'
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        description:
+          type: string
+          nullable: true
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        fund:
+          type: integer
+          nullable: true
+      required:
+      - amount
+      - date
+      - id
+      - transaction_type
+    Funds:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,28}(?:\.\d{0,2})?$
+        last_updated:
+          type: string
+          format: date-time
+          readOnly: true
+        fund_cause:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - last_updated
+    Heatmap:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        severity:
+          $ref: '#/components/schemas/SeverityEnum'
+        magnitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        location:
+          type: string
+          maxLength: 255
+        date:
+          type: string
+          format: date
+        affected_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        status:
+          $ref: '#/components/schemas/HeatmapStatusEnum'
+        description:
+          type: string
+        casualties:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        damage_cost:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - affected_people
+      - casualties
+      - damage_cost
+      - date
+      - description
+      - id
+      - latitude
+      - location
+      - longitude
+      - magnitude
+      - severity
+      - status
+      - type
+    HeatmapStatusEnum:
+      enum:
+      - Active
+      - Recovering
+      - Resolved
+      - Contained
+      type: string
+      description: |-
+        * `Active` - Active
+        * `Recovering` - Recovering
+        * `Resolved` - Resolved
+        * `Contained` - Contained
+    LevelEnum:
+      enum:
+      - Beginner
+      - Intermediate
+      - Advanced
+      type: string
+      description: |-
+        * `Beginner` - Beginner
+        * `Intermediate` - Intermediate
+        * `Advanced` - Advanced
+    Mission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 100
+        location:
+          type: string
+          maxLength: 255
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        urgency:
+          $ref: '#/components/schemas/UrgencyF38Enum'
+        volunteers_needed:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        volunteers_joined:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        description:
+          type: string
+        skills: {}
+        coordinator:
+          type: string
+          maxLength: 255
+        status:
+          $ref: '#/components/schemas/MissionStatusEnum'
+        progress:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        lives_can_be_saved:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+      required:
+      - coordinator
+      - description
+      - end_date
+      - id
+      - location
+      - start_date
+      - status
+      - title
+      - type
+      - urgency
+      - volunteers_needed
+    MissionJoinRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        volunteer:
+          type: string
+          readOnly: true
+        mission:
+          type: string
+          readOnly: true
+        mission_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/MissionJoinRequestStatusEnum'
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+      required:
+      - id
+      - mission
+      - mission_id
+      - requested_at
+      - reviewed_at
+      - volunteer
+    MissionJoinRequestStatusEnum:
+      enum:
+      - PENDING
+      - ACCEPTED
+      - REJECTED
+      type: string
+      description: |-
+        * `PENDING` - Pending
+        * `ACCEPTED` - Accepted
+        * `REJECTED` - Rejected
+    MissionStatusEnum:
+      enum:
+      - Planned
+      - Active
+      - Completed
+      type: string
+      description: |-
+        * `Planned` - Planned
+        * `Active` - Active
+        * `Completed` - Completed
+    Nested:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          maxLength: 128
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        user_name:
+          type: string
+          maxLength: 100
+        user_gender:
+          $ref: '#/components/schemas/UserGenderEnum'
+        user_age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        user_phone:
+          type: string
+          maxLength: 15
+        user_state:
+          $ref: '#/components/schemas/UserStateEnum'
+        user_address:
+          type: string
+        user_profile_image:
+          type: string
+          format: uri
+          nullable: true
+        user_nid:
+          type: string
+          format: uri
+          nullable: true
+        user_awards:
+          $ref: '#/components/schemas/UserAwardsEnum'
+        user_total_donate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        user_last_donated_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_superuser:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+      required:
+      - email
+      - id
+      - password
+      - user_address
+      - user_gender
+      - user_name
+      - user_phone
+      - user_state
+    NullEnum:
+      enum:
+      - null
+    PatchedAidRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_name:
+          type: string
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        amount_needed:
+          type: integer
+          maximum: 999999
+          minimum: -9223372036854775808
+          format: int64
+        address:
+          type: string
+        state:
+          type: string
+          maxLength: 255
+        contact_number:
+          type: string
+          maxLength: 20
+        reason:
+          type: string
+        proof_of_cause:
+          type: string
+          format: uri
+        related_pictures:
+          type: string
+          format: uri
+        total_family_members:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        category:
+          $ref: '#/components/schemas/CategoryEnum'
+        urgency:
+          $ref: '#/components/schemas/AidRequestUrgencyEnum'
+        needed_by:
+          type: string
+          format: date
+          nullable: true
+        is_verified:
+          type: boolean
+          readOnly: true
+        is_funded:
+          type: boolean
+          readOnly: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/AidRequestStatusEnum'
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        bkash_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        bank_name:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/BankNameEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        bank_account_name:
+          type: string
+          nullable: true
+          maxLength: 255
+        bank_account_number:
+          type: string
+          nullable: true
+          maxLength: 20
+        review_note:
+          type: string
+          readOnly: true
+          nullable: true
+        user:
+          type: integer
+    PatchedCampaign:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        location:
+          type: string
+          maxLength: 255
+        slug:
+          type: string
+          maxLength: 50
+          pattern: ^[-a-zA-Z0-9_]+$
+        description:
+          type: string
+        goal_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+        image:
+          type: string
+          format: uri
+          nullable: true
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updates:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignUpdate'
+          readOnly: true
+        comments:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignComment'
+          readOnly: true
+        featured:
+          type: boolean
+    PatchedCampaignComment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+        content:
+          type: string
+        posted_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedCampaignUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        image:
+          type: string
+          format: uri
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        total_collected:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+    PatchedCourseCreateUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        category:
+          type: string
+          maxLength: 100
+        duration:
+          type: string
+          maxLength: 50
+        level:
+          $ref: '#/components/schemas/LevelEnum'
+        instructor:
+          type: string
+          maxLength: 100
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        max_participants:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        enrolled:
+          type: string
+          readOnly: true
+        description:
+          type: string
+        skill_ids:
+          type: array
+          items:
+            type: integer
+            writeOnly: true
+          writeOnly: true
+        certification:
+          type: string
+          maxLength: 150
+        cost:
+          type: string
+          maxLength: 50
+        location:
+          type: string
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/Status9c3Enum'
+    PatchedCourseJoinRequestUpdate:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status4ffEnum'
+        message:
+          type: string
+    PatchedCustomUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        password:
+          type: string
+          writeOnly: true
+        last_login:
+          type: string
+          format: date-time
+          nullable: true
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        user_type:
+          $ref: '#/components/schemas/UserTypeEnum'
+        user_name:
+          type: string
+          maxLength: 100
+        user_gender:
+          $ref: '#/components/schemas/UserGenderEnum'
+        user_age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+          nullable: true
+        user_phone:
+          type: string
+          maxLength: 15
+        user_state:
+          $ref: '#/components/schemas/UserStateEnum'
+        user_address:
+          type: string
+        user_profile_image:
+          type: string
+          format: uri
+          nullable: true
+        user_nid:
+          type: string
+          format: uri
+          nullable: true
+        user_awards:
+          $ref: '#/components/schemas/UserAwardsEnum'
+        user_total_donate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        user_last_donated_at:
+          type: string
+          format: date-time
+          nullable: true
+        is_active:
+          type: boolean
+        is_staff:
+          type: boolean
+        is_superuser:
+          type: boolean
+        groups:
+          type: array
+          items:
+            type: integer
+          description: The groups this user belongs to. A user will get all permissions
+            granted to each of their groups.
+        user_permissions:
+          type: array
+          items:
+            type: integer
+          description: Specific permissions for this user.
+    PatchedEmergencyRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        location_address:
+          type: string
+          maxLength: 255
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,8})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,8})?$
+          nullable: true
+        emergency_type:
+          type: string
+          maxLength: 100
+        additional_details:
+          type: string
+        contact_number:
+          type: string
+          maxLength: 20
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+        emergency_contact:
+          type: string
+          maxLength: 20
+        user:
+          type: integer
+          readOnly: true
+    PatchedHeatmap:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        type:
+          $ref: '#/components/schemas/TypeEnum'
+        severity:
+          $ref: '#/components/schemas/SeverityEnum'
+        magnitude:
+          type: number
+          format: double
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        location:
+          type: string
+          maxLength: 255
+        date:
+          type: string
+          format: date
+        affected_people:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        status:
+          $ref: '#/components/schemas/HeatmapStatusEnum'
+        description:
+          type: string
+        casualties:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        damage_cost:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+    PatchedMission:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        type:
+          type: string
+          maxLength: 100
+        location:
+          type: string
+          maxLength: 255
+        start_date:
+          type: string
+          format: date
+        end_date:
+          type: string
+          format: date
+        urgency:
+          $ref: '#/components/schemas/UrgencyF38Enum'
+        volunteers_needed:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        volunteers_joined:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        description:
+          type: string
+        skills: {}
+        coordinator:
+          type: string
+          maxLength: 255
+        status:
+          $ref: '#/components/schemas/MissionStatusEnum'
+        progress:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        lives_can_be_saved:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+    PatchedMissionJoinRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        volunteer:
+          type: string
+          readOnly: true
+        mission:
+          type: string
+          readOnly: true
+        mission_id:
+          type: integer
+          writeOnly: true
+        status:
+          $ref: '#/components/schemas/MissionJoinRequestStatusEnum'
+        requested_at:
+          type: string
+          format: date-time
+          readOnly: true
+        reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+    PatchedProgram:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_name:
+          type: string
+          maxLength: 255
+        program_description:
+          type: string
+        program_organizer:
+          type: string
+          maxLength: 255
+        program_conductor:
+          type: string
+          maxLength: 255
+        program_location:
+          type: string
+          maxLength: 255
+        program_seats:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        program_start_date:
+          type: string
+          format: date-time
+        program_end_date:
+          type: string
+          format: date-time
+        program_duration:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        program_skill:
+          type: integer
+          nullable: true
+    PatchedShelter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        remaining_capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        description:
+          type: string
+        google_maps_link:
+          type: string
+          format: uri
+          maxLength: 300
+    PatchedSkill:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+    PatchedTicket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketResponse'
+          readOnly: true
+        ticket_id:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/TicketStatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        emergency_request:
+          type: integer
+        assigned_admin:
+          type: integer
+          nullable: true
+    PatchedTicketResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        message:
+          type: string
+        responded_at:
+          type: string
+          format: date-time
+          readOnly: true
+        ticket:
+          type: integer
+        responder:
+          type: integer
+          nullable: true
+    PatchedVolunteer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        awards:
+          type: string
+          nullable: true
+        working_hours:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        status:
+          $ref: '#/components/schemas/VolunteerStatusEnum'
+        user:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        causes_served:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        joined_programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        joined_missions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        completed_missions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+    PatchedVolunteerJoinRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        request_date:
+          type: string
+          format: time
+          readOnly: true
+        cause_of_joining:
+          type: string
+        emergency_contact:
+          type: string
+          maxLength: 15
+        age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        status:
+          allOf:
+          - $ref: '#/components/schemas/VolunteerJoinRequestStatusEnum'
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+    Program:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        program_name:
+          type: string
+          maxLength: 255
+        program_description:
+          type: string
+        program_organizer:
+          type: string
+          maxLength: 255
+        program_conductor:
+          type: string
+          maxLength: 255
+        program_location:
+          type: string
+          maxLength: 255
+        program_seats:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        program_start_date:
+          type: string
+          format: date-time
+        program_end_date:
+          type: string
+          format: date-time
+        program_duration:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        program_skill:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - program_conductor
+      - program_description
+      - program_duration
+      - program_end_date
+      - program_location
+      - program_name
+      - program_organizer
+      - program_start_date
+    PublicDonor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user_name:
+          type: string
+          maxLength: 100
+        user_profile_image:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - id
+      - user_name
+    SeverityEnum:
+      enum:
+      - Low
+      - Medium
+      - High
+      type: string
+      description: |-
+        * `Low` - Low
+        * `Medium` - Medium
+        * `High` - High
+    Shelter:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+        city:
+          type: string
+          maxLength: 50
+        state:
+          type: string
+          maxLength: 50
+        postal_code:
+          type: string
+          maxLength: 20
+        latitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        longitude:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,3}(?:\.\d{0,6})?$
+          nullable: true
+        capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        remaining_capacity:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        description:
+          type: string
+        google_maps_link:
+          type: string
+          format: uri
+          maxLength: 300
+      required:
+      - address
+      - capacity
+      - city
+      - id
+      - name
+      - postal_code
+      - remaining_capacity
+      - state
+    Skill:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 100
+      required:
+      - id
+      - name
+    Status4ffEnum:
+      enum:
+      - Pending
+      - Approved
+      - Rejected
+      type: string
+      description: |-
+        * `Pending` - Pending
+        * `Approved` - Approved
+        * `Rejected` - Rejected
+    Status9c3Enum:
+      enum:
+      - Open
+      - Almost Full
+      - Full
+      type: string
+      description: |-
+        * `Open` - Open
+        * `Almost Full` - Almost Full
+        * `Full` - Full
+    Ticket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        responses:
+          type: array
+          items:
+            $ref: '#/components/schemas/TicketResponse'
+          readOnly: true
+        ticket_id:
+          type: string
+          readOnly: true
+        status:
+          $ref: '#/components/schemas/TicketStatusEnum'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        emergency_request:
+          type: integer
+        assigned_admin:
+          type: integer
+          nullable: true
+      required:
+      - created_at
+      - emergency_request
+      - id
+      - responses
+      - ticket_id
+      - updated_at
+    TicketResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        message:
+          type: string
+        responded_at:
+          type: string
+          format: date-time
+          readOnly: true
+        ticket:
+          type: integer
+        responder:
+          type: integer
+          nullable: true
+      required:
+      - id
+      - message
+      - responded_at
+      - ticket
+    TicketStatusEnum:
+      enum:
+      - pending
+      - in_progress
+      - rescued
+      - cancelled
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `in_progress` - In Progress
+        * `rescued` - Rescued
+        * `cancelled` - Cancelled
+    TokenObtainPair:
+      type: object
+      properties:
+        email:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - email
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    TransactionTypeEnum:
+      enum:
+      - donation
+      - expense
+      type: string
+      description: |-
+        * `donation` - Donation
+        * `expense` - Expense
+    TypeEnum:
+      enum:
+      - Earthquake
+      - Flood
+      - Wildfire
+      - Hurricane
+      - Tornado
+      type: string
+      description: |-
+        * `Earthquake` - Earthquake
+        * `Flood` - Flood
+        * `Wildfire` - Wildfire
+        * `Hurricane` - Hurricane
+        * `Tornado` - Tornado
+    UrgencyF38Enum:
+      enum:
+      - Low
+      - Medium
+      - High
+      type: string
+      description: |-
+        * `Low` - Low
+        * `Medium` - Medium
+        * `High` - High
+    UserAwardsEnum:
+      enum:
+      - SUPPORTER
+      - ROOKIE
+      - CHAMPION
+      - VISIONARY
+      - LEGEND
+      type: string
+      description: |-
+        * `SUPPORTER` - Supporter
+        * `ROOKIE` - Rookie
+        * `CHAMPION` - Champion
+        * `VISIONARY` - Visionary
+        * `LEGEND` - Legend
+    UserGenderEnum:
+      enum:
+      - M
+      - F
+      - O
+      type: string
+      description: |-
+        * `M` - Male
+        * `F` - Female
+        * `O` - Other
+    UserStateEnum:
+      enum:
+      - Barisal
+      - Chattogram
+      - Dhaka
+      - Khulna
+      - Mymensingh
+      - Rajshahi
+      - Rangpur
+      - Sylhet
+      type: string
+      description: |-
+        * `Barisal` - Barisal
+        * `Chattogram` - Chattogram
+        * `Dhaka` - Dhaka
+        * `Khulna` - Khulna
+        * `Mymensingh` - Mymensingh
+        * `Rajshahi` - Rajshahi
+        * `Rangpur` - Rangpur
+        * `Sylhet` - Sylhet
+    UserTypeEnum:
+      enum:
+      - regular
+      - volunteer
+      type: string
+      description: |-
+        * `regular` - Regular
+        * `volunteer` - Volunteer
+    Volunteer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        awards:
+          type: string
+          nullable: true
+        working_hours:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: -9223372036854775808
+          format: int64
+        status:
+          $ref: '#/components/schemas/VolunteerStatusEnum'
+        user:
+          allOf:
+          - $ref: '#/components/schemas/Nested'
+          readOnly: true
+        causes_served:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        joined_programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        joined_missions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+        completed_missions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Nested'
+          readOnly: true
+      required:
+      - causes_served
+      - completed_missions
+      - id
+      - joined_missions
+      - joined_programs
+      - user
+    VolunteerJoinRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        request_date:
+          type: string
+          format: time
+          readOnly: true
+        cause_of_joining:
+          type: string
+        emergency_contact:
+          type: string
+          maxLength: 15
+        age:
+          type: integer
+          maximum: 9223372036854775807
+          minimum: 0
+          format: int64
+        status:
+          allOf:
+          - $ref: '#/components/schemas/VolunteerJoinRequestStatusEnum'
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+      required:
+      - age
+      - cause_of_joining
+      - emergency_contact
+      - id
+      - request_date
+      - status
+      - user
+    VolunteerJoinRequestStatusEnum:
+      enum:
+      - pending
+      - accepted
+      - rejected
+      type: string
+      description: |-
+        * `pending` - Pending
+        * `accepted` - Accepted
+        * `rejected` - Rejected
+    VolunteerStatusEnum:
+      enum:
+      - ACTIVE
+      - INACTIVE
+      type: string
+      description: |-
+        * `ACTIVE` - Active
+        * `INACTIVE` - Inactive
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

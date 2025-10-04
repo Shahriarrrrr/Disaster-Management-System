@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'mission',
     'workshop',
     'alerts',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -156,7 +157,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -186,3 +188,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # <-- Add this
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'DISASTER MANAGEMENT SYSTEM',
+    'DESCRIPTION': 'TO CONNECT THE PERSON IN NEED TO THE PERSON WHO WANT TO GIVE',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
