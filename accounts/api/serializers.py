@@ -1,22 +1,39 @@
 from rest_framework import serializers
 from accounts.models import CustomUser
 
-
 class CustomUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only = True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
-        model  = CustomUser
-        #fields = ['user_name','password','user_address']
-        fields = '__all__'
+        model = CustomUser
+        fields = [
+            'id',
+            'email',
+            'password',
+            'user_name',
+            'user_gender',
+            'user_age',
+            'user_phone',
+            'user_state',
+            'user_address',
+            'user_profile_image',
+            'user_nid',
+            'user_type',
+            'user_awards',
+            'user_total_donate',
+            'user_last_donated_at',
+        ]
+        read_only_fields = ['user_total_donate', 'user_last_donated_at']
 
     def create(self, validated_data):
-        password = validated_data.pop('password')  # Extract password
-        print(f"The password : {password}")
-        user = CustomUser(**validated_data)        # Create instance (without password)
-        user.set_password(password)                # Hash the password
-        user.save()                                # Save to DB
+        password = validated_data.pop('password')
+        user = CustomUser(**validated_data)
+        user.set_password(password)
+        user.is_superuser = False  # Enforce safety
+        user.is_staff = False
+        user.save()
         return user
+
     def update(self, instance, validated_data):
         password = validated_data.pop('password', None)
         for attr, value in validated_data.items():
@@ -24,4 +41,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         if password:
             instance.set_password(password)
         instance.save()
-        return instance    
+        return instance
