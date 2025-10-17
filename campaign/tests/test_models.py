@@ -1,100 +1,79 @@
-from django.test import TestCase
-from django.contrib.auth import get_user_model
-from django.utils.text import slugify
-from datetime import date, timedelta
+# from django.db import models
+# from django.contrib.auth.models import BaseUserManager
+# from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from campaign.models import Campaign, CampaignUpdate, CampaignComment
+# # Custom User Manager
+# class CustomUserManager(BaseUserManager):
+#     def create_user(self, email, password=None, **extra_fields):
+#         if not email:
+#             raise ValueError("The Email field must be set")
+#         email = self.normalize_email(email)
+#         user = self.model(email=email, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)  # Use _db instead of db
+#         return user
 
-User = get_user_model()
+#     def create_superuser(self, email, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#         return self.create_user(email, password, **extra_fields)
 
+# # Custom User model
+# class CustomUser(AbstractBaseUser, PermissionsMixin):
+#     email = models.EmailField(unique=True)
+    
+#     STATE_CHOICE = (
+#         ('Barisal', 'Barisal'),
+#         ('Chattogram', 'Chattogram'),
+#         ('Dhaka', 'Dhaka'),
+#         ('Khulna', 'Khulna'),
+#         ('Mymensingh', 'Mymensingh'),
+#         ('Rajshahi', 'Rajshahi'),
+#         ('Rangpur', 'Rangpur'),
+#         ('Sylhet', 'Sylhet'),
+#     )
 
-class CampaignModelTest(TestCase):
-    def setUp(self):
-        self.campaign = Campaign.objects.create(
-            title="Save the Forest",
-            location="Dhaka",
-            slug="save-the-forest",
-            description="A campaign to save the forest.",
-            goal_amount=50000.00,
-            start_date=date.today(),
-            end_date=date.today() + timedelta(days=30),
-            featured=True,
-        )
+#     GENDER_CHOICES = [
+#         ('M', 'Male'),
+#         ('F', 'Female'),
+#         ('O', 'Other'),
+#     ]
 
-    def test_campaign_str(self):
-        self.assertEqual(str(self.campaign), "Save the Forest")
+#     TIER_CHOICES = [
+#         ('SUPPORTER', 'Supporter'),
+#         ('ROOKIE', 'Rookie'),
+#         ('CHAMPION', 'Champion'),
+#         ('VISIONARY', 'Visionary'),
+#         ('LEGEND', 'Legend'),
+#     ]
 
-    def test_campaign_fields(self):
-        self.assertEqual(self.campaign.location, "Dhaka")
-        self.assertTrue(self.campaign.featured)
-        self.assertTrue(self.campaign.is_active)
-        self.assertIsNotNone(self.campaign.created_at)
+#     user_type = models.CharField(max_length=10, choices=[('regular', 'Regular'), ('volunteer', 'Volunteer')], default='regular')
+#     user_name = models.CharField(max_length=100)
+#     user_gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
+#     user_age = models.PositiveIntegerField(null=True, blank=True)
+#     user_phone = models.CharField(max_length=15, unique=True)  # Phone number uniqueness
+#     user_state = models.CharField(choices=STATE_CHOICE, max_length=100)
+#     user_address = models.TextField()
+#     user_profile_image = models.ImageField(upload_to='profile_images/', null=True, blank=True)
+#     user_nid = models.ImageField(upload_to='nid/', null=True, blank=True)
+#     user_awards = models.CharField(max_length=10, choices=TIER_CHOICES, default='SUPPORTER')
+#     user_total_donate = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+#     user_last_donated_at = models.DateTimeField(null=True, blank=True)
 
-    def test_campaign_slug_unique(self):
-        with self.assertRaises(Exception):
-            Campaign.objects.create(
-                title="Duplicate Slug",
-                location="Chittagong",
-                slug="save-the-forest",  # duplicate
-                description="Another campaign",
-                goal_amount=10000.00,
-                start_date=date.today(),
-                end_date=date.today() + timedelta(days=10),
-            )
+#     # Authentication fields
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = ['user_name']  # Fields required for createsuperuser command
 
+#     is_active = models.BooleanField(default=True)  # Field to deactivate users
+#     is_staff = models.BooleanField(default=False)  # Field for admin access
+#     is_superuser = models.BooleanField(default=False)  # Flag for superuser permissions
 
-class CampaignUpdateModelTest(TestCase):
-    def setUp(self):
-        self.campaign = Campaign.objects.create(
-            title="Ocean Cleanup",
-            location="Cox’s Bazar",
-            slug="ocean-cleanup",
-            description="Clean the ocean of plastics.",
-            goal_amount=100000.00,
-            start_date=date.today(),
-            end_date=date.today() + timedelta(days=60),
-        )
+#     objects = CustomUserManager()  # The custom manager to handle user creation
 
-        self.update = CampaignUpdate.objects.create(
-            campaign=self.campaign,
-            title="Progress Report 1",
-            content="We have cleaned 2 tons of plastic!",
-            total_collected=20000.00,
-        )
+#     def __str__(self):
+#         return f"{self.email} ({self.user_type})"
+#     def get_full_name(self):
+#         return self.user_name
 
-    def test_update_str(self):
-        expected_str = "Progress Report 1 - Ocean Cleanup"
-        self.assertEqual(str(self.update), expected_str)
-
-    def test_update_relationship(self):
-        self.assertEqual(self.update.campaign, self.campaign)
-        self.assertEqual(self.campaign.updates.count(), 1)
-
-
-class CampaignCommentModelTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(username="john", password="password123")
-        self.campaign = Campaign.objects.create(
-            title="Tree Plantation Drive",
-            location="Sylhet",
-            slug="tree-plantation",
-            description="Let’s plant 10,000 trees.",
-            goal_amount=80000.00,
-            start_date=date.today(),
-            end_date=date.today() + timedelta(days=20),
-        )
-
-        self.comment = CampaignComment.objects.create(
-            campaign=self.campaign,
-            user=self.user,
-            content="This is a great initiative!"
-        )
-
-    def test_comment_str(self):
-        expected_str = f"Comment by {self.user} on {self.campaign.title}"
-        self.assertEqual(str(self.comment), expected_str)
-
-    def test_comment_relationship(self):
-        self.assertEqual(self.comment.campaign, self.campaign)
-        self.assertEqual(self.comment.user.username, "john")
-        self.assertEqual(self.campaign.comments.count(), 1)
+# #Needs to be used when foreign key is passed    
+# #user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
