@@ -1,0 +1,2 @@
+EMAIL = "admin"
+PASSWORD = "12345"
