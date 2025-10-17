@@ -190,7 +190,7 @@ const DonationPage = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          donation_cause: 3,
+          donation_cause: 1,
           donation_amount: donationAmount,
           cus_phone: "01722382459",
           donor_remarks: "Hope and recovery donation",

@@ -62,7 +62,7 @@ export default function DonationList({ donation, user, searchTerm = "" }) {
   const formatCurrency = (amount) =>
     new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "BDT",
     }).format(amount)
 
   const getStatusConfig = (status) => {
@@ -137,7 +137,7 @@ export default function DonationList({ donation, user, searchTerm = "" }) {
             <div>
               <p className="text-purple-400 text-sm font-medium">Average Donation</p>
               <p className="text-2xl font-bold text-white">
-                {filteredDonations.length > 0 ? formatCurrency(user_total_donate / filteredDonations.length) : "$0"}
+                {filteredDonations.length > 0 ? formatCurrency(user_total_donate / filteredDonations.length) : "/-0"}
               </p>
             </div>
             <CheckCircle className="h-8 w-8 text-purple-400" />

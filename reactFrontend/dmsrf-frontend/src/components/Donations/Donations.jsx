@@ -25,7 +25,7 @@ const Donations = () => {
   const stats = [
     {
       title: "Total Donations",
-      value: `$${user_total_donate?.toLocaleString() || "0"}`,
+      value: `${user_total_donate?.toLocaleString() || "0"} / -`,
       icon: DollarSign,
       gradient: "from-green-500 to-emerald-600",
       bgGradient: "from-green-500/10 to-emerald-600/10",
