@@ -180,7 +180,7 @@ const DonationPage = () => {
   const handleDonate = async () => {
     setLoading(true)
     const token = localStorage.getItem("access")
-    const donationAmount = customAmount ? Number.parseInt(customAmount) : selectedAmount
+    const donationAmount = customAmount ? Number.parseInt(customAmount) : selectedAmount 
 
     try {
       const response = await fetch("http://127.0.0.1:8000/donation/api/donation/initiate/", {
@@ -352,7 +352,7 @@ const DonationPage = () => {
                   </div>
                   <div className="relative">
                     <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 font-medium">
-                      $
+                      BDT 
                     </span>
                     <input
                       type="number"
@@ -542,11 +542,11 @@ const DonationPage = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between text-sm">
                       <span className="text-slate-400">Raised</span>
-                      <span className="font-semibold text-white">$2,847,392</span>
+                      <span className="font-semibold text-white">BDT 2,847,392</span>
                     </div>
                     <AnimatedProgressBar percentage={71} delay={500} />
                     <div className="flex justify-between text-sm">
-                      <span className="text-slate-400">Goal: $4,000,000</span>
+                      <span className="text-slate-400">Goal: BDT 4,000,000</span>
                       <span className="text-emerald-400 font-semibold">71% funded</span>
                     </div>
                   </div>

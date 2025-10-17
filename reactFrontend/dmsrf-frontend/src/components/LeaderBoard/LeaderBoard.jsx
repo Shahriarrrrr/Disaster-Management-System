@@ -113,7 +113,7 @@ function calculateTimeSinceFirst(firstDonation) {
 function formatCurrency(amount) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "BDT",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount)

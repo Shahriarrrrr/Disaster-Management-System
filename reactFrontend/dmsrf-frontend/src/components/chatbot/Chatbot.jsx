@@ -7,8 +7,7 @@ const Chatbot = () => {
   const [userInput, setUserInput] = useState("")
   const [loading, setLoading] = useState(false)
 
-  // Replace with your actual API key
-  const API_KEY = "AIzaSyAss_5ZaMk9fY7fzTB1sXLTQ0iAdIzODiE"
+  const API_KEY = "AIzaSyAGXAAj7MmsYYqKKnS8Gdc5dR9fk7fTFNM"
 
   const disasterPrompts = [
     {
